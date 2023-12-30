@@ -1,0 +1,35 @@
+--users--
+id
+name
+birthdate (To check eligibility)
+profilePic
+bio
+email
+password - Encrypted
+posts (User's posts)
+likes (user's Liked post)
+followers (Array/Object of UserId)
+following (Array/Object of UserId)
+loginStatus
+created_at
+updated_at
+
+--posts--
+id
+caption
+imagePath
+userRefId
+location
+tags
+likes- Array/object
+comments- Array/object
+created_at
+updated_at
+
+--comments--
+id
+text
+userId
+postId
+created_at
+updated_at
