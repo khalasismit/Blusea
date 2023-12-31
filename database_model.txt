@@ -1,35 +1,36 @@
 --users--
 id
-name
+name (FirstName + LastName )
+userName ()
 birthdate (To check eligibility)
 profilePic
-bio
-email
+bio (max - 50 char)
+email 
 password - Encrypted
-posts (User's posts)
-likes (user's Liked post)
+posts (user's posts)
+likes (user's Liked post) (use PostId as value)
 followers (Array/Object of UserId)
 following (Array/Object of UserId)
-loginStatus
-created_at
-updated_at
+loginStatus (Boolean [True if Online / false if Offline ] )
+created_at (default)
+updated_at (default)
 
 --posts--
 id
-caption
+userId
 imagePath
-userRefId
+caption
 location
-tags
-likes- Array/object
-comments- Array/object
+tags 
+likes - Array/object
+comments - Array/object
 created_at
 updated_at
 
 --comments--
 id
-text
-userId
-postId
+comment ()
+userId ( ref )
+postId ( ref )
 created_at
 updated_at
