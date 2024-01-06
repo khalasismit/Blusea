@@ -1,0 +1,36 @@
+--users--
+id
+name (FirstName + LastName )
+userName ()
+birthdate (To check eligibility)
+profilePic
+bio (max - 50 char)
+email 
+password - Encrypted
+posts (user's posts)
+likes (user's Liked post) (use PostId as value)
+followers (Array/Object of UserId)
+following (Array/Object of UserId)
+loginStatus (Boolean [True if Online / false if Offline ] )
+created_at (default)
+updated_at (default)
+
+--posts--
+id
+userId
+imagePath
+caption
+location
+tags 
+likes - Array/object
+comments - Array/object
+created_at
+updated_at
+
+--comments--
+id
+comment ()
+userId ( ref )
+postId ( ref )
+created_at
+updated_at
