@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import Post from "../models/Post.js";
-/* CREATE */
+
+/* CREATE POST */
 export const createPost = async (req, res) => {
   try {
     const { userId,imagePath,caption,likes,comments } = req.body; 
@@ -20,5 +21,15 @@ export const createPost = async (req, res) => {
     res.status(201).json(posts);
   } catch (err) {
     res.status(409).json({ message: err.message });
+  }
+};
+
+/* GET FEED POST */ 
+export const getFeedPosts = async (req,res) => {
+  try {
+    const posts = await Post.find();
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 };
