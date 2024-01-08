@@ -12,6 +12,7 @@ import mongoose from "mongoose";
 // likes (user's Liked post)
 // followers (Array/Object of UserId)
 // following (Array/Object of UserId)
+// follow-request (Array of userId)
 // loginStatus (Boolean [True if Online / false if Offline ] )
 // created_at (default)
 // updated_at (default)
@@ -73,6 +74,10 @@ const UserSchema = new mongoose.Schema(
     following: {
       type: Array,
       default: []
+    },
+    followRequest:{
+      type : Array,
+      default:[],
     }
   },
   { timestamps: true }
