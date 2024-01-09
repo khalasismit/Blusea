@@ -17,7 +17,8 @@ export const register = async (req, res) => {
             password,
             status,
             followers,
-            following
+            following,
+            followRequest
         }=req.body;
 
         let saltRound = 10;
@@ -35,7 +36,8 @@ export const register = async (req, res) => {
             password:hashedPassword,
             status,
             followers,
-            following
+            following,
+            followRequest
         });
 
         await newUser.save();
