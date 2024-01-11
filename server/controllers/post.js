@@ -2,19 +2,19 @@ import User from "../models/User.js";
 import Post from "../models/Post.js";
 
 /* CREATE POST */
-export const createPost = async (req, res) => {
+export const create = async (req, res) => {
   try {
-    const { userId,imagePath,caption,likes,comments } = req.body; 
-    const user = await User.findById({ _id : userId });
+    const { userId, imagePath, caption, likes, comments, visibility } = req.body;
+    const user = await User.findById({ _id: userId });
     const newPost = new Post({
       userId: userId,
       userName: user.userName,
       location: user.location,
       imagePath: imagePath,
-      caption:caption,
-      likes:likes,
-      comments:comments
-
+      caption: caption,
+      likes: likes,
+      comments: comments,
+      visibility: visibility
     });
     await newPost.save();
     const posts = await Post.find();
@@ -24,8 +24,8 @@ export const createPost = async (req, res) => {
   }
 };
 
-/* GET FEED POST */ 
-export const getFeedPosts = async (req,res) => {
+/* GET FEED POST */
+export const Feed = async (req, res) => {
   try {
     const posts = await Post.find();
     res.status(200).json(posts);
@@ -33,3 +33,17 @@ export const getFeedPosts = async (req,res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
+/* LIKE POST */
+export const toggleLike = async (req, res) => {
+  try {
+    const { postId, userId } = req.params;
+    const post = await Post.findById({ _id: postId });
+    const isLiked = post.likes.includes(userId);
+    { isLiked ? post.likes.pull(userId) : post.likes.push(userId) }
+    await post.save();
+    res.status(200).json(post);
+  } catch (err) {
+    req.status(400).json({ error: err });
+  }
+}
