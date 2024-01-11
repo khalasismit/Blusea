@@ -8,6 +8,7 @@ import morgan from "morgan";
 
 import authRoute from "./routes/auth.js";
 import userRoute from "./routes/user.js";
+import postRoute from "./routes/post.js";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -24,6 +25,7 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 app.use('/auth',authRoute);
 app.use('/users',userRoute);
+app.use('/posts',postRoute);
 
 /* MONGOOSE SETUP */
 
