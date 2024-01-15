@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 // tags 
 // likes - Array/object
 // comments - Array/object
+// visibility
 // created_at
 // updated_at
 
@@ -24,13 +25,22 @@ const PostSchema = new mongoose.Schema(
             type:String,
             max:60
         },
-        likes:{
-            type:Array,
-            default:[], 
-        },
-        comments:{
-            type:Array,
+        likes:[{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User", 
+            default:[],
+        }],
+        comments:[{
+            text:String,
+            postedBy:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"User"
+            },
             default:[]
+        }],
+        visibility: {
+            type :Boolean,
+            default:true
         }
     },{
         timestamps:true
