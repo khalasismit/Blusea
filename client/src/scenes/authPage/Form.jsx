@@ -306,9 +306,7 @@ const Form = () => {
                                 color: palette.background.alt,
                                 "&:hover": { color: palette.primary.dark, background: palette.primary.main },
                             }}
-                        >
-                            {isLogin ? "LOGIN" : "REGISTER"}
-                        </Button>
+                        >{isLogin ? "LOGIN" : "REGISTER"}</Button>
                         <Typography
                             onClick={() => {
                                 setPageType(isLogin ? "register" : "login");
