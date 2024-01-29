@@ -1,7 +1,8 @@
 import { Box, CssBaseline, ThemeProvider, createTheme, useMediaQuery, useTheme } from '@mui/material';
 import './App.css';
 import AuthPage from './scenes/authPage';
-import HomePage from './scenes/homePage'
+import HomePage from './scenes/homePage';
+import ExplorePage from './scenes/explorePage';
 import { useSelector } from "react-redux";
 import { useMemo } from 'react';
 import { themeSettings } from './styles/theme/theme';
@@ -31,6 +32,7 @@ function App() {
               }
               <Routes>
                 <Route path="/home" element={isAuth ? <HomePage /> : <Navigate to="/" />} />
+                <Route path="/explore" element={isAuth ? <ExplorePage /> : <Navigate to="/" />} />
                 {/* <Route
               path="/profile/:userId"
               element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
