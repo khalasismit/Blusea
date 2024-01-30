@@ -55,7 +55,7 @@ const ExplorePage = () => {
       ];
   return (
     <Box sx={{ width: "100%", height: "100vh",p:"1rem", overflowY: 'scroll' }}>
-      <ImageList variant="masonry" cols={3} gap={2}>
+      <ImageList variant="masonry" cols={3} gap={4}>
         {itemData.map((item) => (
           <ImageListItem key={item.img}>
             <img
