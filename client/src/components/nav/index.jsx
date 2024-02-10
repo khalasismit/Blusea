@@ -4,19 +4,37 @@ import ExploreIcon from '@mui/icons-material/Explore';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import AddBoxIcon from '@mui/icons-material/AddBox';
+// import AddBoxIcon from '@mui/icons-material/AddBox';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Mode from '../mode';
+import Create from '../create';
+import { useSelector } from 'react-redux';
 
 const Navigation = () => {
+    const user = useSelector(state => state.user)
     const isNonMobile = useMediaQuery("(min-width:600px)");
-    // const { palette } = useTheme();
     const theme = useTheme();
-    return <Box sx={{ position: "sticky", top: 0, zIndex: 100, background: theme.palette.background.alt, borderRadius: 4, p: "0.5rem", boxShadow: isNonMobile ? "1px 0px 5px rgba(0,0,0,0.1)" : "", m: 0, height: isNonMobile ? "100vh" : "5rem", width: isNonMobile ? "max-content" : "100%", display: "flex", flexDirection: "column", alignItems: "left", justifyContent: "space-between" }}>
+    return <Box sx={{
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
+        borderRadius: 4,
+        p: "0.5rem",
+        boxShadow: isNonMobile ? "1px 0px 5px rgba(0,0,0,0.1)" : "",
+        m: 0, 
+        height: isNonMobile ? "100vh" : "5rem",
+        width: isNonMobile ? "max-content" : "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "left",
+        justifyContent: "space-between"
+    }}>
         {isNonMobile && (
             <Box sx={{
+                borderRadius: "1rem 1rem 0rem 0rem",
+                background: theme.palette.background.alt,
                 // p: "0.7rem 1rem 0.2rem 1rem",
                 p: "0 4rem",
                 fontSize: "2rem",
@@ -25,16 +43,7 @@ const Navigation = () => {
                     cursor: 'pointer',
                 }
             }}>
-                <Box>
-                    {/* <Typography sx={{
-                    color: palette.neutral.main,
-                    fontSize: "1.2rem",
-                    fontWeight: "bold",
-                }}>
-                    MAGNET
-                </Typography> */}
-                    <img src="./assets/logo/magnet3.png" style={{ width: "5rem", height: "4rem", objectFit: "cover" }} alt="" />
-                </Box>
+                <img src={"https://firebasestorage.googleapis.com/v0/b/magnet784492.appspot.com/o/logo%2Fmagnet3.png?alt=media&token=750dc1ef-316a-4bf3-8a83-8024f0a90dea"} style={{ width: "5rem", height: "4rem", objectFit: "cover" }} alt="" />
             </Box>
         )}
         <Box sx={{
@@ -98,16 +107,7 @@ const Navigation = () => {
                         )}
                     </Box>
                 </Link>
-                <Link to={"/create"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                        <AddBoxIcon titleAccess='Create' sx={{ fontSize: "2rem" }} />
-                        {isNonMobile && (
-                            <Typography>
-                                Create
-                            </Typography>
-                        )}
-                    </Box>
-                </Link>
+                <Create></Create>
                 <Link to={"/notifications"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                         <NotificationsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
@@ -118,7 +118,7 @@ const Navigation = () => {
                         )}
                     </Box>
                 </Link>
-                <Link to={"/profile "} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
+                <Link to={`/profile/${user.userName}`} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                         <PersonIcon titleAccess='Profile' sx={{ fontSize: "2rem" }} />
                         {isNonMobile && (
@@ -130,42 +130,49 @@ const Navigation = () => {
                 </Link>
             </Box>
 
-            {isNonMobile && (<Box sx={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                <Box sx={{
+            {
+                isNonMobile && (<Box sx={{
                     display: "flex",
-                    flexDirection: isNonMobile ? "column" : "row",
-                    boxShadow: isNonMobile ? "" : "0px -1px 5px rgba(0,0,0,0.1)",
-                    color: theme.palette.neutral.dark,
-                    zIndex: 100,
+                    alignItems: "center",
+                    justifyContent: "space-between",
                     background: theme.palette.background.alt,
-                    '& > *': {
-                        borderRadius: 2,
-                        p: "0.7rem 1rem"
-                    },
-                    '& > *:hover': {
-                        color: theme.palette.neutral.light,
-                        background: theme.palette.neutral.mediumMain,
-                        cursor: 'pointer'
-                    },
+                    borderRadius: "0 0 1rem 1rem",
                 }}>
-                    <Link to={"/settings"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                            <MenuIcon titleAccess='Settings' sx={{ fontSize: "2rem" }} />
-                            {isNonMobile && (
-                                <Typography>
-                                    Settings
-                                </Typography>
-                            )}
-                        </Box>
-                    </Link>
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: isNonMobile ? "column" : "row",
+                        boxShadow: isNonMobile ? "" : "0px -1px 5px rgba(0,0,0,0.1)",
+                        color: theme.palette.neutral.dark,
+                        zIndex: 100,
+                        '& > *': {
+                            borderRadius: 2,
+                            p: "0.7rem 1rem"
+                        },
+                        '& > *:hover': {
+                            color: theme.palette.neutral.light,
+                            background: theme.palette.neutral.mediumMain,
+                            cursor: 'pointer'
+                        },
+                    }}>
+                        <Link to={"/settings"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
+                            <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                                <MenuIcon titleAccess='Settings' sx={{ fontSize: "2rem" }} />
+                                {isNonMobile && (
+                                    <Typography>
+                                        Settings
+                                    </Typography>
+                                )}
+                            </Box>
+                        </Link>
+                    </Box>
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                        <Mode></Mode>
+                    </Box>
                 </Box>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <Mode></Mode>
-                </Box>
-            </Box>
-            )}
-        </Box>
-    </Box>
+                )
+            }
+        </Box >
+    </Box >
 };
 
 export default Navigation;
