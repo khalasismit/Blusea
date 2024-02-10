@@ -35,7 +35,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       require: true,
       max: 25,
-      unique:true
+      unique: true
     },
     dob: {
       type: Date,
@@ -75,12 +75,20 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       default: []
     },
-    followRequest:{
-      type : Array,
-      default:[],
+    followRequest: {
+      type: Array,
+      default: [],
+    },
+    sentRequest: {
+      type: Array,
+      default: [],
+    },
+    posts: {
+      type: Array,
+      default: []
     }
   },
   { timestamps: true }
-  );
-  const User = mongoose.model("User",UserSchema);
+);
+const User = mongoose.model("User", UserSchema);
 export default User;  
