@@ -18,12 +18,13 @@ const PostSchema = new mongoose.Schema(
             type:String,
             require:true
         },
-        imagePath:{
+        imageId:{
             type:String,
+            require:true,
         },
         caption:{
             type:String,
-            max:60
+            max:60,
         },
         likes:[{
             type:mongoose.Schema.Types.ObjectId,
