@@ -27,21 +27,15 @@ export const Follow = ({ user2userName }) => {
             const isUser1Following = await user2.followers.includes(user1._id)
             const isUser2Following = await user1.followers.includes(user2._id)
             const isReqsent = await user1.sentRequest.includes(user2._id)
-            const isRequest = await user2.followRequest.includes(user1._id)
+            // const isRequest = await user2.followRequest.includes(user1._id)
 
             console.log("isUser1Following", isUser1Following);
             console.log("isUser2Following", isUser2Following);
             console.log("isReqsent", isReqsent);
-            console.log("isRequest", isRequest);
+            // console.log("isRequest", isRequest);
 
             if (!isUser1Following && !isUser2Following) {
                 setType("Follow");
-            } else if (isRequest) {
-                if (!isUser1Following && isUser2Following) {
-                    setType("Follow Back")
-                } else {
-                    setType("Follow")
-                }
             } else if (!isUser1Following && isReqsent) {
                 setType("Requested");
             } else if (isUser1Following && isUser2Following) {
@@ -57,7 +51,8 @@ export const Follow = ({ user2userName }) => {
     }
     useEffect(() => {
         getUser2(user1)
-    }, [user1,Type])
+    }, [user1, Type]) //eslint-disable-line react-hooks/exhaustive-deps
+
     const handleClick = async (Type, user1, user2) => {
         try {
             let url = '';
@@ -94,7 +89,7 @@ export const Follow = ({ user2userName }) => {
                 const isUser1Following = await user2.followers.includes(user1._id)
                 const isUser2Following = await user1.followers.includes(user2._id)
                 const isReqsent = await user1.sentRequest.includes(user2._id)
-                const isRequest = await user2.followRequest.includes(user1._id)
+                // const isRequest = await user2.followRequest.includes(user1._id)
 
                 // console.log("isUser1Following", isUser1Following);
                 // console.log("isUser2Following", isUser2Following);
@@ -103,12 +98,6 @@ export const Follow = ({ user2userName }) => {
 
                 if (!isUser1Following && !isUser2Following) {
                     setType("Follow");
-                } else if (!isRequest) {
-                    if (!isUser1Following && isUser2Following) {
-                        setType("Follow Back")
-                    } else {
-                        setType("Follow")
-                    }
                 } else if (isUser1Following && isUser2Following) {
                     setType("Unfollow");
                 } else if (!isUser1Following && isReqsent) {

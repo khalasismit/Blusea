@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Button, Dialog, Divider, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux"
@@ -7,8 +7,18 @@ import GridOnIcon from '@mui/icons-material/GridOn';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 // import { setLogin } from "../../redux/reducers";
 const ProfilePage = () => {
+    const [title, setTitle] = useState('');
+    const [open, setOpen] = useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const [ListData, setListData] = useState([]);
     const [isLoggedInUser, setIsLoggedInUser] = useState(true)
     const theme = useTheme()
     const { userName } = useParams();
@@ -47,6 +57,31 @@ const ProfilePage = () => {
         setIsLoggedInUser(User.userName === userName ? true : false)
     }, [user, User, userName]);
 
+    const handleListData = async (title) => {
+        try {
+            let url = ''
+            if (await title === 'followers') {
+                url = `http://localhost:3001/users/${userName}/followers`
+                setTitle(title);
+            } else if (title === 'following') {
+                url = `http://localhost:3001/users/${userName}/following`
+                setTitle(title);
+            }
+            // console.log(await url)
+            await fetch(url, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            }).then(async (res) => {
+                const data = await res.json();
+                // console.log(data)
+                setListData(data)
+                handleClickOpen()
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return <Box sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", gap: "2rem", m: "2rem 0" }}>
             <img src="https://storage.googleapis.com/magnet784492.appspot.com/1707242019109-Snapchat-1395104439.jpg?GoogleAccessId=firebase-adminsdk-n84xd%40magnet784492.iam.gserviceaccount.com&Expires=253402300799&Signature=pRxC8URIXXGFlKqrFMra6ra88lftBEF63cgYTwi%2FcOdg62yZ3lo464GLFTy0svtpcDeCvSv0f2LbuXP4fwoxXSGiIlLyZyDGZuL%2BnstXBsTsRdATJcV0R2JYnppdKxm7XuwKcVR1blTdn2Bp4dgzgnNg5Aj%2F7xd7t1foC4Hx9e044zKBf2oamLD66RV6Q7nf6jm7oV5800O%2Bd84N4S%2FbYGUpZUMC1WPoizkkqSo41aEGSIZHXvHrvlpQ9bRIXOjkroEuf1GlrXOWAYtdprfmSOGPX0vFEfMb2ORUBrORidF91w8Ewb%2Ft2XjoI1IaVvpx7iXCSmxGZk0u3ybOh%2FtFiw%3D%3D" style={{ width: "10rem", height: "10rem", objectFit: "cover", borderRadius: "10%", cursor: "pointer" }} alt="" />
@@ -72,8 +107,37 @@ const ProfilePage = () => {
                 </Box>
                 <Box sx={{ display: "flex", gap: 3, p: "0.5rem" }}>
                     <Typography sx={{ fontSize: "0.9rem" }}>{totalPosts} posts</Typography>
-                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }}>{totalFollowers} followers</Typography>
-                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }}>{totalFollowing} following</Typography>
+                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} onClick={() => handleListData('followers')} >{totalFollowers} followers</Typography>
+                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} onClick={() => handleListData('following')} >{totalFollowing} following</Typography>
+                    <Dialog maxWidth="sm" sx={{ width: "100%" }} open={open} onClose={handleClose}>
+                        <Box sx={{ flex: 1, p: 1, display: "flex", alignItems: "center", width: "400px" }}>
+                            <Typography sx={{ flex: 1, textAlign: "center", fontSize: "1.1rem", textTransform: "capitalize" }}>{title}</Typography>
+                            <CloseOutlinedIcon onClick={handleClose} sx={{ fontSize: "2rem" }} />
+                        </Box>
+                        <Divider></Divider>
+                        {
+                            Array.isArray(ListData) && (
+                                ListData.length > 0 ? (
+                                    <Box sx={{ flex: 1, display: "flex",flexDirection:"column",overflowY:"scroll" }}>
+                                        {
+                                            ListData.map((user) => {
+                                                return <Box sx={{ display: "flex",alignItems: "center", gap: "1rem", m: 1 }}>
+                                                        <Avatar src="./assets/images/Snapchat-1048757234.jpg" sx={{ borderRadius: 2, height: "3rem", width: "3rem" }} />
+                                                        <Box sx={{ display: "flex", flexDirection: "column" }}>
+                                                            <Typography>{user.userName}</Typography>
+                                                            <Typography>{user.firstName} {user.lastName}</Typography>
+                                                        </Box>
+                                                    </Box>
+                                            })
+                                        }
+
+                                    </Box>
+                                ) : (
+                                    <Typography sx={{ flex: 1, fontSize: "1rem", p: 1, textAlign: "center" }}>No User Found</Typography>
+                                )
+                            )
+                        }
+                    </Dialog>
                 </Box>
                 <Box sx={{ p: 1 }}>
                     <Typography sx={{ fontSize: "1rem" }}>
