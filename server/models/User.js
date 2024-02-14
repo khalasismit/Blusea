@@ -49,8 +49,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
       max: 60,
     },
-    profilePic: {
+    picturePath: {
       type: String,
+      default:""
     },
     email: {
       type: String,

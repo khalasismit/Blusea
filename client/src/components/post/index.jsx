@@ -12,13 +12,12 @@ import Like from "../like";
 // import Follow from "../follow";
 import { useNavigate } from "react-router-dom";
 
-const Post = ({ postId, picturePath, pictureAlt, userName, likes, comments, caption, createdAt }) => {
+const Post = ({ postId, profilePic, picturePath, pictureAlt, userName, likes, comments, caption, createdAt }) => {
     const LIKES = likes.length
     const COMMENTS = comments.length
     const navigate = useNavigate();
     const theme = useTheme();
     const { typography } = useTheme();
-
     const [comment, setComment] = useState("");
     const isNonMobile = useMediaQuery("(min-width:768px)")
     const [timeAgo, setTimeAgo] = useState('');
@@ -30,7 +29,6 @@ const Post = ({ postId, picturePath, pictureAlt, userName, likes, comments, capt
                 setTimeAgo(timeAgoString);
             }
         };
-
         calculateTimeAgo();
         const intervalId = setInterval(() => {
             calculateTimeAgo();
@@ -47,7 +45,12 @@ const Post = ({ postId, picturePath, pictureAlt, userName, likes, comments, capt
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 <Box>
-                    <Avatar src="./assets/images/Snapchat-1048757234.jpg" sx={{ borderRadius: 2, height: "2.5rem", width: "2.5rem" }}></Avatar>
+                    {
+                        profilePic === "" ?
+                            <Avatar sx={{ borderRadius: 2, height: "2.5rem", width: "2.5rem" }}></Avatar>
+                            :
+                            <Avatar src={profilePic} sx={{ borderRadius: 2, height: "2.5rem", width: "2.5rem" }}></Avatar>
+                    }
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography sx={{ fontSize: typography.h5, fontFamily: typography.h5, cursor: "pointer" }} onClick={NavigateToProfile} >{userName}</Typography>

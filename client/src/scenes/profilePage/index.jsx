@@ -84,7 +84,12 @@ const ProfilePage = () => {
 
     return <Box sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", gap: "2rem", m: "2rem 0" }}>
-            <img src="https://storage.googleapis.com/magnet784492.appspot.com/1707242019109-Snapchat-1395104439.jpg?GoogleAccessId=firebase-adminsdk-n84xd%40magnet784492.iam.gserviceaccount.com&Expires=253402300799&Signature=pRxC8URIXXGFlKqrFMra6ra88lftBEF63cgYTwi%2FcOdg62yZ3lo464GLFTy0svtpcDeCvSv0f2LbuXP4fwoxXSGiIlLyZyDGZuL%2BnstXBsTsRdATJcV0R2JYnppdKxm7XuwKcVR1blTdn2Bp4dgzgnNg5Aj%2F7xd7t1foC4Hx9e044zKBf2oamLD66RV6Q7nf6jm7oV5800O%2Bd84N4S%2FbYGUpZUMC1WPoizkkqSo41aEGSIZHXvHrvlpQ9bRIXOjkroEuf1GlrXOWAYtdprfmSOGPX0vFEfMb2ORUBrORidF91w8Ewb%2Ft2XjoI1IaVvpx7iXCSmxGZk0u3ybOh%2FtFiw%3D%3D" style={{ width: "10rem", height: "10rem", objectFit: "cover", borderRadius: "10%", cursor: "pointer" }} alt="" />
+            {
+                user.picturePath === "" ?
+                    <Avatar sx={{ width: "10rem", height: "10rem",borderRadius:"10%" }} />
+                    :
+                    <Avatar src={user.picturePath} sx={{ width: "10rem", height: "10rem",cursor:"pointer",borderRadius:"10%" }} alt={user.userName} />
+            }
             <Box sx={{ flex: 1, display: "flex", flexDirection: "column", }}>
                 {/* user details */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 3, p: 1 }}>
@@ -111,29 +116,31 @@ const ProfilePage = () => {
                     <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} onClick={() => handleListData('following')} >{totalFollowing} following</Typography>
                     <Dialog maxWidth="sm" sx={{ width: "100%" }} open={open} onClose={handleClose}>
                         <Box sx={{ flex: 1, p: 1, display: "flex", alignItems: "center", width: "400px" }}>
-                            <Typography sx={{ flex: 1, textAlign: "center", fontSize: "1.1rem", textTransform: "capitalize" }}>{title}</Typography>
+                            <Typography sx={{ flex: 1, p: 1, fontSize: "1.1rem", textTransform: "capitalize" }}>{title}</Typography>
                             <CloseOutlinedIcon onClick={handleClose} sx={{ fontSize: "2rem" }} />
                         </Box>
                         <Divider></Divider>
                         {
                             Array.isArray(ListData) && (
                                 ListData.length > 0 ? (
-                                    <Box sx={{ flex: 1, display: "flex",flexDirection:"column",overflowY:"scroll" }}>
+                                    <Box sx={{ minHeight: "350px", flex: 1, display: "flex", flexDirection: "column", overflow: "auto" }}>
                                         {
                                             ListData.map((user) => {
-                                                return <Box sx={{ display: "flex",alignItems: "center", gap: "1rem", m: 1 }}>
-                                                        <Avatar src="./assets/images/Snapchat-1048757234.jpg" sx={{ borderRadius: 2, height: "3rem", width: "3rem" }} />
-                                                        <Box sx={{ display: "flex", flexDirection: "column" }}>
-                                                            <Typography>{user.userName}</Typography>
-                                                            <Typography>{user.firstName} {user.lastName}</Typography>
-                                                        </Box>
+                                                return <Box sx={{ display: "flex", alignItems: "center", gap: "1rem", m: 1 }}>
+                                                    <Avatar src={user.picturePath} sx={{ borderRadius: 2, height: "3rem", width: "3rem" }} />
+                                                    <Box sx={{ display: "flex", flexDirection: "column" }}>
+                                                        <Typography>{user.userName}</Typography>
+                                                        <Typography>{user.firstName} {user.lastName}</Typography>
                                                     </Box>
+                                                </Box>
                                             })
                                         }
 
                                     </Box>
                                 ) : (
-                                    <Typography sx={{ flex: 1, fontSize: "1rem", p: 1, textAlign: "center" }}>No User Found</Typography>
+                                    <Box sx={{ minHeight: "350px", flex: 1, display: "flex", flexDirection: "column", overflow: "auto" }}>
+                                        <Typography sx={{ flex: 1, fontSize: "1rem", p: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>No User Found</Typography>
+                                    </Box>
                                 )
                             )
                         }
@@ -167,7 +174,6 @@ const ProfilePage = () => {
             </Box>
         </Box>
         <Box sx={{ flex: 1 }}>
-
         </Box>
     </Box>
 };

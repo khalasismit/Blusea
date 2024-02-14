@@ -2,11 +2,10 @@ import React from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 import ExploreIcon from '@mui/icons-material/Explore';
 import SearchIcon from '@mui/icons-material/Search';
-import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 // import AddBoxIcon from '@mui/icons-material/AddBox';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Avatar, Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Mode from '../mode';
 import Create from '../create';
@@ -23,7 +22,7 @@ const Navigation = () => {
         borderRadius: 4,
         p: "0.5rem",
         boxShadow: isNonMobile ? "1px 0px 5px rgba(0,0,0,0.1)" : "",
-        m: 0, 
+        m: 0,
         height: isNonMobile ? "100vh" : "5rem",
         width: isNonMobile ? "max-content" : "100%",
         display: "flex",
@@ -33,10 +32,12 @@ const Navigation = () => {
     }}>
         {isNonMobile && (
             <Box sx={{
+                display: "flex",
+                flexDirection:"column",
+                alignItems:"center",
                 borderRadius: "1rem 1rem 0rem 0rem",
                 background: theme.palette.background.alt,
-                // p: "0.7rem 1rem 0.2rem 1rem",
-                p: "0 4rem",
+                p: "1.5rem 4rem",
                 fontSize: "2rem",
                 '& > *': {
                     color: theme.palette.neutral.dark,
@@ -44,6 +45,9 @@ const Navigation = () => {
                 }
             }}>
                 <img src={"https://firebasestorage.googleapis.com/v0/b/magnet784492.appspot.com/o/logo%2Fmagnet3.png?alt=media&token=750dc1ef-316a-4bf3-8a83-8024f0a90dea"} style={{ width: "5rem", height: "4rem", objectFit: "cover" }} alt="" />
+                <Typography fontWeight="bold" fontSize="30px" color={theme.palette.neutral.dark} sx={{ lineHeight: "0px" }}>
+                    Magnet
+                </Typography>
             </Box>
         )}
         <Box sx={{
@@ -120,7 +124,12 @@ const Navigation = () => {
                 </Link>
                 <Link to={`/profile/${user.userName}`} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                        <PersonIcon titleAccess='Profile' sx={{ fontSize: "2rem" }} />
+                        {
+                            user.picturePath === "" ?
+                                <Avatar sx={{ borderRadius: 2, height: "2rem", width: "2rem",color:theme.palette.neutral.dark,background:"none" }}></Avatar>
+                                :
+                                <Avatar src={user.picturePath} sx={{ borderRadius: 2, height: "2rem", width: "2rem" }}></Avatar>
+                        }
                         {isNonMobile && (
                             <Typography>
                                 Profile
