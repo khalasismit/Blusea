@@ -135,7 +135,7 @@ const Create = () => {
                             </Box>
                             <Box sx={{ display: "flex", flex: 1, flexDirection: "column", p: 1 }}>
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                                    <Avatar src="./assets/images/Snapchat-1048757234.jpg" sx={{ height: "2.5rem", width: "2.5rem" }}></Avatar>
+                                    <Avatar src={user.picturePath} sx={{ height: "2.5rem", width: "2.5rem",borderRadius:"10%" }}></Avatar>
                                     <Typography>
                                         {user.userName}
                                     </Typography>
