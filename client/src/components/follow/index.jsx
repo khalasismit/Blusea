@@ -2,8 +2,10 @@ import { Box, Button, useTheme } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { setLogin } from "../../redux/reducers";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 export const Follow = ({ user2userName }) => {
+    const {userName} = useParams();
     const user1 = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
     const theme = useTheme();
@@ -34,7 +36,7 @@ export const Follow = ({ user2userName }) => {
             console.log("isReqsent", isReqsent);
             // console.log("isRequest", isRequest);
 
-            if (!isUser1Following && !isUser2Following) {
+            if (!isUser1Following && !isUser2Following && !isReqsent) {
                 setType("Follow");
             } else if (!isUser1Following && isReqsent) {
                 setType("Requested");
@@ -51,7 +53,7 @@ export const Follow = ({ user2userName }) => {
     }
     useEffect(() => {
         getUser2(user1)
-    }, [user1, Type]) //eslint-disable-line react-hooks/exhaustive-deps
+    }, [user1, Type,userName]) //eslint-disable-line react-hooks/exhaustive-deps
 
     const handleClick = async (Type, user1, user2) => {
         try {
@@ -96,7 +98,7 @@ export const Follow = ({ user2userName }) => {
                 // console.log("isReqsent", isReqsent);
                 // console.log("isRequest",isRequest)
 
-                if (!isUser1Following && !isUser2Following) {
+                if (!isUser1Following && !isUser2Following && !isReqsent) {
                     setType("Follow");
                 } else if (isUser1Following && isUser2Following) {
                     setType("Unfollow");

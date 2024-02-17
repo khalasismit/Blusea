@@ -33,8 +33,8 @@ const Navigation = () => {
         {isNonMobile && (
             <Box sx={{
                 display: "flex",
-                flexDirection:"column",
-                alignItems:"center",
+                flexDirection: "column",
+                alignItems: "center",
                 borderRadius: "1rem 1rem 0rem 0rem",
                 background: theme.palette.background.alt,
                 p: "1.5rem 4rem",
@@ -126,7 +126,7 @@ const Navigation = () => {
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                         {
                             user.picturePath === "" ?
-                                <Avatar sx={{ borderRadius: 2, height: "2rem", width: "2rem",color:theme.palette.neutral.dark,background:"none" }}></Avatar>
+                                <Avatar sx={{ borderRadius: 2, height: "2rem", width: "2rem", color: theme.palette.neutral.dark, background: "none" }}></Avatar>
                                 :
                                 <Avatar src={user.picturePath} sx={{ borderRadius: 2, height: "2rem", width: "2rem" }}></Avatar>
                         }
@@ -140,44 +140,43 @@ const Navigation = () => {
             </Box>
 
             {
-                isNonMobile && (<Box sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    background: theme.palette.background.alt,
-                    borderRadius: "0 0 1rem 1rem",
-                }}>
+                isNonMobile && (
                     <Box sx={{
                         display: "flex",
-                        flexDirection: isNonMobile ? "column" : "row",
-                        boxShadow: isNonMobile ? "" : "0px -1px 5px rgba(0,0,0,0.1)",
-                        color: theme.palette.neutral.dark,
-                        zIndex: 100,
-                        '& > *': {
-                            borderRadius: 2,
-                            p: "0.7rem 1rem"
-                        },
-                        '& > *:hover': {
-                            color: theme.palette.neutral.light,
-                            background: theme.palette.neutral.mediumMain,
-                            cursor: 'pointer'
-                        },
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        background: theme.palette.background.alt,
+                        borderRadius: "0 0 1rem 1rem",
                     }}>
-                        <Link to={"/settings"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
-                            <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                                <MenuIcon titleAccess='Settings' sx={{ fontSize: "2rem" }} />
-                                {isNonMobile && (
-                                    <Typography>
-                                        Settings
-                                    </Typography>
-                                )}
-                            </Box>
-                        </Link>
-                    </Box>
-                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                        <Box sx={{
+                            display: "flex",
+                            flexDirection: isNonMobile ? "column" : "row",
+                            boxShadow: isNonMobile ? "" : "0px -1px 5px rgba(0,0,0,0.1)",
+                            color: theme.palette.neutral.dark,
+                            zIndex: 100,
+                            '& > *': {
+                                borderRadius: 2,
+                                p: "0.7rem 1rem"
+                            },
+                            '& > *:hover': {
+                                color: theme.palette.neutral.light,
+                                background: theme.palette.neutral.mediumMain,
+                                cursor: 'pointer'
+                            },
+                        }}>
+                            <Link to={"/settings"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
+                                <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                                    <MenuIcon titleAccess='Settings' sx={{ fontSize: "2rem" }} />
+                                    {isNonMobile && (
+                                        <Typography>
+                                            Settings
+                                        </Typography>
+                                    )}
+                                </Box>
+                            </Link>
+                        </Box>
                         <Mode></Mode>
                     </Box>
-                </Box>
                 )
             }
         </Box >

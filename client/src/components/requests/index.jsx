@@ -3,9 +3,9 @@ import Request from "../request"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 const Requests = () => {
-    const user = useSelector(state=>state.user)
-    const {_id} = user
-    const [Loading,setLoading] = useState(true);
+    const user = useSelector(state => state.user)
+    const { _id } = user
+    const [Loading, setLoading] = useState(true);
     const [Users, setUsers] = useState([])
     const { palette } = useTheme();
     const handleRequest = async () => {
@@ -14,7 +14,6 @@ const Requests = () => {
             headers: {}
         })
         const data = await res.json();
-        console.log(data)
         setUsers(data);
         setLoading(false);
     }
@@ -23,15 +22,13 @@ const Requests = () => {
     }, [user]);
     return <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
         <Box sx={{ display: "flex", flexDirection: "column" }} >
-            <Box>
-                <Typography sx={{
-                    color: palette.neutral.main,
-                    fontSize: "1.2rem",
-                    fontWeight: "bold",
-                }}>
-                    REQUESTS
-                </Typography>
-            </Box>
+            <Typography sx={{
+                color: palette.neutral.main,
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+            }}>
+                REQUESTS
+            </Typography>
             <Box sx={{ gap: 1, display: "flex", flexDirection: "column" }}>
                 {
                     !Loading ? (

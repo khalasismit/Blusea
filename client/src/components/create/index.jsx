@@ -120,7 +120,7 @@ const Create = () => {
                                         >
                                             <Input {...getInputProps()} />
                                             {!values.file ? (
-                                                <Box sx={{ flex: 1, width: isNonMobile ? "400px": "320px" , height: isNonMobile ? "400px": "320px" , display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                <Box sx={{ flex: 1, width: isNonMobile ? "400px": "400px" , height: isNonMobile ? "400px": "320px" , display: "flex", alignItems: "center", justifyContent: "center" }}>
                                                     <Typography>Add Picture Here</Typography>
                                                 </Box>
                                             ) : (
@@ -140,7 +140,7 @@ const Create = () => {
                                         {user.userName}
                                     </Typography>
                                 </Box>
-                                <Box sx={{ p: 1 }}>
+                                <Box sx={{ p: 0 }}>
                                     <TextField name="caption" placeholder="Write a caption..." variant="standard" fullWidth multiline rows={6} value={values.caption} onChange={handleChange} onBlur={handleBlur} />
                                 </Box>
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 2, p: 1 }}>

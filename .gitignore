@@ -145,3 +145,5 @@ client/public/assets/images/Snapchat-2059617544.jpg
 client/public/assets/images/Snapchat-2142773828.jpg
 apikey.json
 server/data.json
+server/temp/genPostData.py
+server/temp/genUserData.py

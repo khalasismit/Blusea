@@ -21,16 +21,15 @@ const Feed = () => {
             setPosts(data);
         } catch (error) {
             console.error('Error fetching posts:', error);
-            setPosts([]); // Set empty array to prevent infinite loading
+            setPosts([]); 
         }
     };
 
     useEffect(() => {
         fetchPosts();
-    }, [POSTS]); // Fetch posts when POSTS state changes
+    }, [POSTS]);
 
-    return <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
-        <Box sx={{ display: "flex", gap: 1, flexDirection: "column-reverse"}}>
+    return <Box sx={{ flex: 1, display: "flex", justifyContent: "center",gap:1,flexDirection:"column-reverse" }}>
             {
                 Array.isArray(posts) ? (
                     posts.map((post) => (
@@ -54,7 +53,6 @@ const Feed = () => {
                     </Box>
                 )
             }
-        </Box>
     </Box>
 }
 export default Feed;

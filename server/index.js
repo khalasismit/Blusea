@@ -11,6 +11,7 @@ import uploadFile from "./controllers/uploadFile.js";
 import authRoute from "./routes/auth.js";
 import userRoute from "./routes/user.js";
 import postRoute from "./routes/post.js";
+import messageRoute from "./routes/message.js";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -30,7 +31,7 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use('/auth', authRoute);
 app.use('/users', userRoute);
 app.use('/posts', postRoute);
-
+app.use('/message', messageRoute);
 /* ROUTES SETUP WHICH USES FILE UPLOAD */
 
 app.use('/', uploadFile);

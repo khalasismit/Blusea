@@ -26,7 +26,7 @@ const AuthPage = () => {
         borderRadius="1.5rem"
         backgroundColor={theme.palette.background.alt}
       >
-        <Typography fontWeight="500" variant="h5" align="center" sx={{ mb: "1.5rem" }}>
+        <Typography sx={{ mb: "1.5rem",textAlign:"center",fontSize:"1rem" }}>
           Bringing People Closer : Magnet - Your Social Attraction!
         </Typography>
         <Form />

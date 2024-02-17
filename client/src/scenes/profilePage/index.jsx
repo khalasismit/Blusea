@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Dialog, Divider, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux"
 import { Follow } from "../../components/follow";
 import GridOnIcon from '@mui/icons-material/GridOn';
@@ -21,6 +21,7 @@ const ProfilePage = () => {
     const [ListData, setListData] = useState([]);
     const [isLoggedInUser, setIsLoggedInUser] = useState(true)
     const theme = useTheme()
+    const navigate = useNavigate();
     const { userName } = useParams();
     const [user, setUser] = useState([]);
     const [totalPosts, setTotalPosts] = useState(0);
@@ -81,6 +82,10 @@ const ProfilePage = () => {
             console.log(error)
         }
     }
+    const NavigateToProfile = (userName) => {
+        handleClose();
+        navigate(`/profile/${userName}`);
+    }
 
     return <Box sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", gap: "2rem", m: "2rem 0" }}>
@@ -129,7 +134,7 @@ const ProfilePage = () => {
                                                 return <Box sx={{ display: "flex", alignItems: "center", gap: "1rem", m: 1 }}>
                                                     <Avatar src={user.picturePath} sx={{ borderRadius: 2, height: "3rem", width: "3rem" }} />
                                                     <Box sx={{ display: "flex", flexDirection: "column" }}>
-                                                        <Typography>{user.userName}</Typography>
+                                                        <Typography onClick={()=>NavigateToProfile(user.userName)} >{user.userName}</Typography>
                                                         <Typography>{user.firstName} {user.lastName}</Typography>
                                                     </Box>
                                                 </Box>
