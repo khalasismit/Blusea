@@ -72,7 +72,7 @@ export const accept = async (req, res) => {
 
         console.log(`${user1userName} started following ${user2userName}`);
         
-        res.status(200).json(updatedUser);
+        res.status(200).json(updatedUser2);
     } catch (err) {
         res.status(400).json({ error: err })
     }
@@ -80,8 +80,8 @@ export const accept = async (req, res) => {
 export const reject = async (req, res) => {
     try {
         const { userId,followId } = req.params;
-        let user1 = userId;
-        let user2 = followId;
+        let user1 = userId;//other
+        let user2 = followId;//mine
         const updatedUser = await User.findByIdAndUpdate({ _id:user1 }, {
             $pull:{ followRequest:user2 }
         },{
@@ -99,7 +99,7 @@ export const reject = async (req, res) => {
         console.log(`${user1userName} Reject the Request of ${user2userName}`);
 
         // res.status(200).json("Follow-Request-Rejected");
-        res.status(200).json(updatedUser);
+        res.status(200).json(updatedUser2);
     } catch (err) {
         res.status(400).json({ error: err })
     }

@@ -1,4 +1,4 @@
-import { Avatar, Box, Input, Switch, TextField, Typography, useMediaQuery, useTheme } from "@mui/material"
+import { Avatar, Box, CircularProgress, Input, Switch, TextField, Typography, useMediaQuery, useTheme } from "@mui/material"
 import * as React from 'react';
 import KeyboardBackspaceOutlinedIcon from '@mui/icons-material/KeyboardBackspaceOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
@@ -14,6 +14,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import { setPosts } from "../../redux/reducers";
 const Create = () => {
     const dispatch = useDispatch()
+    const [loading, setLoading] = useState(true)
     const [isOpenAdditional, setIsOpenAdditional] = useState(false);
     const user = useSelector((state) => state.user);
     const initialValues = {
@@ -24,6 +25,7 @@ const Create = () => {
 
     const createPost = async (values, onSubmitProps) => {
         // console.log(values);
+        setLoading(true)
         var formData = new FormData();
         formData.append("file", values.file);
         formData.append("userId", user._id);
@@ -45,7 +47,8 @@ const Create = () => {
         dispatch(
             setPosts({ posts: newPost })
         )
-        if(newPost){
+        if (newPost) {
+            setLoading(false);
             setOpen(false);
         }
     };
@@ -67,7 +70,7 @@ const Create = () => {
                 </Typography>
             )}
         </Box>
-        <Dialog maxWidth={isNonMobile ? "md" : "sm" } fullWidth open={open} onClose={handleClose}>
+        <Dialog maxWidth={isNonMobile ? "md" : "sm"} fullWidth open={open} onClose={handleClose}>
             <Formik initialValues={initialValues} onSubmit={createPost} >
                 {({
                     values,
@@ -94,13 +97,21 @@ const Create = () => {
                                 </Typography>
                             </Box>
                             <Box>
-                                <Typography sx={{
-                                    p: 1, fontSize: "1rem", color: theme.palette.primary.main, '&:hover': {
-                                        cursor: "pointer"
-                                    }
-                                }} onClick={handleSubmit}>
-                                    Share
-                                </Typography>
+                                {
+                                    loading ? (
+                                        <Box sx={{display:"flex",alignItems:"center",p:1}}>
+                                        <CircularProgress size={25} />
+                                        </Box>
+                                    ) : (
+                                        <Typography sx={{
+                                            p: 1, fontSize: "1rem", color: theme.palette.primary.main, '&:hover': {
+                                                cursor: "pointer"
+                                            }
+                                        }} onClick={handleSubmit}>
+                                            Share
+                                        </Typography>
+                                    )
+                                }
                             </Box>
                         </Box>
                         <Box sx={{ display: "flex", flexDirection: isNonMobile ? "row" : "column", justifyContent: "center", gap: 2 }}>
@@ -120,11 +131,11 @@ const Create = () => {
                                         >
                                             <Input {...getInputProps()} />
                                             {!values.file ? (
-                                                <Box sx={{ flex: 1, width: isNonMobile ? "400px": "400px" , height: isNonMobile ? "400px": "320px" , display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                <Box sx={{ flex: 1, width: isNonMobile ? "400px" : "400px", height: isNonMobile ? "400px" : "320px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                                     <Typography>Add Picture Here</Typography>
                                                 </Box>
                                             ) : (
-                                                <Box sx={{ flex: 1, width: isNonMobile ? "400px": "320px" , height: isNonMobile ? "400px": "320px" , display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                <Box sx={{ flex: 1, width: isNonMobile ? "400px" : "320px", height: isNonMobile ? "400px" : "320px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                                     {/* <Box sx={{ display: "flex", alignItems: "center" }} > */}
                                                     <img src={URL.createObjectURL(values.file)} alt="Selected Media" style={{ width: '100%', height: '100%', objectFit: "cover" }} />
                                                 </Box >
@@ -135,7 +146,7 @@ const Create = () => {
                             </Box>
                             <Box sx={{ display: "flex", flex: 1, flexDirection: "column", p: 1 }}>
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                                    <Avatar src={user.picturePath} sx={{ height: "2.5rem", width: "2.5rem",borderRadius:"10%" }}></Avatar>
+                                    <Avatar src={user.picturePath} sx={{ height: "2.5rem", width: "2.5rem", borderRadius: "10%" }}></Avatar>
                                     <Typography>
                                         {user.userName}
                                     </Typography>
@@ -164,7 +175,7 @@ const Create = () => {
                                                 </Typography>
                                                 <Switch />
                                             </Box>
-                                            <Typography fontSize={"0.9rem"} sx={{color:theme.palette.neutral.mediumMain }}> "Friends Only" is a privacy feature that limits content visibility to a user's approved connections or friends. </Typography>
+                                            <Typography fontSize={"0.9rem"} sx={{ color: theme.palette.neutral.mediumMain }}> "Friends Only" is a privacy feature that limits content visibility to a user's approved connections or friends. </Typography>
                                         </Box>
                                     )
                                 }
