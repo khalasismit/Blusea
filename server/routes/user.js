@@ -1,12 +1,15 @@
 import express from "express";
 
-import { getUsers, getUser } from "../controllers/user.js"
-import { follow, accept, reject, cancel, unfollow } from "../controllers/follow.js";
+import { getUsers, getUser, getFollowing, getFollowers } from "../controllers/user.js"
+import { follow, accept, reject, cancel, unfollow, requests } from "../controllers/follow.js";
 
 const router = express.Router();
 
 router.get("/",getUsers);
-router.get("/:id",getUser);
+router.get("/:userName",getUser);
+router.get("/:userName/followers",getFollowers);
+router.get("/:userName/following",getFollowing);
+router.get("/:id/requests",requests)
 
 // SEND_FOLLOW_REQUEST - ACCEPT_REQUEST - REJECT_REQUEST
 router.put("/:userId/follow-request/:followId",follow);

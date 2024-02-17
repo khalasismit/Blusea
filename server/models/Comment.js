@@ -1,11 +1,20 @@
 import mongoose from "mongoose";
-
-// id
-// comment ()
-// userId ( ref )
-// postId ( ref )
-// created_at
-// updated_at
+const ReplySchema = new mongoose.Schema({
+    comment: {
+        type: String,
+        require:true
+    },
+    repliedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+    },
+    likes: {
+        type: Array,
+        default: []
+    }
+}, {
+    timestamps: true
+});
 
 const CommentSchema = new mongoose.Schema(
     {
@@ -18,23 +27,21 @@ const CommentSchema = new mongoose.Schema(
             require:true
         },
         comment:{
-            type:String
+            type:String,
+            require:true
         },
         likes:{
             type:Array,
             default:[]
         },
-        reply:[{
-            type:{
-                CommentSchema,
-                replyTo: mongoose.Schema.Types.ObjectId,
-                ref:"user"
-            }
-        }]
+        replies:{
+            type:Array,
+            default:[]
+        }
     },{
         timestamps:true
     }
 );
 
 const Comment = mongoose.model("Comment",CommentSchema);
-export default Comment;
+export default Comment

@@ -81,7 +81,7 @@ const Form = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values)
             }
-        )
+        );
         let savedUser = await savedUserRes.json();
         onSubmitProps.resetForm();
         if (savedUser !== "Error") {
@@ -156,7 +156,7 @@ const Form = () => {
                 setFieldValue,
                 resetForm,
             }) => (
-                <form autoComplete="on" onChange={handleChange} onSubmit={handleSubmit}>
+                <form autoComplete="on" onSubmit={handleSubmit}>
                     <Snackbar
                         open={snackbar}
                         varient="filled"

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 // id
 // userId
 // imagePath
@@ -14,38 +13,36 @@ import mongoose from "mongoose";
 
 const PostSchema = new mongoose.Schema(
     {
-        userId:{
-            type:String,
-            require:true
+        userId: {
+            type: String,
+            require: true
         },
-        imagePath:{
-            type:String,
+        imageId: {
+            type: String,
+            require: true,
         },
-        caption:{
-            type:String,
-            max:60
+        caption: {
+            type: String,
+            max: 60,
         },
-        likes:[{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"User", 
-            default:[],
+        likes: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: [],
         }],
-        comments:[{
-            text:String,
-            postedBy:{
-                type:mongoose.Schema.Types.ObjectId,
-                ref:"User"
-            },
-            default:[]
+        comments: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "comment",
+            default: [],
         }],
         visibility: {
-            type :Boolean,
-            default:true
+            type: Boolean,
+            default: true
         }
-    },{
-        timestamps:true
-    }
+    }, {
+    timestamps: true
+}
 );
 
-const Post = mongoose.model("Post",PostSchema);
+const Post = mongoose.model("Post", PostSchema);
 export default Post;
