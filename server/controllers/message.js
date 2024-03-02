@@ -1,42 +1,179 @@
-// import Conversation from "../models/Conversation";
-// import Message from "../models/Message";
+import Conversation from "../models/Conversation.js";
+import Message from "../models/Message.js";
+import crypto from 'crypto-js';
+import dotenv from 'dotenv'
+dotenv.config();
+/*
+USERID FOR TESTING
+
+CURIOUSK : 65cb9a3572dc8e25e6485ba4
+SMITK : 65cb9a4f72dc8e25e6485ba6
+TESTUSER1 : 65cc410814dfd545893e5347
+
+*/
+
+// Function to encrypt a message using AES
+const encryptMessage = (message, key) => {
+    const cipherText = crypto.AES.encrypt(message, key).toString()
+    return cipherText;
+}
+
+// const message = encryptMessage("hello","sbjcbsjdbh");
+// console.log(message)
+
+// Function to decrypt a message using AES
+const decryptMessage = (encryptMessage, key) => {
+    const bytes = crypto.AES.decrypt(encryptMessage, key);
+    if (bytes.sigBytes > 0) {
+        const decryptedMessage = bytes.toString(crypto.enc.Utf8)
+        return decryptedMessage
+    }
+    return
+}
+/* CREATE CONVERSATION */
+export const createConversation = async (req, res) => {
+    try {
+        // console.log(userId);
+        let { userId, otherUserId } = req.body;
+        console.log(userId, otherUserId)
+        let existingConversation = await Conversation.findOne({
+            participants: { $all: [userId, otherUserId] }
+        });
+        if (existingConversation) {
+            // If conversation already exists, return the existing conversation
+            const conversation = await existingConversation.populate("participants messages")
+            const decryptedMessagesConversation = await Promise.all(conversation.messages.map((message) => {
+                const decryptedMessage = decryptMessage(message.message, process.env.SECRET_KEY)
+                return {...message.toObject(),message:decryptedMessage}
+            }))
+            return res.status(200).json(decryptedMessagesConversation);
+        }
+        /* Create new conversation and save it */
+        const newConversation = await Conversation.create({ participants: [userId, otherUserId] })
+        const conversation = await newConversation.populate("participants")
+        return res.status(201).json(conversation);
+    } catch (err) {
+        console.log("server error")
+        return res.status(400).json({ message: "Server Error" });
+    }
+}
+
+// 2024-03-01T14:22:37.446+00:00
+/* GET CONVERSATIONS */
+export const getConversations = async (req, res) => {
+    try {
+        const { id } = req.params;
+        let conversations = await Conversation.find({ participants: id }).sort({ updatedAt: -1 }).populate("participants messages");
+        conversations = await Promise.all(conversations.map(async (conversation) => {
+            const decryptedMessages = await Promise.all(conversation.messages.map(async (message) => {
+                const decryptedMessage = decryptMessage(message.message, process.env.SECRET_KEY);
+                return {
+                    ...message._doc,
+                    message: decryptedMessage
+                };
+            }));
+            
+            return {
+                ...conversation._doc,
+                messages: decryptedMessages
+            };
+        }));
+        return res.status(200).json(conversations);
+    } catch (err) {
+        console.log("server error")
+        res.status(400).json({ error: err });
+    }
+}
+
+export const getConversation = async (req, res) => {
+    try {
+        const { id } = req.params;
+        let conversation = await Conversation.findOne({ _id: id }).populate("participants messages");
+        const decryptedMessages = await Promise.all(conversation.messages.map(async (message) => {
+            const decryptedMessage = await decryptMessage(message.message, process.env.SECRET_KEY);
+            return {
+                ...message._doc,
+                message: decryptedMessage
+            };
+        }));
+        // Replace the messages array in the conversation object with the decrypted messages
+        conversation.messages = decryptedMessages;
+
+        return res.status(200).json(conversation);
+    } catch (err) {
+        console.log("server error")
+        res.status(400).json({ error: err });
+    }
+}
 
 export const sendMessage = async (req, res) => {
-    console.log("message sent");
+    try {
+        const { message, senderId, receiverId } = req.body;
+        const conversation = await Conversation.findOne({ participants: { $all: [senderId, receiverId] } });
+        const encryptedMessage = encryptMessage(message, process.env.SECRET_KEY);
+        // if found then add else create one
+        if (conversation) {
+            const newMessage = new Message({
+                conversationId: conversation._id,
+                receiverId: receiverId,
+                senderId: senderId,
+                message: encryptedMessage
+            });
+            await newMessage.save();
+            conversation.messages.push(newMessage._id);
+            await conversation.save();
+            const NewMessage = await Message.findOne({ _id: newMessage._id }).populate("senderId receiverId")
+            res.status(200).json({ NewMessage });
+        } else {
+            const newConversation = new Conversation({
+                participants: [senderId, receiverId],
+                messages: []
+            });
+            await newConversation.save();
+            const newMessage = new Message({
+                conversationId: newConversation._id,
+                senderId: senderId,
+                receiverId: receiverId,
+                message: encryptedMessage
+            });
+            await newMessage.save();
+            newConversation.messages.push(newMessage._id);
+            await newConversation.save();
+            const NewMessage = await Message.findOne({ _id: newMessage._id }).populate("senderId receiverId").exec();
+            res.status(200).json({ NewMessage });
+        }
+    } catch (err) {
+        console.log("server error")
+        res.status(400).json({ error: err });
+    }
 }
-    // try {
-        // const { senderId, receiverId } = req.params;
-        // const { text } = req.body;
-        // const conversation = await Conversation.findOne({ participants: [senderId, receiverId] });
-        // if (conversation) {
-        //     const message = new Message({
-        //         conversationId: conversation._id,
-        //         sender: senderId,
-        //         text
-        //     });
-        //     await message.save();
-        //     conversation.messages.push(message._id);
-        //     await conversation.save();
-        //     res.status(200).json({ message });
-        // } else {
-        //     const newConversation = new Conversation({
-        //         participants: [senderId, receiverId],
-        //         messages: []
-        //     });
-        //     await newConversation.save();
-        //     const message = new Message({
-        //         conversationId: newConversation._id,
-        //         sender: senderId,
-        //         text
-        //     });
-        //     await message.save();
-        //     newConversation.messages.push(message._id);
-        //     await newConversation.save();
-        //     res.status(200).json({ message });
-        // }
-        // console.log("message sent");
-    // } catch (err) {
-    //     res.status(400).json({ error: err });
-    // }
+
+
+/* GET MESSAGES FOR A CONVERSATION */
+export const getMessages = async (req, res) => {
+    try {
+        const { conversationId } = req.params;
+        const messages = await Message.find({ conversationId }).populate("senderId receiverId");
+        const decryptedMessages = await Promise.all(messages.map(message => {
+            const Decryptedmessage = decryptMessage(message.message, process.env.SECRET_KEY)
+            return { ...message._doc, message: Decryptedmessage }
+        }));
+        res.status(200).json(decryptedMessages);
+    } catch (err) {
+        console.log("server error")
+        res.status(400).json({ error: err });
+    }
+}
+
+/* GET CONVERSATIONS */
+// export const getConversations = async (req, res) => {
+//     try {
+//         const {userId} = req.body;
+//         const conversations = await Conversation.find({ participants: userId });
+//         if (!conversations || !conversations.length) return res.status(404).json("No conversations found");
+//         res.status(200).json(conversations);
+//     } catch (err) {
+//         console.log("server error")
+//         res.status(400).json({ error: err });
+//     }
 // }
-// export const getMessagesInConversation = async (req, res) => {}
