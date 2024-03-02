@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Typography, useTheme } from "@mui/material"
-import Request from "../request"
+import Request from "./request"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 const Requests = () => {
@@ -20,27 +20,31 @@ const Requests = () => {
     useEffect(() => {
         handleRequest();
     }, [user]);
-    return <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
-        <Box sx={{ display: "flex", flexDirection: "column" }} >
+    return <Box sx={{ flex:1,display: "flex", justifyContent: "center" }}>
+        <Box sx={{ flex: 1, p: "0.5rem 1rem", borderRadius: 2, m: 1, display: "flex", flexDirection: "column", background: palette.background.alt }} >
             <Typography sx={{
                 color: palette.neutral.main,
                 fontSize: "1.2rem",
                 fontWeight: "bold",
             }}>
-                REQUESTS
+                Requests
             </Typography>
-            <Box sx={{ gap: 1, display: "flex", flexDirection: "column" }}>
+            <Box sx={{height:"46vh",overflowY:"scroll",scrollbarWidth:"none",gap: 1, display: "flex", flexDirection: "column" }}>
                 {
                     !Loading ? (
-                        Users.map((User) => (
-                            <Request
-                                reqId={User._id}
-                                key={User._id}
-                                userName={User.userName}
-                            />
-                        ))
+                        Users.length <= 0 ? (
+                            <Typography sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>No requests yet.</Typography>
+                        ) : (
+                            Users.map((User) => (
+                                <Request
+                                    reqId={User._id}
+                                    key={User._id}
+                                    userName={User.userName}
+                                />
+                            ))
+                        )
                     ) : (
-                        <Box sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Box sx={{ height: "30vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
                             <CircularProgress />
                         </Box>
                     )}

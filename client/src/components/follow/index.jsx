@@ -138,7 +138,7 @@ export const Accept = ({ reqId }) => {
         dispatch(setLogin({ user: updatedUser, token: token }));
     }
     return <>
-        <Button onClick={handleClick} variant="text" color="success" sx={{ flex: 1 }}>
+        <Button onClick={handleClick} variant="outlined" color="success" sx={{ flex: 1 }}>
             Accept
         </Button>
     </>
@@ -158,7 +158,7 @@ export const Decline = ({ reqId }) => {
         dispatch(setLogin({ user: updatedUser, token: token }));
     }
     return <>
-        <Button onClick={handleClick} variant="text" color="error" sx={{ flex: 1, }}>
+        <Button onClick={handleClick} variant="outlined" color="error" sx={{ flex: 1, }}>
             Decline
         </Button>
     </>
