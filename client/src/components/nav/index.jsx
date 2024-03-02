@@ -2,7 +2,9 @@ import React from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 import ExploreIcon from '@mui/icons-material/Explore';
 import SearchIcon from '@mui/icons-material/Search';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+// import Diversity2Icon from '@mui/icons-material/Diversity2';
+import TextsmsIcon from '@mui/icons-material/Textsms';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
 // import AddBoxIcon from '@mui/icons-material/AddBox';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Avatar, Box, Typography, useMediaQuery, useTheme } from '@mui/material';
@@ -12,6 +14,13 @@ import Create from '../create';
 import { useSelector } from 'react-redux';
 
 const Navigation = () => {
+    const handleContextMenu = (e) => {
+        e.preventDefault();
+    };
+
+    const handleDragStart = (e) => {
+        e.preventDefault();
+    };
     const user = useSelector(state => state.user)
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const theme = useTheme();
@@ -21,9 +30,8 @@ const Navigation = () => {
         zIndex: 100,
         borderRadius: 4,
         p: "0.5rem",
-        boxShadow: isNonMobile ? "1px 0px 5px rgba(0,0,0,0.1)" : "",
         m: 0,
-        height: isNonMobile ? "100vh" : "5rem",
+        height: isNonMobile ? "100vh" : "auto",
         width: isNonMobile ? "max-content" : "100%",
         display: "flex",
         flexDirection: "column",
@@ -44,7 +52,11 @@ const Navigation = () => {
                     cursor: 'pointer',
                 }
             }}>
-                <img src={"https://firebasestorage.googleapis.com/v0/b/magnet784492.appspot.com/o/logo%2Fmagnet3.png?alt=media&token=750dc1ef-316a-4bf3-8a83-8024f0a90dea"} style={{ width: "5rem", height: "4rem", objectFit: "cover" }} alt="" />
+                <img src={"https://firebasestorage.googleapis.com/v0/b/magnet784492.appspot.com/o/logo%2Fmagnet3.png?alt=media&token=750dc1ef-316a-4bf3-8a83-8024f0a90dea"}
+                    onContextMenu={handleContextMenu}
+                    onDragStart={handleDragStart}
+                    style={{ width: "5rem", height: "4rem", objectFit: "cover" }}
+                    alt="Magnet" />
                 <Typography fontWeight="bold" fontSize="30px" color={theme.palette.neutral.dark} sx={{ lineHeight: "0px" }}>
                     Magnet
                 </Typography>
@@ -54,7 +66,7 @@ const Navigation = () => {
             flex: 1,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-beteen"
+            justifyContent: "space-between"
         }}>
             <Box sx={{
                 flex: 1,
@@ -112,12 +124,23 @@ const Navigation = () => {
                     </Box>
                 </Link>
                 <Create></Create>
-                <Link to={"/notifications"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
+                {/* <Link to={"/notifications"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                         <NotificationsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
                         {isNonMobile && (
                             <Typography>
                                 Notification
+                            </Typography>
+                        )}
+                    </Box>
+                </Link> */}
+
+                <Link to={"/chats"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                        <TextsmsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
+                        {isNonMobile && (
+                            <Typography>
+                                Messaging
                             </Typography>
                         )}
                     </Box>
