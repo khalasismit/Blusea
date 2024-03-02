@@ -14,9 +14,15 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import { setPosts } from "../../redux/reducers";
 const Create = () => {
     const dispatch = useDispatch()
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [isOpenAdditional, setIsOpenAdditional] = useState(false);
     const user = useSelector((state) => state.user);
+    const [type,setType] = useState("public");
+    const [isPrivate, setIsPrivate] = useState(false);
+    const handleSwitchToggle = () => {
+        setIsPrivate(!isPrivate);
+        setType(isPrivate ? "private" : "public")
+    };
     const initialValues = {
         file: null,
         caption: "",
@@ -29,6 +35,7 @@ const Create = () => {
         var formData = new FormData();
         formData.append("file", values.file);
         formData.append("userId", user._id);
+        formData.append("type",type);
         formData.append("caption", values.caption);
         const uploadResponse = await fetch('http://localhost:3001/upload', {
             method: 'POST',
@@ -99,8 +106,8 @@ const Create = () => {
                             <Box>
                                 {
                                     loading ? (
-                                        <Box sx={{display:"flex",alignItems:"center",p:1}}>
-                                        <CircularProgress size={25} />
+                                        <Box sx={{ display: "flex", alignItems: "center", p: 1 }}>
+                                            <CircularProgress size={25} />
                                         </Box>
                                     ) : (
                                         <Typography sx={{
@@ -168,14 +175,27 @@ const Create = () => {
                                 </Box>
                                 {
                                     isOpenAdditional && (
+                                        // <Box sx={{ p: "0px 8px" }}>
+                                        //     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                        //         <Typography>
+                                        //             Friends Only
+                                        //         </Typography>
+                                        //         <Switch />
+                                        //     </Box>
+                                        //     <Typography fontSize={"0.9rem"} sx={{ color: theme.palette.neutral.mediumMain }}> "Friends Only" is a privacy feature that limits content visibility to a user's approved connections or friends. </Typography>
+                                        // </Box>
                                         <Box sx={{ p: "0px 8px" }}>
                                             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                                 <Typography>
-                                                    Friends Only
+                                                    {isPrivate ? "Friends Only" : "Public"} {/* Display the current privacy setting */}
                                                 </Typography>
-                                                <Switch />
+                                                <Switch checked={isPrivate} onChange={handleSwitchToggle} /> {/* Bind switch to state and handle toggle */}
                                             </Box>
-                                            <Typography fontSize={"0.9rem"} sx={{ color: theme.palette.neutral.mediumMain }}> "Friends Only" is a privacy feature that limits content visibility to a user's approved connections or friends. </Typography>
+                                            <Typography fontSize={"0.9rem"} sx={{ color: theme.palette.neutral.mediumMain }}>
+                                                {isPrivate
+                                                    ? "Friends Only is a privacy feature that limits content visibility to a user's approved connections or friends."
+                                                    : "Public posts are visible to everyone."} {/* Display privacy information based on the current setting */}
+                                            </Typography>
                                         </Box>
                                     )
                                 }
