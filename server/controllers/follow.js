@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-import {io} from "../index.js";
+// import {io} from "../index.js";
 export const requests = async (req,res)=>{
     try {
         const { id } = req.params;
@@ -36,7 +36,7 @@ export const follow = async (req, res) => {
         });
         const user2userName = updatedUser2.userName
         
-        io.emit('Request', { userId, followId });
+        // io.emit('Request', { userId, followId });
         console.log(`${user1userName} sent Request to ${user2userName}`);
 
         // res.status(200).json({massage:"Follow-Request-Sent"},updatedUser);
@@ -68,7 +68,7 @@ export const accept = async (req, res) => {
         });
         const user2userName = updatedUser2.userName
         
-        io.emit('Accept', { userId, followId });
+        // io.emit('Accept', { userId, followId });
 
         console.log(`${user1userName} started following ${user2userName}`);
         
@@ -95,7 +95,7 @@ export const reject = async (req, res) => {
         });
 
         const user2userName = updatedUser2.userName
-        io.emit('Reject', { userId, followId });
+        // io.emit('Reject', { userId, followId });
         console.log(`${user1userName} Reject the Request of ${user2userName}`);
 
         // res.status(200).json("Follow-Request-Rejected");
@@ -122,7 +122,7 @@ export const cancel = async (req,res) => {
             new:true
         });
         const user2userName = updatedUser2.userName
-        io.emit('Cancel', { userId, followId });
+        // io.emit('Cancel', { userId, followId });
         console.log(`${user1userName} cancel Request to ${user2userName}`);
 
         res.status(200).json(updatedUser);
@@ -151,7 +151,7 @@ export const unfollow = async ( req,res ) => {
         const user2userName = updatedUser2.userName
         console.log(`${user1userName} started unfollowing ${user2userName}`);
 
-        io.emit('Unfollow', { userId, followId });
+        // io.emit('Unfollow', { userId, followId });
         res.status(200).json(updatedUser)
     } catch (err) {
         res.status(400).json({error:err})

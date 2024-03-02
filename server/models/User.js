@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 
+// following :[1,2,3,4,5]
+// followers :[4,8,7,2]
+// all unique 
+// output : [1,2,3,4,5,7,8]
+
+
 // id (default)
 // name (FirstName + LastName )
 // userName ()
@@ -87,7 +93,11 @@ const UserSchema = new mongoose.Schema(
     posts: {
       type: Array,
       default: []
-    }
+    },
+    saved: [{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'Post'
+    }]
   },
   { timestamps: true }
 );

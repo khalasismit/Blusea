@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import sharp from "sharp";
+import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
 import admin from "firebase-admin";
@@ -15,6 +16,13 @@ admin.initializeApp({
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+router.use(cors());
+router.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
 // export const uploadFile = async (req,res) =>{ 
 router.post('/upload', upload.single("file"), async (req, res) => {
   try {
