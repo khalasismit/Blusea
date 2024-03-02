@@ -1,43 +1,33 @@
 import mongoose from "mongoose";
-const ReplySchema = new mongoose.Schema({
-    comment: {
-        type: String,
-        require:true
-    },
-    repliedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user"
-    },
-    likes: {
-        type: Array,
-        default: []
-    }
-}, {
-    timestamps: true
-});
 
 const CommentSchema = new mongoose.Schema(
     {
-        userId:{
+        type:{
             type:String,
             require:true
         },
+        userId:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User",
+            require:true
+        },
         postId:{
-            type:String,
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Post",
             require:true
         },
         comment:{
             type:String,
             require:true
         },
-        likes:{
-            type:Array,
-            default:[]
-        },
-        replies:{
-            type:Array,
-            default:[]
-        }
+        likes:[{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User"
+        }],
+        replies:[{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Comment",
+        }]
     },{
         timestamps:true
     }

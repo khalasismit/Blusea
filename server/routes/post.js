@@ -2,15 +2,13 @@ import express from "express";
 import multer from 'multer';
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-import { Feed, comment, explore, getPost, reply, toggleLike } from "../controllers/post.js";
+import { Feed, comment, explore, getComments, getPost, getUserPosts, savePost, toggleCommentLike, toggleLike } from "../controllers/post.js";
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 
 const router = express.Router();
 
-router.get("/", Feed);
-router.get("/explore",explore)
-router.get("/:postId",getPost)
+/* ROUTE FOR CREATING A NEW POST */
 router.post("/create", upload.single("file"), async (req, res) => {
   try {
     const { userId, caption, fileId } = req.body;
@@ -40,8 +38,22 @@ router.post("/create", upload.single("file"), async (req, res) => {
   }
 });
 
+/* ROUTES TO GET ALL POSTS */ 
+router.get("/", Feed);
+// router.get("/:userId", Feed);
+router.get("/explore",explore);
+
+/* ROUTE FOR SINGLE POST */ 
+router.get("/:postId",getPost);
+router.get("/:userId/posts",getUserPosts);
+router.patch("/:postId/toggleSave",savePost);
+
+/* ROUTES FOR LIKE/UNLIKE POST */ 
 router.patch("/:postId/toggleLike/:userId", toggleLike);
-router.post("/:postId/comment", comment);
-router.post("/:postId/comment/:commentId/reply", reply);
+
+/* ROUTES RELATED TO COMMENT */ 
+router.get("/:postId/comment/",getComments);
+router.post("/:postId/comment/new", comment);
+router.patch("/:postId/comment/toggleCommentLike", toggleCommentLike);
 
 export default router;

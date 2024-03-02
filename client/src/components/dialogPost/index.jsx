@@ -3,57 +3,68 @@ import { formatDistanceToNow } from 'date-fns';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-// import TurnedInIcon from '@mui/icons-material/TurnedIn';
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
+// import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import { useEffect, useState } from "react";
 import ImageWidget from "../imgwidget";
 import Like from "../like";
 // import { useSelector } from "react-redux";
 // import Follow from "../follow";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Comments from "../comments";
+import { setPost } from "../../redux/reducers";
+import SavePost from "../savePost";
 
-const DialogPost = ({ item, open, handleClose,onClose}) => {
-    const [post,setPost] = useState(item);
-    // console.log("Post:",post)
+const DialogPost = ({ item, open, handleClose, onClose }) => {
+    const dispatch = useDispatch();
+    const [post, setpost] = useState(item);
+    console.log("Post:",post)
     const user = useSelector((state) => state.user);
-    const POSTS = useSelector((state) => state.posts);
+    const Posts = useSelector((state) => state.posts);
     // const LIKES = likes.length
     // const COMMENTS = comments.length
     const navigate = useNavigate();
     const theme = useTheme();
     const { typography } = useTheme();
     const [comment, setComment] = useState("");
+    const [commentId, setCommentId] = useState("");
     const isNonMobile = useMediaQuery("(min-width:768px)")
     const [timeAgo, setTimeAgo] = useState('');
+    const updateCommentField = (value) => {
+        setComment(value);
+    };
+    const parentId = (value) => {
+        setCommentId(value);
+    };
 
     // console.log(postId, profilePic, picturePath, pictureAlt, userName, likes, createdAt, open, handleClose)
     const getPost = async (post) => {
         // console.log(post)
         await fetch(`http://localhost:3001/posts/${post._doc._id}`, {
             method: 'GET',
-            headers: { },
         }).then(async (res) => await res.json()).then(async (data) => {
             // console.log(data);
-            setPost(data)
+            setpost(data)
         }).catch(err => { console.log(err) });
     }
-
-    useEffect(()=>{
+    
+    useEffect(() => {
         getPost(post)
-    },[POSTS,post])
-
+    }, [Posts])
+    
     const handleComment = async () => {
-
-        await fetch(`http://localhost:3001/posts/${post._doc.id}/comment`, {
+        await fetch(`http://localhost:3001/posts/${post._doc._id}/comment/new`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 userId: user._id,
-                comment: comment
+                comment: comment,
+                commentId : commentId
             })
         }).then(async (res) => await res.json()).then(async (data) => {
             // console.log(data);
+            dispatch(setPost(data));
+            getPost(post)
             setComment("");
         }).catch(err => { console.log(err) });
     }
@@ -74,19 +85,19 @@ const DialogPost = ({ item, open, handleClose,onClose}) => {
 
     const NavigateToProfile = () => {
         navigate(`/profile/${post.userName}`);
-    }   
+    }
     // return (<></>)
-    return <Dialog maxWidth={isNonMobile ? 'md' : "sm"} fullWidth open={open} onClose={handleClose} >
+    return <Dialog maxWidth={isNonMobile ? 'lg' : "md"} fullWidth open={open} onClose={handleClose} >
         <CloseOutlinedIcon onClick={handleClose} sx={{ fontSize: "2rem", position: "fixed", top: ".3rem", right: ".3rem" }} />
         <Box sx={{ flex: 1, display: "flex", flexDirection: isNonMobile ? "row" : "column", overflowY: "auto", scrollbarWidth: "none" }}>
             <Box sx={{ width: isNonMobile ? "600px" : "100%", p: "0 0.5rem" }}>
                 <ImageWidget src={post.url} alt={post.pictureAlt} />
             </Box>
             <Divider orientation={isNonMobile ? "vertical" : "horizontal"} variant="middle" flexItem ></Divider>
-            <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+            <Box sx={{flex:1,display: "flex", flexDirection: "column"}}>
                 {/* first Box */}
                 <Box>
-                    <Box sx={{ display: "flex", gap: "0.5rem", p: "0.5rem 0.5rem" }}>
+                    <Box sx={{ flex: 1, display: "flex", gap: "0.5rem", p: "0.5rem 0.5rem" }}>
                         <Box>
                             {
                                 post.picturePath === "" ?
@@ -101,46 +112,64 @@ const DialogPost = ({ item, open, handleClose,onClose}) => {
                         </Box>
                     </Box>
                     <Divider orientation="horizontal" variant="fullwidth" flexItem ></Divider>
+                    <Box sx={{ display: "flex", alignItems: "center", p: "0.5rem 0.5rem", gap: 1 }}>
+                        <Typography>
+                            <span style={{ fontSize: "1rem", fontStyle: "italic",marginRight:"1rem"}}>
+                                {post.userName}
+                            </span>
+                            <span>
+                                {post._doc.caption}
+                            </span>
+                        </Typography>
+                    </Box>
+                    <Divider orientation="horizontal" variant="fullwidth" flexItem ></Divider>
                 </Box>
                 {/* second Box */}
-                <Box sx={{ p: 1 }}>
-                    <Divider orientation="horizontal" variant="fullwidth" flexItem ></Divider>
-                    <Box sx={{ display: "flex", justifyContent: "space-between", p: "0.4rem 0" }}>
-                        <Box sx={{
-                            display: "flex",
-                            gap: "1rem",
-                            '& > *:hover': {
-                                color: theme.palette.neutral.main,
-                            },
-                        }}>
-                            <Box>
-                                <Like postId={post._doc._id} likes={post._doc.likes} />
+                <Box sx={{flex:1,display: "flex",flexDirection: "column" }}>
+                    {/* second first Box */}
+                    <Box sx={{flex:1,overflow: "auto", scrollbarWidth: "thin" }}>
+                        <Comments postId={post._doc._id} updateCommentField={updateCommentField} parentId={parentId} ></Comments>
+                    </Box>
+                    {/* second second Box */}
+                    <Box sx={{ p: 1,position:!isNonMobile && "sticky",bottom:!isNonMobile && 0,background:!isNonMobile&&theme.palette.background.default}}>
+                        <Divider orientation="horizontal" variant="fullWidth" flexItem ></Divider>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", p: "0.4rem 0" }}>
+                            <Box sx={{
+                                display: "flex",
+                                gap: "1rem",
+                                '& > *:hover': {
+                                    color: theme.palette.neutral.main,
+                                },
+                            }}>
+                                <Box>
+                                    <Like postId={post._doc._id} likes={post._doc.likes} />
+                                </Box>
+                                <Box>
+                                    <ModeCommentOutlinedIcon sx={{ fontSize: "1.7rem" }} />
+                                </Box>
+                                <Box>
+                                    <SendOutlinedIcon sx={{ fontSize: "1.7rem" }} />
+                                </Box>
                             </Box>
-                            <Box>
-                                <ModeCommentOutlinedIcon sx={{ fontSize: "1.7rem" }} />
-                            </Box>
-                            <Box>
-                                <SendOutlinedIcon sx={{ fontSize: "1.7rem" }} />
+                            <Box sx={{
+                                '& > *:hover': {
+                                    color: theme.palette.neutral.main,
+                                },
+                            }}>
+                                <Box>
+                                    <SavePost saved={user.saved} postId={post._doc._id}></SavePost>
+                                    {/* <TurnedInNotIcon sx={{ fontSize: "1.7rem" }} /> */}
+                                </Box>
                             </Box>
                         </Box>
-                        <Box sx={{
-                            '& > *:hover': {
-                                color: theme.palette.neutral.main,
-                            },
-                        }}>
-                            <Box>
-                                <TurnedInNotIcon sx={{ fontSize: "1.7rem" }} />
-                            </Box>
+                        <Box>
+                            <Typography>{post._doc.likes.length} likes </Typography>
                         </Box>
-                    </Box>
-                    <Box>
-                        <Typography>{post._doc.likes.length} likes </Typography>
-                    </Box>
-
-                    {/* add a comment textfield */}
-                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                        <TextField fullWidth size="small" variant="standard" label="Add a comment..." value={comment} onChange={(e) => { setComment(e.target.value) }} />
-                        <Button disabled={!comment || comment === "" ? true : false} sx={{ display: comment === "" ? "none" : "block", color: theme.palette.neutral.dark, }} onClick={handleComment}>Post</Button>
+                        {/* add a comment textfield */}
+                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                            <TextField fullWidth size="small" variant="standard" label="Add a comment..." value={comment} onChange={(e) => { setComment(e.target.value) }} />
+                            <Button disabled={!comment || comment === "" ? true : false} sx={{ display: comment === "" ? "none" : "block", color: theme.palette.neutral.dark, }} onClick={handleComment}>Post</Button>
+                        </Box>
                     </Box>
                 </Box>
             </Box>

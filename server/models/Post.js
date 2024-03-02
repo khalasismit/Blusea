@@ -13,6 +13,10 @@ import mongoose from "mongoose";
 
 const PostSchema = new mongoose.Schema(
     {
+        type:{
+            type:String,
+            require:true
+        },
         userId: {
             type: String,
             require: true
@@ -38,7 +42,12 @@ const PostSchema = new mongoose.Schema(
         visibility: {
             type: Boolean,
             default: true
-        }
+        },
+        saved: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: [],
+        }]
     }, {
     timestamps: true
 }

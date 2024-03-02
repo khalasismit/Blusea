@@ -6,10 +6,16 @@ import { Follow } from "../../components/follow";
 import GridOnIcon from '@mui/icons-material/GridOn';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+// import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import EditProfile from "../../components/editProfile";
+import Settings from "../../components/settings";
+import ActivityFeed from "./ActivityFeed";
 // import { setLogin } from "../../redux/reducers";
 const ProfilePage = () => {
+    const [active,setActive]=useState("posts")
+    const [AFT,setAFT]=useState("posts")
+    const [edit, setEdit] = useState(false);
     const [title, setTitle] = useState('');
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => {
@@ -91,9 +97,9 @@ const ProfilePage = () => {
         <Box sx={{ display: "flex", justifyContent: "space-between", gap: "2rem", m: "2rem 0" }}>
             {
                 user.picturePath === "" ?
-                    <Avatar sx={{ width: "10rem", height: "10rem",borderRadius:"10%" }} />
+                    <Avatar sx={{width: "10rem", height: "10rem", borderRadius: "10%" }} />
                     :
-                    <Avatar src={user.picturePath} sx={{ width: "10rem", height: "10rem",cursor:"pointer",borderRadius:"10%" }} alt={user.userName} />
+                    <Avatar src={user.picturePath} sx={{ width: "10rem", height: "10rem", cursor: "pointer", borderRadius: "10%" }} alt={user.userName} />
             }
             <Box sx={{ flex: 1, display: "flex", flexDirection: "column", }}>
                 {/* user details */}
@@ -102,12 +108,18 @@ const ProfilePage = () => {
                     {
                         isLoggedInUser ?
                             <>
-                                <Button variant="text" sx={{ color: theme.palette.neutral.dark, background: theme.palette.neutral.light, textTransform: "none", borderRadius: 2 }}>
-                                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }}>
+                                <Button variant="text" sx={{ color: theme.palette.neutral.dark, background: theme.palette.background.alt,p:1,textTransform: "none", borderRadius: 2 }} onClick={()=>setEdit(true)}>
+                                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer",}}>
                                         Edit profile
                                     </Typography>
                                 </Button>
-                                <SettingsOutlinedIcon sx={{ fontSize: "1.5rem", cursor: "pointer" }} />
+                                {
+                                    edit && (
+                                        <EditProfile></EditProfile>
+                                    )
+                                }
+                                <Settings></Settings>
+                                {/* <SettingsOutlinedIcon sx={{ fontSize: "1.5rem", cursor: "pointer" }} /> */}
                             </>
                             :
                             <>
@@ -128,13 +140,13 @@ const ProfilePage = () => {
                         {
                             Array.isArray(ListData) && (
                                 ListData.length > 0 ? (
-                                    <Box sx={{ minHeight: "350px", flex: 1, display: "flex", flexDirection: "column", overflow: "auto" }}>
+                                    <Box sx={{ minHeight: "350px",maxHeight:"50vh",flex: 1, display: "flex", flexDirection: "column", overflow: "auto",scrollbarWidth:"none" }}>
                                         {
                                             ListData.map((user) => {
                                                 return <Box sx={{ display: "flex", alignItems: "center", gap: "1rem", m: 1 }}>
                                                     <Avatar src={user.picturePath} sx={{ borderRadius: 2, height: "3rem", width: "3rem" }} />
                                                     <Box sx={{ display: "flex", flexDirection: "column" }}>
-                                                        <Typography onClick={()=>NavigateToProfile(user.userName)} >{user.userName}</Typography>
+                                                        <Typography onClick={() => NavigateToProfile(user.userName)} sx={{cursor:"pointer",fontWeight:"bold"}}>{user.userName}</Typography>
                                                         <Typography>{user.firstName} {user.lastName}</Typography>
                                                     </Box>
                                                 </Box>
@@ -163,22 +175,23 @@ const ProfilePage = () => {
         </Box>
         <Divider orientation="horizontal" variant="middle" flexItem />
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "3rem", }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, p: "0.6rem", color: theme.palette.neutral.dark, '&:hover': { cursor: "pointer" } }}>
+            <Box sx={{ borderTop:active === "posts" && `1px solid ${theme.palette.neutral.dark}`,display: "flex", alignItems: "center", gap: 1, p: "0.6rem", color: theme.palette.neutral.dark, '&:hover': { cursor: "pointer" } }} onClick={()=>{setAFT("posts");setActive("posts")}} >
                 <GridOnIcon sx={{ fontSize: "0.85rem" }} />
                 <Typography sx={{ fontSize: "0.85rem" }} > POSTS</Typography>
             </Box>
             {isLoggedInUser && (
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1, p: "0.6rem", color: theme.palette.neutral.dark, '&:hover': { cursor: "pointer" } }} >
+                <Box sx={{ borderTop:active === "saved" && `1px solid ${theme.palette.neutral.dark}`,display: "flex", alignItems: "center", gap: 1, p: "0.6rem", color: theme.palette.neutral.dark, '&:hover': { cursor: "pointer" } }} onClick={()=>{setAFT("saved");setActive("saved")}}>
                     <TurnedInNotIcon sx={{ fontSize: "0.85rem" }} />
                     <Typography sx={{ fontSize: "0.85rem" }} > SAVED</Typography>
                 </Box>
             )}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, p: "0.6rem", color: theme.palette.neutral.dark, '&:hover': { cursor: "pointer" } }}>
+            <Box sx={{borderTop:active === "tagged" && `1px solid ${theme.palette.neutral.dark}`,display: "none", alignItems: "center", gap: 1, p: "0.6rem", color: theme.palette.neutral.dark, '&:hover': { cursor: "pointer" } }} onClick={()=>{setAFT("tagged");setActive("tagged")}} >
                 <AssignmentIndOutlinedIcon sx={{ fontSize: "0.85rem" }} />
                 <Typography sx={{ fontSize: "0.85rem" }} > TAGGED</Typography>
             </Box>
         </Box>
         <Box sx={{ flex: 1 }}>
+            <ActivityFeed Type={AFT} user={user}></ActivityFeed>
         </Box>
     </Box>
 };

@@ -21,9 +21,15 @@ const ExplorePage = () => {
     });
     const data = await res.json();
     setExploreData(data);
-    // console.log(data);
   }
 
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDragStart = (e) => {
+    e.preventDefault();
+  };
   useEffect(() => {
     explore()
   }, [posts])
@@ -46,7 +52,9 @@ const ExplorePage = () => {
                     srcSet={`${item.url}`}
                     src={`${item.url}`}
                     alt={`${item._doc._id}`}
-                    style={{ objectFit: "cover", borderRadius: "0.5rem" }}
+                    onContextMenu={handleContextMenu}
+                    onDragStart={handleDragStart}
+                    style={{ width: "100%", height: "auto", aspectRatio: "1 / 1", objectFit: "cover",cursor:"pointer" }}
                     onClick={() => handleImageClick(item)}
                   />
                 </ImageListItem>

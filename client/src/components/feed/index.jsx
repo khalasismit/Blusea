@@ -1,10 +1,12 @@
 import { Box, CircularProgress } from "@mui/material";
-import Post from "../post";
+import Post from "./post";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 const Feed = () => {
-    const POSTS = useSelector((state) => state.posts)
+    // const theme = useTheme()
+    const user = useSelector((state) => state.user)
+    const Posts = useSelector((state) => state.posts)
     const [posts, setPosts] = useState(null);
     const fetchPosts = async () => {
         try {
@@ -14,6 +16,12 @@ const Feed = () => {
                     'Content-Type': 'application/json'
                 },
             });
+            // const res = await fetch(`http://localhost:3001/posts/${user._id}`, {
+            //     method: "GET",
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            // });
             if (!res.ok) {
                 throw new Error('Failed to fetch posts');
             }
@@ -21,19 +29,21 @@ const Feed = () => {
             setPosts(data);
         } catch (error) {
             console.error('Error fetching posts:', error);
-            setPosts([]); 
+            setPosts([]);
         }
     };
 
     useEffect(() => {
-        fetchPosts();
-    }, [POSTS]);
+        fetchPosts()
+    }, [Posts]);
 
-    return <Box sx={{ flex: 1, display: "flex", justifyContent: "center",gap:1,flexDirection:"column-reverse" }}>
+    return <Box sx={{ flex: 1,display: "flex", justifyContent: "center",flexDirection: "column-reverse" }}>
+        {/* <Box sx={{m:1,height:"100%",background:theme.palette.background.alt,borderRadius:2}}> */}
             {
                 Array.isArray(posts) ? (
                     posts.map((post) => (
                         <Post
+                            post={post}
                             key={post._doc._id}
                             postId={post._doc._id}
                             postUserId={post._doc.userId}
@@ -53,6 +63,7 @@ const Feed = () => {
                     </Box>
                 )
             }
+        {/* </Box> */}
     </Box>
 }
 export default Feed;
