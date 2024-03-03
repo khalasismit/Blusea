@@ -147,3 +147,8 @@ apikey.json
 server/data.json
 server/temp/genPostData.py
 server/temp/genUserData.py
+client/public/assets/background/chatBackground.jpg
+client/public/assets/background/chatbg.jpg
+client/src/scenes/authPage/data.json
+server/controllers/test.js
+client/public/assets/background/chatBackground.jpg
