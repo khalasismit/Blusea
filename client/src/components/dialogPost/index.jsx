@@ -14,11 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Comments from "../comments";
 import { setPost } from "../../redux/reducers";
 import SavePost from "../savePost";
+import CommentInput from "../feed/post/commentInput";
 
 const DialogPost = ({ item, open, handleClose, onClose }) => {
     const dispatch = useDispatch();
     const [post, setpost] = useState(item);
-    console.log("Post:",post)
+    // console.log("Post:",post)
     const user = useSelector((state) => state.user);
     const Posts = useSelector((state) => state.posts);
     // const LIKES = likes.length
@@ -52,22 +53,23 @@ const DialogPost = ({ item, open, handleClose, onClose }) => {
         getPost(post)
     }, [Posts])
     
-    const handleComment = async () => {
-        await fetch(`http://localhost:3001/posts/${post._doc._id}/comment/new`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                userId: user._id,
-                comment: comment,
-                commentId : commentId
-            })
-        }).then(async (res) => await res.json()).then(async (data) => {
-            // console.log(data);
-            dispatch(setPost(data));
-            getPost(post)
-            setComment("");
-        }).catch(err => { console.log(err) });
-    }
+    // const handleComment = async () => {
+    //     await fetch(`http://localhost:3001/posts/${post._doc._id}/comment/new`, {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify({
+    //             userId: user._id,
+    //             comment: comment,
+    //             commentId : commentId
+    //         })
+    //     }).then(async (res) => await res.json()).then(async (data) => {
+    //         if(data){
+    //             dispatch(setPost(data))
+    //             getPost(post)
+    //             setComment("");
+    //         }
+    //     }).catch(err => { console.log(err) });
+    // }
 
     useEffect(() => {
         const calculateTimeAgo = () => {
@@ -142,7 +144,7 @@ const DialogPost = ({ item, open, handleClose, onClose }) => {
                                 },
                             }}>
                                 <Box>
-                                    <Like postId={post._doc._id} likes={post._doc.likes} />
+                                    <Like postId={post._doc._id} postUserName={post.userName} likes={post._doc.likes} />
                                 </Box>
                                 <Box>
                                     <ModeCommentOutlinedIcon sx={{ fontSize: "1.7rem" }} />
@@ -166,10 +168,11 @@ const DialogPost = ({ item, open, handleClose, onClose }) => {
                             <Typography>{post._doc.likes.length} likes </Typography>
                         </Box>
                         {/* add a comment textfield */}
-                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                        {/* <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                             <TextField fullWidth size="small" variant="standard" label="Add a comment..." value={comment} onChange={(e) => { setComment(e.target.value) }} />
                             <Button disabled={!comment || comment === "" ? true : false} sx={{ display: comment === "" ? "none" : "block", color: theme.palette.neutral.dark, }} onClick={handleComment}>Post</Button>
-                        </Box>
+                        </Box> */}
+                        <CommentInput postId={post._doc._id} CM={comment} commentId={commentId}></CommentInput>
                     </Box>
                 </Box>
             </Box>

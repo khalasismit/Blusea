@@ -1,14 +1,15 @@
 import { Box, CircularProgress, ImageList, ImageListItem, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import DialogPost from "../../../components/dialogPost";
 
-const ActivityFeed = ({ Type,user }) => {
+const ActivityFeed = ({ Type, user }) => {
+    const [loading,setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [userPosts, setUserPosts] = useState([]);
     const [savedPosts, setSavedPosts] = useState([]);
-    // const user = useSelector((state) => state.user);
-    // const posts = useSelector((state) => state.posts)
+    const User = useSelector((state) => state.user);
+    // const Posts = useSelector((state) => state.posts)
     const isNonMobile = useMediaQuery("(min-width:768px)")
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
@@ -16,15 +17,16 @@ const ActivityFeed = ({ Type,user }) => {
     useEffect(() => {
         const fetchData = async (user) => {
             try {
+                setLoading(true);
                 let userPostsPromise, savedPostsPromise;
                 // Fetch user's own posts
-                userPostsPromise =await fetch(`http://localhost:3001/posts/${user._id}/posts`, {
+                userPostsPromise = await fetch(`http://localhost:3001/posts/${user._id}/posts`, {
                     method: "GET",
                     headers: {}
                 }).then(res => res.json());
 
                 // Fetch user's saved posts
-                savedPostsPromise =await fetch(`http://localhost:3001/users/${user._id}/posts/saved`, {
+                savedPostsPromise = await fetch(`http://localhost:3001/users/${user._id}/posts/saved`, {
                     method: "GET",
                     headers: {}
                 }).then(res => res.json());
@@ -33,12 +35,13 @@ const ActivityFeed = ({ Type,user }) => {
                 const [userPostsData, savedPostsData] = await Promise.all([userPostsPromise, savedPostsPromise]);
                 setUserPosts(userPostsData)
                 setSavedPosts(savedPostsData)
+                setLoading(false)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
         fetchData(user)
-    }, [user]);
+    }, [user, User]);
     useEffect(() => {
         // Determine which data to set based on Type
         if (Type === "saved") {
@@ -69,11 +72,11 @@ const ActivityFeed = ({ Type,user }) => {
     };
 
     return <Box sx={{ width: "100%", display: "flex", justifyContent: "center", p: "1rem" }}>
-        {Array.isArray(data) ? (
+        {!loading ? (
             <Box width={isNonMobile ? "80%" : "100%"}>
                 <ImageList variant='standard' cols={3} gap={3}>
                     {
-                        data.map((item) => (
+                        data.slice().reverse().map((item) => (
                             <ImageListItem key={item._doc._id}>
                                 <img
                                     srcSet={`${item.url}`}
@@ -81,7 +84,7 @@ const ActivityFeed = ({ Type,user }) => {
                                     alt={`${item._doc._id}`}
                                     onContextMenu={handleContextMenu}
                                     onDragStart={handleDragStart}
-                                    style={{  width: "100%", height: "auto", aspectRatio: "1 / 1", objectFit: "cover", }}
+                                    style={{ width: "100%", height: "auto", aspectRatio: "1 / 1", objectFit: "cover", }}
                                     onClick={() => handleImageClick(item)}
                                 />
                             </ImageListItem>
@@ -90,11 +93,11 @@ const ActivityFeed = ({ Type,user }) => {
                 </ImageList>
             </Box>
         ) : (
-            <Box sx={{ flex: 1, height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Box sx={{flex:1,display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <CircularProgress />
             </Box>
-        )
-        }
+        )}
+        
         {selectedPost && (
             <DialogPost
                 key={selectedPost._doc._id}

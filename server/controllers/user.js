@@ -13,6 +13,21 @@ export const getUser = async (req, res) => {
   }
 };
 
+// Edit User
+export const edit = async (req, res) => {
+  try {
+    const { firstName, lastName, userName, location, bio, picturePath } = req.body
+    const { id } = req.params;
+    const user = await User.findOneAndUpdate({ _id: id }, { firstName: firstName, lastName: lastName, userName: userName, location: location, bio: bio, picturePath: picturePath }, {
+      new: true
+    });
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ error })
+  }
+}
+
 /* GET USER'S SAVED POST */
 export const getUserSavedPost = async (req, res) => {
   try {
@@ -94,9 +109,19 @@ export const getUsers = async (req, res) => {
 // Search User
 export const searchUser = async (req, res) => {
   try {
+    const { search,id } = req.params;
+    const SearchText = new RegExp(`^${search}`, 'i')
+    const users = await User.find({ _id: { $ne: id },$or: [{ firstName: SearchText }, { lastName: SearchText }, { userName: SearchText }] }).sort({ firstName: 1 });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(404).json({ error })
+  }
+};
+export const search = async (req, res) => {
+  try {
     const { search } = req.params;
     const SearchText = new RegExp(`^${search}`, 'i')
-    const users = await User.find({ $or: [{ firstName: SearchText }, { lastName: SearchText }, { userName: SearchText }] }).sort({ firstName: 1 });
+    const users = await User.find({$or: [{ firstName: SearchText }, { lastName: SearchText }, { userName: SearchText }] }).sort({ firstName: 1 });
     res.status(200).json(users);
   } catch (error) {
     res.status(404).json({ error })
@@ -107,62 +132,39 @@ export const suggestions = async (req, res) => {
   try {
 
     const { userId } = req.params;
-    console.log("suggestion userId :", userId)
-    const user = await User.findOne({ _id: userId });
-    const usersFollowingIds = user.following;
+    // const user = await User.findOne({ _id: userId });
+    // const usersFollowingIds = user.following;
 
-    // Fetch the followings of each user whom you're following
-    const suggestions = [];
-    for (const userFollowingId of usersFollowingIds) {
-        const userFollowing = await User.findById(userFollowingId);
-        const userFollowingFollowings = userFollowing.following;
-        suggestions.push(...userFollowingFollowings);
-    }
+    // // Fetch the followings of each user whom you're following
+    // const suggestions = [];
+    // for (const userFollowingId of usersFollowingIds) {
+    //     const userFollowing = await User.findById(userFollowingId);
+    //     const userFollowingFollowings = userFollowing.following;
+    //     suggestions.push(...userFollowingFollowings);
+    // }
 
-    // Remove duplicates and the users you're already following
-    const filteredSuggestions = suggestions.filter(id => !user.following.includes(id) && id.toString() !== userId);
-    const uniqueFilteredSuggestions = Array.from(new Set(filteredSuggestions));
+    // // Remove duplicates and the users you're already following
+    // const filteredSuggestions = suggestions.filter(id => !user.following.includes(id) && id.toString() !== userId);
+    // const uniqueFilteredSuggestions = Array.from(new Set(filteredSuggestions));
 
-    // Fetch user details of suggestions
-    const suggestedUsers = await User.find({ _id: { $in: uniqueFilteredSuggestions } })
-    return res.status(200).json(suggestedUsers);
-    // Find users who are followed by the current user's followers or who are following the current user's followings,
-    // but exclude users whom the current user is already following or who are already following the current user
+    // // Fetch user details of suggestions
+    // const suggestedUsers = await User.find({ _id: { $in: uniqueFilteredSuggestions } })
+    // return res.status(200).json(suggestedUsers);
 
-    // const users = await User.find({
-    //     $and: [
-    //         {
-    //             $or: [
-    //                 { _id: { $in: userFollowers } }, // Users followed by current user's followers
-    //                 { _id: { $in: userFollowing } } // Users following the current user's followings
-    //             ]
-    //         },
-    //         {
-    //             $nor: [
-    //                 { _id: userId }, // Exclude the current user
-    //                 { _id: { $in: userFollowing } } // Exclude users already followed by the current user
-    //             ]
-    //         }
-    //     ]
-    // });
-    // const users = await User.find({
-    //   $and: [
-    //     {
-    //       $or: [
-    //         { _id: { $in: userFollowers } }, // Users followed by current user's followers
-    //         { _id: { $in: userFollowing } } // Users following the current user's followings
-    //       ]
-    //     },
-    //     {
-    //       _id: {
-    //         $nin: [userId, ...userFollowing],
-    //         $nin: [userId, ...userFollowers]
-    //       }
-    //     } // Exclude the current user and users already followed by the current user
-    //   ]
-    // }).limit(6);
-    // console.log("suggestions :", users)
-    // return res.status(200).json(users);
+    const allUsers = await User.find({});
+    // Fetch the current user
+    const currentUser = await User.findOne({ _id: userId });
+    // Fetch the IDs of the users the current user is following
+    const usersFollowingIds = currentUser.following;
+    // Remove the current user
+    const usersWithoutCurrentUser = allUsers.filter(user => user._id.toString() !== userId);
+    // Remove the users the current user is following
+    const suggestions = usersWithoutCurrentUser.filter(user => !usersFollowingIds.includes(user._id.toString()))
+    //suffle
+    suggestions.sort(() => Math.random() - 0.7);
+    //select first 6
+    const randomSuggestions = suggestions.slice(0, 6);
+    return res.status(200).json(randomSuggestions);
   } catch (error) {
     console.error('Error searching users:', error);
     return res.status(500).json({ message: 'Server Error' });

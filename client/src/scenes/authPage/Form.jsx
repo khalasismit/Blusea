@@ -6,6 +6,7 @@ import {
     useMediaQuery,
     Typography,
     useTheme,
+    Divider,
 } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -20,6 +21,8 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOff from '@mui/icons-material/VisibilityOffOutlined';
+import LoginButton from "./auth0Login";
+import ForgetPass from "./forgotPass";
 
 // handling schema and validation 
 const loginSchema = yup.object().shape({
@@ -46,6 +49,7 @@ const initialValuesRegister = {
     firstName: "",
     lastName: "",
     userName: "",
+    bio: "",
     email: "",
     password: "",
     confirmPassword: ""
@@ -58,6 +62,7 @@ const Form = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const isLogin = pageType === "login";
     const isRegister = pageType === "register";
+    const isForgotPass = pageType === "forgot";
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const dispatch = useDispatch();
@@ -119,13 +124,13 @@ const Form = () => {
                     token: loggedIn.token
                 }),
                 setStatus({
-                    status:loggedIn.user.status
+                    status: loggedIn.user.status
                 })
-                );
-                setTimeout(() => {
-                    setSnackbar(false)
-                    navigate("/home");
-                }, 1500); 
+            );
+            setTimeout(() => {
+                setSnackbar(false)
+                navigate("/home");
+            }, 1500);
         }
         else {
             setError("Invalid credentials.");
@@ -171,6 +176,7 @@ const Form = () => {
                             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
                         }}
                     >
+
                         {isRegister && (
                             <>
                                 <TextField
@@ -225,42 +231,47 @@ const Form = () => {
                                 />
                             </>
                         )}
-                        <TextField
-                            size="small"
-                            label="Email"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.email}
-                            name="email"
-                            error={Boolean(touched.email) && Boolean(errors.email)}
-                            helperText={touched.email && errors.email}
-                            sx={{ gridColumn: "span 4" }}
-                        />
-                        <TextField
-                            size="small"
-                            label="Password"
-                            type={showPassword ? 'text' : 'password'}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.password}
-                            name="password"
-                            error={Boolean(touched.password) && Boolean(errors.password)}
-                            helperText={touched.password && errors.password}
-                            sx={{ gridColumn: "span 4" }}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={TogglePwdVisibility}
-                                            edge="end"
-                                        >
-                                            {showPassword ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
+                        {!isForgotPass && (
+                            <>
+                                <TextField
+                                    size="small"
+                                    label="Email"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.email}
+                                    name="email"
+                                    error={Boolean(touched.email) && Boolean(errors.email)}
+                                    helperText={touched.email && errors.email}
+                                    sx={{ gridColumn: "span 4" }}
+                                />
+                                <TextField
+                                    size="small"
+                                    label="Password"
+                                    type={showPassword ? 'text' : 'password'}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.password}
+                                    name="password"
+                                    error={Boolean(touched.password) && Boolean(errors.password)}
+                                    helperText={touched.password && errors.password}
+                                    sx={{ gridColumn: "span 4" }}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={TogglePwdVisibility}
+                                                    edge="end"
+                                                >
+                                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            </>
+                        )
+                        }
                         {isRegister && (
                             <TextField
                                 size="small"
@@ -292,11 +303,15 @@ const Form = () => {
                             />
                         )}
                     </Box>
+                    {
+                        isForgotPass &&
+                        <ForgetPass />
+                    }
                     {/* Error */}
                     <Typography color="red" p="1rem 0 0 0">{error}</Typography>
                     {/* BUTTONS */}
                     <Box>
-                        <Button
+                        { !isForgotPass && <Button
                             fullWidth
                             type="submit"
                             sx={{
@@ -306,7 +321,30 @@ const Form = () => {
                                 color: palette.background.alt,
                                 "&:hover": { color: palette.primary.dark, background: palette.primary.main },
                             }}
-                        >{isLogin ? "LOGIN" : "REGISTER"}</Button>
+                        > {
+                            isLogin ? "LOGIN" : "REGISTER"
+                        }</Button>}
+                        {/* {
+                            isLogin &&
+                            <Typography
+                                onClick={() => {
+                                    setPageType("forgot");
+                                    resetForm();
+                                }}
+                                sx={{
+                                    textAlign: 'center',
+                                    textDecoration: "underline",
+                                    color: palette.primary.dark,
+                                    "&:hover": {
+                                        cursor: "pointer",
+                                        color: palette.primary.main,
+                                    },
+                                }}
+                            >
+                                   Forgot password?
+                            </Typography>
+                        } */}
+                        {/* <Divider flexItem variant="middle" sx={{ m: 1 }} textAlign="center">Or</Divider> */}
                         <Typography
                             onClick={() => {
                                 setPageType(isLogin ? "register" : "login");

@@ -39,7 +39,7 @@ const Chats = ({ handleSetConversationId }) => {
         setIsSearch(!isSearch)
     }
     const handleSearch = async (value) => {
-            const searchRes = await fetch(`http://localhost:3001/users/search/${value}`, {
+            const searchRes = await fetch(`http://localhost:3001/users/${user._id}/search/${value}`, {
                 method: "GET",
                 headers: {}
             });
@@ -49,9 +49,15 @@ const Chats = ({ handleSetConversationId }) => {
     const theme = useTheme();
     return <Box sx={{ flex: 1, display: "flex", background: theme.palette.background.alt, flexDirection: "column", p: 1, borderRadius: "1rem" }}>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 1 }}>
-            <Typography sx={{ fontSize: "1.1rem" }}>Conversations</Typography>
-            <PersonSearchOutlinedIcon sx={{ fontSize: "1.5rem" }} onClick={handleIsSearch} />
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center",}}>
+            <Typography sx={{ fontSize: "1.1rem",p:"0 1rem" }}>Conversations</Typography>
+            <Box onClick={handleIsSearch} sx={{
+                p:"0.5rem 0.7rem",
+                borderRadius:"50%",
+                ':hover':{background:theme.palette.neutral.light} 
+            }}>
+            <PersonSearchOutlinedIcon sx={{ fontSize: "1.6rem"}} />
+            </Box>
         </Box>
         <Divider sx={{ m: 1 }} flexItem></Divider>
         {isSearch ? (
@@ -105,8 +111,9 @@ const Chats = ({ handleSetConversationId }) => {
                                     handleSetConversationId={handleSetConversationId}
                                     id={conversation._id}
                                     participants={conversation.participants}
-                                    messages={conversation.messages[conversation.messages.length-1].message}
-                                />
+                                    messages={conversation.messages}
+                                    // messages={conversation.messages[conversation.messages.length-1].message}
+                                    />
                             </Box>
                         ))
                         ) : (

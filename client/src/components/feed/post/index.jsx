@@ -11,21 +11,20 @@ import Like from "../../like";
 // import { useSelector } from "react-redux";
 // import Follow from "../follow";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import DialogPost from "../../dialogPost";
-import { setPost } from "../../../redux/reducers";
 import SavePost from "../../savePost";
 import Share from "../../share";
+import CommentInput from "./commentInput";
 
 const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, likes, comments, caption, createdAt }) => {
-    const dispatch = useDispatch();
+
     const user = useSelector((state) => state.user);
     const LIKES = likes.length
     const COMMENTS = comments.length
     const navigate = useNavigate();
     const theme = useTheme();
     const { typography } = useTheme();
-    const [comment, setComment] = useState("");
     const isNonMobile = useMediaQuery("(min-width:768px)")
     const [timeAgo, setTimeAgo] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
@@ -34,23 +33,6 @@ const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, lik
         // console.log(item)
         setOpenDialog(true); // Open the dialog
     };
-    // dialog Post 
-    const handleComment = async () => {
-        console.log(user._id, postId, comment)
-        await fetch(`http://localhost:3001/posts/${postId}/comment/new`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                userId: user._id,
-                comment: comment
-            })
-        }).then(async (res) => await res.json()).then(async (data) => {
-            // console.log(data);
-            setComment("");
-            dispatch(setPost(data));
-        }).catch(err => { console.log(err) });
-    }
-
     useEffect(() => {
         const calculateTimeAgo = () => {
             if (createdAt) {
@@ -94,7 +76,7 @@ const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, lik
                     color: theme.palette.neutral.main,
                 },
             }}>
-                <Like postId={postId} likes={likes} />
+                <Like postId={postId} postUserName={userName} likes={likes} />
                 <ModeCommentOutlinedIcon sx={{ fontSize: "1.7rem" }} onClick={handleOpen} />
                 <Share post={post} picturePath={picturePath}></Share>
             </Box>
@@ -115,12 +97,7 @@ const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, lik
             </Box>
             <Typography sx={{ cursor: "pointer" }} onClick={handleOpen}> view all {COMMENTS} comment </Typography>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <TextField fullWidth size="small" variant="standard" label="Add a comment..." value={comment} onChange={(e) => { setComment(e.target.value) }} />
-            {/* if textfield has some value then show the post button else hide it  */}
-            <Button disabled={!comment || comment === "" ? true : false} sx={{ display: comment === "" ? "none" : "block", color: theme.palette.neutral.dark, }} onClick={handleComment}>Post</Button>
-            {/* <Button size="large" disabled={!comment ? true : false} sx={{color:palette.neutral.dark,background:"none"}}>Post</Button> */}
-        </Box>
+        <CommentInput postId={postId} commentId={""} CM={""} ></CommentInput>
         {openDialog && (
             <DialogPost
                 key={post._doc._id}

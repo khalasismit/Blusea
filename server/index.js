@@ -10,6 +10,7 @@ import authRoute from "./routes/auth.js";
 import userRoute from "./routes/user.js";
 import postRoute from "./routes/post.js";
 import messageRoute from "./routes/message.js";
+import notifRoute from "./routes/notification.js"
 import { app, server } from "./socket/socket.js";
 
 /* CONFIGURATIONS */
@@ -35,6 +36,7 @@ app.use('/auth', authRoute);
 app.use('/users', userRoute);
 app.use('/posts', postRoute);
 app.use('/chats', messageRoute);
+app.use('/notifications', notifRoute);
 
 /* ROUTES SETUP WHICH USES FILE UPLOAD */
 app.use('/',uploadFile);

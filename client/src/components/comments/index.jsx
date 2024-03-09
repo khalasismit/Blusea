@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material"
+import { Box, CircularProgress, Typography } from "@mui/material"
 import Comment from "./comment"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
@@ -12,7 +12,7 @@ const Comments = ({ postId, parentId, updateCommentField }) => {
         setComments(prevComments => {
             return toggleRepliesInTree(prevComments, commentId);
         });
-    };   
+    };
 
     const toggleRepliesInTree = (comments, commentId) => {
         return comments.map(comment => {
@@ -44,34 +44,36 @@ const Comments = ({ postId, parentId, updateCommentField }) => {
 
     const renderCommentsTree = (comments) => {
         return comments.map(comment => (
-            <Box key={comment._id}>
-                <Comment
-                    _id={comment._id}
-                    postId={postId}
-                    type={comment.type}
-                    userName={comment.userId.userName}
-                    comment={comment.comment}
-                    likes={comment.likes}
-                    profilePic={comment.userId.picturePath}
-                    createdAt={comment.createdAt}
-                    updateCommentField={updateCommentField}
-                    parentId={parentId}
-                    replies={comment.replies.length}
-                    handleViewReplies={() => toggleRepliesVisibility(comment._id)}
-                />
-                {comment.showReplies && comment.replies && comment.replies.length > 0 &&
-                    renderCommentsTree(comment.replies)}
-            </Box>
-        ));
+                <Box key={comment._id}>
+                    <Comment
+                        _id={comment._id}
+                        postId={postId}
+                        type={comment.type}
+                        userName={comment.userId.userName}
+                        comment={comment.comment}
+                        likes={comment.likes}
+                        profilePic={comment.userId.picturePath}
+                        createdAt={comment.createdAt}
+                        updateCommentField={updateCommentField}
+                        parentId={parentId}
+                        replies={comment.replies.length}
+                        handleViewReplies={() => toggleRepliesVisibility(comment._id)}
+                    />
+                    {comment.showReplies && comment.replies && comment.replies.length > 0 &&
+                        renderCommentsTree(comment.replies)}
+                </Box>
+            ));
     };
 
     return (
         <Box sx={{ maxHeight: "50vh" }}>
             {
                 !Loading ? (
-                    renderCommentsTree(comments)
+                    comments.length === 0 ? (<Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", height: "50vh" }}>
+                    <Typography>No comments yet...</Typography>
+                </Box>) : renderCommentsTree(comments)
                 ) : (
-                    <Box sx={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",height:"50vh"}}>
+                    <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", height: "50vh" }}>
                         <CircularProgress />
                     </Box>
                 )

@@ -1,9 +1,14 @@
-import { Box, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Divider, useMediaQuery, useTheme } from "@mui/material";
 import TextArea from "./textArea";
 import Messages from "../messages";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import ChatHeader from "./chatHeader";
+import { useSelector } from "react-redux";
+import io from "socket.io-client";
 const ChatArea = () => {
+    const Socket = io("http://localhost:3001");
+    const user = useSelector((state) => state.user);
     const [conversation, setConversation] = useState([])
     const { conversationId } = useParams();
     const [update,setUpdate] = useState("")
@@ -19,6 +24,7 @@ const ChatArea = () => {
         setConversation(data);
     }
     useEffect(() => {
+        Socket.emit("authenticate", user._id);
         getConversation()
     }, [conversationId])
     const isNonMobile = useMediaQuery('(min-width:1000px)');
@@ -36,6 +42,8 @@ const ChatArea = () => {
         background: theme.palette.background.default,
         height: isNonMobile ? "100vh" : "95vh",
     }}>
+        <ChatHeader participants={conversation.participants}></ChatHeader>
+        <Divider></Divider>
         <Messages conversationId={conversationId} updateMessage={update}></Messages>
         <TextArea participants={conversation.participants} updateMessage={updateMessage}></TextArea>
     </Box>

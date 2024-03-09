@@ -17,7 +17,7 @@ const Create = () => {
     const [loading, setLoading] = useState(false)
     const [isOpenAdditional, setIsOpenAdditional] = useState(false);
     const user = useSelector((state) => state.user);
-    const [type,setType] = useState("public");
+    const [type, setType] = useState("public");
     const [isPrivate, setIsPrivate] = useState(false);
     const handleSwitchToggle = () => {
         setIsPrivate(!isPrivate);
@@ -35,7 +35,7 @@ const Create = () => {
         var formData = new FormData();
         formData.append("file", values.file);
         formData.append("userId", user._id);
-        formData.append("type",type);
+        formData.append("type", type);
         formData.append("caption", values.caption);
         const uploadResponse = await fetch('http://localhost:3001/upload', {
             method: 'POST',
@@ -142,9 +142,10 @@ const Create = () => {
                                                     <Typography>Add Picture Here</Typography>
                                                 </Box>
                                             ) : (
-                                                <Box sx={{ flex: 1, width: isNonMobile ? "400px" : "320px", height: isNonMobile ? "400px" : "320px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                                    {/* <Box sx={{ display: "flex", alignItems: "center" }} > */}
-                                                    <img src={URL.createObjectURL(values.file)} alt="Selected Media" style={{ width: '100%', height: '100%', objectFit: "cover" }} />
+                                                <Box sx={{ flex: 1, width: isNonMobile ? "400px" : "100%", height: isNonMobile ? "400px" : "320px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                    {/* <Box sx={{ display: "flex", alignItems: "center",justifyContent:"center" }} > */}
+                                                        <img src={URL.createObjectURL(values.file)} alt="Selected Media" style={{ width:"100%",height: '100%', objectFit: "contain" }} />
+                                                    {/* </Box> */}
                                                 </Box >
                                             )}
                                         </Box>

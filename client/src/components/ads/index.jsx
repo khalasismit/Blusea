@@ -1,5 +1,6 @@
 import { Box, Typography, useTheme } from '@mui/material';
 import React from 'react';
+// import AdSense from './adsense';
 
 const Ads = () => {
     const {palette} = useTheme();
@@ -15,6 +16,8 @@ const Ads = () => {
             </Typography>
             <Box sx={{gap: 1,display: "flex", flexDirection: "column" }}>
                 ADS_DATA_NOT_FOUND
+
+                {/* <AdSense></AdSense> */}
             </Box>
         </Box>
     </Box >

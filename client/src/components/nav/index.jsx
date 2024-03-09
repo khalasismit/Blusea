@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 import ExploreIcon from '@mui/icons-material/Explore';
 import SearchIcon from '@mui/icons-material/Search';
 // import Diversity2Icon from '@mui/icons-material/Diversity2';
 import TextsmsIcon from '@mui/icons-material/Textsms';
-// import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 // import AddBoxIcon from '@mui/icons-material/AddBox';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Avatar, Box, Typography, useMediaQuery, useTheme } from '@mui/material';
@@ -56,7 +56,7 @@ const Navigation = () => {
                     onContextMenu={handleContextMenu}
                     onDragStart={handleDragStart}
                     style={{ width: "5rem", height: "4rem", objectFit: "cover" }}
-                    alt="Magnet" />
+                />
                 <Typography fontWeight="bold" fontSize="30px" color={theme.palette.neutral.dark} sx={{ lineHeight: "0px" }}>
                     Magnet
                 </Typography>
@@ -124,7 +124,7 @@ const Navigation = () => {
                     </Box>
                 </Link>
                 <Create></Create>
-                {/* <Link to={"/notifications"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
+                {isNonMobile && <Link to={"/notifications"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                         <NotificationsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
                         {isNonMobile && (
@@ -133,8 +133,7 @@ const Navigation = () => {
                             </Typography>
                         )}
                     </Box>
-                </Link> */}
-
+                </Link>}
                 <Link to={"/chats"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                         <TextsmsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
@@ -187,16 +186,16 @@ const Navigation = () => {
                                 cursor: 'pointer'
                             },
                         }}>
-                            <Link to={"/settings"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
+                            {/* <Link to={"/settings"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}> */}
                                 <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                                     <MenuIcon titleAccess='Settings' sx={{ fontSize: "2rem" }} />
                                     {isNonMobile && (
                                         <Typography>
-                                            Settings
+                                            More
                                         </Typography>
                                     )}
                                 </Box>
-                            </Link>
+                            {/* </Link> */}
                         </Box>
                         <Mode></Mode>
                     </Box>

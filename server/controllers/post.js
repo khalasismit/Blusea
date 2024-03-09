@@ -218,6 +218,7 @@ export const comment = async (req, res) => {
       userId,
       postId,
       comment,
+      parentId:null,
       replies: [],
     });
 
@@ -232,6 +233,7 @@ export const comment = async (req, res) => {
         userId,
         postId,
         comment,
+        parentId:commentId,
         replies: [],
       })
       await newComment.save();
@@ -243,8 +245,8 @@ export const comment = async (req, res) => {
         $push: { comments: newComment._id }
       })
     }
-
-    res.status(201).json(newComment);
+    const updatedPost = await Post.findById(postId);
+    res.status(201).json(updatedPost);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
@@ -255,8 +257,6 @@ export const comment = async (req, res) => {
 export const toggleCommentLike = async (req, res) => {
   try {
     const { commentId, userId } = req.body;
-    // console.log("commentId",commentId);
-    // console.log("userId",userId);
     const comment = await Comment.findById(commentId);
     const isLiked = comment.likes.includes(userId);
     { isLiked ? comment.likes.pull(userId) : comment.likes.push(userId) }
@@ -264,5 +264,42 @@ export const toggleCommentLike = async (req, res) => {
     res.status(200).json(comment)
   } catch (err) {
     res.status(400).json("{ error: err }");
+  }
+}
+
+/* DELETE COMMENT */
+export const deleteComment = async (req, res) => {
+  try {
+    const { postId } = req.params
+    const { commentId } = req.body;
+
+    // Check if the comment exists
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    // If it's a reply, remove it from parent comment's replies array
+    if (comment.type === "reply") {
+      const parentComment = await Comment.findById(comment.parentId);
+      if (!parentComment) {
+        return res.status(404).json({ message: "Parent comment not found" });
+      }
+      parentComment.replies = parentComment.replies.filter(replyId => replyId.toString() !== commentId);
+      await parentComment.save();
+    } else {
+      // If it's a top-level comment, remove it from the post's comments array
+      await Post.findByIdAndUpdate(postId, {
+        $pull: { comments: commentId }
+      });
+    }
+
+    // Delete the comment itself
+    await Comment.findByIdAndDelete(commentId);
+    const updatedPost = await Post.findById(postId);
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
   }
 }

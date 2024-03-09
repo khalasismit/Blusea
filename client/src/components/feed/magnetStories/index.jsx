@@ -1,9 +1,9 @@
 import { Box } from "@mui/material"
 
-const Stories = () => {
+const MagnetStories = () => {
     
     return <Box>
         
     </Box>
 }
-export default Stories
+export default MagnetStories

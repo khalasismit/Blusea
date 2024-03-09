@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
       delete users[userId]; // Remove previous socket ID
     }
     users[userId] = socket.id;
-    console.log(users)
+    // console.log(users)
   });
 
   socket.on('send_message', (data) => {
@@ -45,6 +45,20 @@ io.on('connection', (socket) => {
             // Handle case where recipient is not connected or does not exist
             console.log(`User ${receiverId} is not connected`);
         }
+  })
+
+  socket.on('LIKE_POST',(data)=>{
+    const {userName,postUserName,postUserId} = data
+    console.log("data: ",data)
+    const recipientSocketId = users[postUserId]
+    console.log("LIKE POST RUN")
+    if (recipientSocketId) {
+        io.to(recipientSocketId).emit('notification',{message:`${userName} Liked Your Post`});
+        console.log(`notification sent to receiver :${postUserName}`);
+    } else {
+        // Handle case where recipient is not connected or does not exist
+        console.log(`User ${postUserId} is not connected`);
+    }
   })
 
   socket.on('disconnect',()=>{

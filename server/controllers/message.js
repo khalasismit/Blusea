@@ -13,8 +13,8 @@ TESTUSER1 : 65cc410814dfd545893e5347
 */
 
 // Function to encrypt a message using AES
-const encryptMessage = (message, key) => {
-    const cipherText = crypto.AES.encrypt(message, key).toString()
+const encryptMessage = (message) => {
+    const cipherText = crypto.AES.encrypt(message, process.env.SECRET_KEY).toString()
     return cipherText;
 }
 
@@ -22,14 +22,30 @@ const encryptMessage = (message, key) => {
 // console.log(message)
 
 // Function to decrypt a message using AES
-const decryptMessage = (encryptMessage, key) => {
-    const bytes = crypto.AES.decrypt(encryptMessage, key);
+const decryptMessage = (encryptMessage) => {
+    const bytes = crypto.AES.decrypt(encryptMessage, process.env.SECRET_KEY);
     if (bytes.sigBytes > 0) {
         const decryptedMessage = bytes.toString(crypto.enc.Utf8)
         return decryptedMessage
     }
     return
 }
+
+export const decryptMessageAsync = async (req, res) => {
+    try {
+        const { message } = req.body;
+        const bytes = crypto.AES.decrypt(message, process.env.SECRET_KEY);
+        if (bytes.sigBytes > 0) {
+            const decryptedMessage = bytes.toString(crypto.enc.Utf8);
+            return res.status(200).json(decryptedMessage);
+        }
+        return res.status(400).json({ message: "Invalid message" });
+    } catch (err) {
+        console.log("server error")
+        return res.status(400).json({ message: "Server Error" });
+    }
+}
+
 /* CREATE CONVERSATION */
 export const createConversation = async (req, res) => {
     try {
@@ -43,8 +59,8 @@ export const createConversation = async (req, res) => {
             // If conversation already exists, return the existing conversation
             const conversation = await existingConversation.populate("participants messages")
             const decryptedMessagesConversation = await Promise.all(conversation.messages.map((message) => {
-                const decryptedMessage = decryptMessage(message.message, process.env.SECRET_KEY)
-                return {...message.toObject(),message:decryptedMessage}
+                const decryptedMessage = decryptMessage(message.message)
+                return { ...message.toObject(), message: decryptedMessage }
             }))
             return res.status(200).json(decryptedMessagesConversation);
         }
@@ -66,13 +82,13 @@ export const getConversations = async (req, res) => {
         let conversations = await Conversation.find({ participants: id }).sort({ updatedAt: -1 }).populate("participants messages");
         conversations = await Promise.all(conversations.map(async (conversation) => {
             const decryptedMessages = await Promise.all(conversation.messages.map(async (message) => {
-                const decryptedMessage = decryptMessage(message.message, process.env.SECRET_KEY);
+                const decryptedMessage = decryptMessage(message.message);
                 return {
                     ...message._doc,
                     message: decryptedMessage
                 };
             }));
-            
+
             return {
                 ...conversation._doc,
                 messages: decryptedMessages
@@ -90,7 +106,7 @@ export const getConversation = async (req, res) => {
         const { id } = req.params;
         let conversation = await Conversation.findOne({ _id: id }).populate("participants messages");
         const decryptedMessages = await Promise.all(conversation.messages.map(async (message) => {
-            const decryptedMessage = await decryptMessage(message.message, process.env.SECRET_KEY);
+            const decryptedMessage = await decryptMessage(message.message);
             return {
                 ...message._doc,
                 message: decryptedMessage
@@ -110,7 +126,7 @@ export const sendMessage = async (req, res) => {
     try {
         const { message, senderId, receiverId } = req.body;
         const conversation = await Conversation.findOne({ participants: { $all: [senderId, receiverId] } });
-        const encryptedMessage = encryptMessage(message, process.env.SECRET_KEY);
+        const encryptedMessage = encryptMessage(message);
         // if found then add else create one
         if (conversation) {
             const newMessage = new Message({
@@ -153,9 +169,11 @@ export const sendMessage = async (req, res) => {
 export const getMessages = async (req, res) => {
     try {
         const { conversationId } = req.params;
+
         const messages = await Message.find({ conversationId }).populate("senderId receiverId");
+
         const decryptedMessages = await Promise.all(messages.map(message => {
-            const Decryptedmessage = decryptMessage(message.message, process.env.SECRET_KEY)
+            const Decryptedmessage = decryptMessage(message.message)
             return { ...message._doc, message: Decryptedmessage }
         }));
         res.status(200).json(decryptedMessages);
@@ -164,6 +182,7 @@ export const getMessages = async (req, res) => {
         res.status(400).json({ error: err });
     }
 }
+
 
 /* GET CONVERSATIONS */
 // export const getConversations = async (req, res) => {

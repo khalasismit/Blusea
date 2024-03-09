@@ -20,7 +20,7 @@ const TextArea = ({ participants, updateMessage }) => {
                 }
             })
         }
-    }, [participants])
+    }, [participants, user._id, socket])
     const sendMessage = async () => {
         try {
             if (message === "") return;
@@ -35,9 +35,19 @@ const TextArea = ({ participants, updateMessage }) => {
                     message,
                 })
             })
-            const data = await res.json();
-            console.log("data", data)
-            socket.emit("send_message", { receiverId: UserToChat._id, message: data })
+            const data = await res.json(); // GET NewMessage Data (Encrypted Message)
+            const res2 = await fetch("http://localhost:3001/chats/message/decrypt", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: data.NewMessage.message,
+                })
+            });
+            const decryptedData = await res2.json(); // Decrypted Message
+            data.NewMessage.message = await decryptedData; // Replace Encrypted Message with Decrypted Message
+            socket.emit("send_message", { receiverId: UserToChat._id, message: data }) // Send Message to Receiver
             updateMessage(data)
             setMessage("");
         } catch (error) {

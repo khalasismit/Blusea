@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../../../redux/reducers";
+import DeleteComment from "../deleteComment";
 
 const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, createdAt, updateCommentField, parentId, handleViewReplies,replies }) => {
     // console.log(_id, postId, type, userName, comment, likes, profilePic, createdAt )
@@ -41,7 +42,6 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
     }
     const iscomment = type === 'comment' ? true : false;
     return <Box sx={{ p: iscomment ? "0.5rem" : "0.5rem 0.5rem 0.5rem 3rem" }}>
-
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <Box sx={{ display: "flex", gap: 1 }}>
                 {
@@ -61,13 +61,17 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
                             </span>
                         </Typography>
                     </Box>
-                    <Typography>
+                    <Typography sx={{display:"flex",alignItems:"center"}}>
                         <span>
                             {timeAgo}
                         </span>
                         <span style={{ margin: "0 1rem", cursor: "pointer" }} onClick={() => { updateCommentField(`@${userName} `); parentId(_id); }}>
                             Reply
                         </span>
+                        { userName === user.userName 
+                        &&
+                            <DeleteComment commentId={_id} postId={postId}></DeleteComment>
+                        }
                     </Typography>
                 </Box>
             </Box>
