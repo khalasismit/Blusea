@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getUsers, getUser, getFollowing, getFollowers, knownUsers, getUserSavedPost, searchUser, suggestions, edit, search } from "../controllers/user.js"
+import { getUsers, getUser, getFollowing, getFollowers, knownUsers, getUserSavedPost, searchUser, suggestions, edit, search, getUserToReply } from "../controllers/user.js"
 import { follow, accept, reject, cancel, unfollow, requests } from "../controllers/follow.js";
 
 const router = express.Router();
@@ -8,6 +8,7 @@ const router = express.Router();
 router.get("/",getUsers);
 router.get("/:userName",getUser);
 router.get("/suggestions/:userId",suggestions);
+router.get("/userToReply/:commentId",getUserToReply);
 router.get("/:id/search/:search",searchUser);
 router.get("/search/:search",search);
 router.get("/:id/knownUsers",knownUsers);

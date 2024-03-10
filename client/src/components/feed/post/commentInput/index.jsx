@@ -18,6 +18,10 @@ const CommentInput = ({ postId, commentId, CM }) => {
                 commentId: commentId
             })
         }).then(async (res) => await res.json()).then(async (data) => {
+            const res = await fetch(`http://localhost:3001/users/userToReply/${commentId}`, {
+                method: "GET",
+            });
+            const ParentCommentuser = await res.json();
             // console.log("Comment data: ", data);
             const updatedPost = data.updatedPost;
             const newComment = data.newComment;
@@ -28,8 +32,8 @@ const CommentInput = ({ postId, commentId, CM }) => {
                 if (newComment.type === "comment") {
                     receiverId = updatedPost.userId;
                     message = `commented on your post : ${newComment.comment}`;
-                } else if (newComment.type === "reply") { 
-                    receiverId = commentId;
+                } else if (newComment.type === "reply") {
+                    receiverId = ParentCommentuser._id;
                     message = `replied to your comment : ${newComment.comment}`;
                 } else {
                     console.log("Error in comment.jsx")

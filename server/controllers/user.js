@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 import File from "../models/File.js";
+import Comment from "../models/Comment.js";
 
 // Get User 
 export const getUser = async (req, res) => {
@@ -109,9 +110,9 @@ export const getUsers = async (req, res) => {
 // Search User
 export const searchUser = async (req, res) => {
   try {
-    const { search,id } = req.params;
+    const { search, id } = req.params;
     const SearchText = new RegExp(`^${search}`, 'i')
-    const users = await User.find({ _id: { $ne: id },$or: [{ firstName: SearchText }, { lastName: SearchText }, { userName: SearchText }] }).sort({ firstName: 1 });
+    const users = await User.find({ _id: { $ne: id }, $or: [{ firstName: SearchText }, { lastName: SearchText }, { userName: SearchText }] }).sort({ firstName: 1 });
     res.status(200).json(users);
   } catch (error) {
     res.status(404).json({ error })
@@ -121,7 +122,7 @@ export const search = async (req, res) => {
   try {
     const { search } = req.params;
     const SearchText = new RegExp(`^${search}`, 'i')
-    const users = await User.find({$or: [{ firstName: SearchText }, { lastName: SearchText }, { userName: SearchText }] }).sort({ firstName: 1 });
+    const users = await User.find({ $or: [{ firstName: SearchText }, { lastName: SearchText }, { userName: SearchText }] }).sort({ firstName: 1 });
     res.status(200).json(users);
   } catch (error) {
     res.status(404).json({ error })
@@ -170,3 +171,15 @@ export const suggestions = async (req, res) => {
     return res.status(500).json({ message: 'Server Error' });
   }
 };
+
+export const getUserToReply = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+    const comment = await Comment.findById(commentId).populate("userId");
+    const user = comment.userId;
+    return res.status(200).json(user);
+  } catch (err) {
+    console.error('Error getting user to reply:', err);
+    return res.status(500).json({ message: 'Server Error' });
+  }
+}
