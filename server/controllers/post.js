@@ -246,7 +246,7 @@ export const comment = async (req, res) => {
       })
     }
     const updatedPost = await Post.findById(postId);
-    res.status(201).json(updatedPost);
+    res.status(201).json({updatedPost,newComment});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });

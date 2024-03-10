@@ -3,10 +3,10 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../../redux/reducers";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 import { useEffect, useState } from "react";
 const Like = ({ postId, postUserName, likes }) => {
-    const socket = io("http://localhost:3001");
+    // const socket = io("http://localhost:3001");
     const user = useSelector((state) => state.user)
     const [isLiked, setIsLiked] = useState(likes.includes(user._id))
     // const [likeType, setLikeType] = useState("LIKE_POST");
@@ -18,52 +18,70 @@ const Like = ({ postId, postUserName, likes }) => {
             headers: { "Content-Type": "application/json" },
         });
         const updatedPost = await res.json();
+        try {
+            let url = ""
+            if (!isLiked) {
+                url = `http://localhost:3001/notifications/new`
+            } else if (isLiked) {
+                url = `http://localhost:3001/notifications/deleteLike`
+            } else {
+                console.log("Error in Like.jsx")
+            }
+            const NotifRes = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        postId: postId,
+                        senderId: user._id,
+                        receiverId: updatedPost.userId,
+                        message: `liked your post`
+                    })
+                });
+                const newNotif = await NotifRes.json();
+                console.log("newNotif: ", newNotif);
+                // socket.emit("notification", { newNotif, postUserName });
 
-        // if (await isLiked) {
-        //     setLikeType("UNLIKE_POST")
-        // } else {
-        //     setLikeType("LIKE_POST")
-        // }
-        if (!isLiked){
-            const NotifRes = await fetch(`http://localhost:3001/notifications/new`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    postId:postId,
-                    senderId: user._id,
-                    receiverId: updatedPost.userId,
-                    message: `liked your post`
-                })
-            });
-            const newNotif = await NotifRes.json();
-            socket.on("connection", () => {
-                socket.on("authenticate", user.userId);
-                socket.emit("notification", { newNotif, postUserName });
-            });
+            // if (!isLiked) {  
+            //     const NotifRes = await fetch(`http://localhost:3001/notifications/new`, {
+            //         method: "POST",
+            //         headers: { "Content-Type": "application/json" },
+            //         body: JSON.stringify({
+            //             postId: postId,
+            //             senderId: user._id,
+            //             receiverId: updatedPost.userId,
+            //             message: `liked your post`
+            //         })
+            //     });
+            //     const newNotif = await NotifRes.json();
+            //     console.log("newNotif: ", newNotif);
+            //     socket.emit("notification", { newNotif, postUserName });
+            // }
+            // if (isLiked) {
+            //     const NotifRes = await fetch(`http://localhost:3001/notifications/deleteLike`, {
+            //         method: "POST",
+            //         headers: { "Content-Type": "application/json" },
+            //         body: JSON.stringify({
+            //             postId: postId,
+            //             senderId: user._id,
+            //             receiverId: updatedPost.userId,
+            //             message: `liked your post`
+            //         })
+            //     });
+            //     const newNotif = await NotifRes.json();
+            //     console.log("DELETEnewNotif: ", newNotif);
+            //     // socket.emit("notification", { newNotif, postUserName });
+            // }
+            dispatch(setPost({ post: updatedPost }));
+        } catch (error) {
+            console.log("Error in Like.jsx",error)
+        
         }
-        if (isLiked){
-            const NotifRes = await fetch(`http://localhost:3001/notifications/deleteLike`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    postId:postId,
-                    senderId: user._id,
-                    receiverId: updatedPost.userId,
-                    message: `liked your post`
-                })
-            });
-            const newNotif = await NotifRes.json();
-            socket.on("connection", () => {
-                socket.on("authenticate", user.userId);
-                socket.emit("notification", { newNotif, postUserName });
-            });
-        }
-        dispatch(setPost({ post: updatedPost }));
     }
     useEffect(() => {
-        return () => {
-            socket.close();
-        };
+        // socket.on("authenticate", user.userId);
+        // return () => {
+        //     socket.close();
+        // };
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (

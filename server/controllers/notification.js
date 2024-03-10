@@ -43,7 +43,6 @@ export const delNotif = async (req, res) => {
     try {
         const { senderId, receiverId, postId,message } = req.body
         const deletedNotif = await Notification.findOneAndDelete({ senderId: senderId, receiverId: receiverId, postId: postId,message:message });
-        await deletedNotif.save();
         return res.status(201).json(deletedNotif);
     } catch (err) {
         console.log("server error")

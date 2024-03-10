@@ -1,11 +1,12 @@
-import { Box, CircularProgress, Divider, Typography, useMediaQuery, } from "@mui/material"
+import { Box, CircularProgress, Divider, Typography, useMediaQuery, useTheme, } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 // import io from "socket.io-client"
 import Notification from "./notification"
 const NotificationsPage = () => {
-    const [loading,setLoading]= useState(false)
+    const theme = useTheme();
+    const [loading, setLoading] = useState(false)
     const isNonMobile = useMediaQuery("(min-width:1000px)");
     // const socket = io("http://localhost:3001");
     const [Data, setData] = useState([]);
@@ -32,25 +33,24 @@ const NotificationsPage = () => {
     //     //get notifications when connected to the server 
     // })
     // socket.on("notification", (data) => {
-        //     console.log(data);
-        //     setNotifications([...notifications, data])
-        // })
-        
-        // useEffect(() => {
-            //     socket.on("connect", () => {
-                //         socket.emit("authenticate", user._id);
+    //     console.log(data);
+    //     setNotifications([...notifications, data])
+    // })
+
+    // useEffect(() => {
+    //     socket.on("connect", () => {
+    //         socket.emit("authenticate", user._id);
     //         socket.on("notification", (data) => {
     //             setNotifications(...notifications, data)
     //         })
     //     })
     // }, [])
     return <Box sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <Box sx={{ width: isNonMobile ? "50%" : "100%", display: "flex", alignItems: "center", p: "0 1rem" }}>
+        <Box sx={{ width: isNonMobile ? "50%" : "100%", display: "flex", alignItems: "center", p: "0 1rem", position: "sticky", top: 0,borderBottom:"1px solid gray",background:theme.palette.background.default,zIndex:100 }}>
             <ArrowBackIosNewOutlinedIcon sx={{ fontSize: "2rem" }} onClick={() => { window.history.back() }} />
             <Typography sx={{ flex: 1, textAlign: "center", fontSize: "1.5rem", p: 1 }}>Notifications</Typography>
         </Box>
-        <Divider flexItem />
-        <Box sx={{ width: isNonMobile ? "50%" : "100%", display: "flex", flexDirection: "column-reverse", justifyContent: "center" }}>
+        <Box sx={{ width: isNonMobile ? "50%" : "100%", display: "flex", flexDirection: "column-reverse", justifyContent: "center",zIndex:0 }}>
             {
                 !loading ? (
                     Data.map((notification, i) => (

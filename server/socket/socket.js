@@ -47,19 +47,18 @@ io.on('connection', (socket) => {
         }
   })
 
-  socket.on('LIKE_POST',(data)=>{
-    const {userName,postUserName,postUserId} = data
-    console.log("data: ",data)
-    const recipientSocketId = users[postUserId]
-    console.log("LIKE POST RUN")
-    if (recipientSocketId) {
-        io.to(recipientSocketId).emit('notification',{message:`${userName} Liked Your Post`});
-        console.log(`notification sent to receiver :${postUserName}`);
-    } else {
-        // Handle case where recipient is not connected or does not exist
-        console.log(`User ${postUserId} is not connected`);
-    }
-  })
+  // socket.on('LIKE_POST',(data)=>{
+  //   const {userName,postUserName,postUserId} = data
+  //   console.log("data: ",data)
+  //   const recipientSocketId = users[postUserId]
+  //   if (recipientSocketId) {
+  //       io.to(recipientSocketId).emit('notification',{message:`${userName} Liked Your Post`});
+  //       console.log(`notification sent to receiver :${postUserName}`);
+  //   } else {
+  //       // Handle case where recipient is not connected or does not exist
+  //       console.log(`User ${postUserId} is not connected`);
+  //   }
+  // })
 
   socket.on('disconnect',()=>{
     // Find the user ID associated with the disconnected socket

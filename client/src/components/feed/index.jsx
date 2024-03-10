@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 const Feed = () => {
     // const theme = useTheme()
-    const user = useSelector((state) => state.user)
+    // const user = useSelector((state) => state.user)
     const Posts = useSelector((state) => state.posts)
     const [posts, setPosts] = useState(null);
     const fetchPosts = async () => {
