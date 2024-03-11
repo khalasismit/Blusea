@@ -56,8 +56,8 @@ function App() {
               <Route path="/profile/:userName" element={isAuth ? <ProfilePage /> : <Navigate to="/" />} />
               <Route path="/search" element={isAuth ? <SearchPage /> : <Navigate to="/" />} />
               <Route path="/notifications" element={isAuth ? <NotificationsPage socket={socket} /> : <Navigate to="/" />} />
-              <Route path="/chats" element={isAuth ? <ChatPage /> : <Navigate to="/" />} />
-              <Route path="/chats/:conversationId/messages" element={isAuth ? <ChatArea /> : <Navigate to="/" />} />
+              <Route path="/chats" element={isAuth ? <ChatPage socket={socket}/> : <Navigate to="/" />} />
+              <Route path="/chats/:conversationId/messages" element={isAuth ? <ChatArea socket={socket}/> : <Navigate to="/" />} />
             </Routes>
           </Box>
         </ThemeProvider>

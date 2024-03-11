@@ -2,9 +2,9 @@ import { Box, InputAdornment, TextField, useMediaQuery, useTheme } from "@mui/ma
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
-const TextArea = ({ participants, updateMessage }) => {
-    const socket = io("http://localhost:3001");
+// import { io } from "socket.io-client";
+const TextArea = ({ participants, updateMessage, socket }) => {
+    // const socket = io("http://localhost:3001");
     const [message, setMessage] = useState("");
     const [UserToChat, setUserToChat] = useState([]);
     const user = useSelector((state) => state.user);
@@ -12,7 +12,7 @@ const TextArea = ({ participants, updateMessage }) => {
     // console.log("participants",participants)
     const isNonMobile = useMediaQuery('(min-width:1000px)');
     useEffect(() => {
-        socket.emit("authenticate", user._id);
+        // socket.emit("authenticate", user._id);
         if (participants) {
             participants.map((participant) => {
                 if (participant._id !== user._id) {
@@ -54,6 +54,12 @@ const TextArea = ({ participants, updateMessage }) => {
             console.log("Error in sending message: ", error)
         }
     }
+    useEffect(() => {
+        socket.connect();
+        return () => {
+            socket.close()
+        }
+    }, [])
     return (
         <Box sx={{
             width: "100%",

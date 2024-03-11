@@ -1,12 +1,12 @@
 import { Box, Divider } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import Message from "./message";
-import { io } from "socket.io-client";
-import { useSelector } from "react-redux";
+// import { io } from "socket.io-client";
+// import { useSelector } from "react-redux";
 
-const Messages = ({ conversationId, updateMessage }) => {
-    const user = useSelector((state) => state.user);
-    const socket = io("http://localhost:3001");
+const Messages = ({ socket,conversationId, updateMessage }) => {
+    // const user = useSelector((state) => state.user);
+    // const socket = io("http://localhost:3001");
     const [messagesByDate, setMessagesByDate] = useState({});
     const messagesEndRef = useRef(null);
 
@@ -37,13 +37,13 @@ const Messages = ({ conversationId, updateMessage }) => {
     }, [conversationId, updateMessage]);
 
     useEffect(() => {
-        socket.on("connect", () => {
-            socket.emit("authenticate", user._id);
-            console.log(socket.connected)
-            if (socket.connected) {
-                socket.on('receive_message', (receivedMessage) => {
-                    // console.log("receivedMessage", receivedMessage);
-                    // organizeMessagesByDate([...messagesByDate, receivedMessage]);
+        // socket.on("connect", () => {
+        //     socket.emit("authenticate", user._id);
+        //     console.log(socket.connected)
+        //     if (socket.connected) {
+            // console.log("receivedMessage", receivedMessage);
+            // organizeMessagesByDate([...messagesByDate, receivedMessage]);
+            socket.on('receive_message', (receivedMessage) => {
                     const date = new Date(receivedMessage.createdAt).toISOString().split('T')[0];
                     setMessagesByDate(prevMessagesByDate => {
                         const updatedMessagesByDate = { ...prevMessagesByDate };
@@ -55,8 +55,12 @@ const Messages = ({ conversationId, updateMessage }) => {
                         return updatedMessagesByDate;
                     });
                 });
-            }
-        });
+        //     }
+        // });
+        return  () => {
+            socket.off('receive_message');
+            socket.close();
+        }
     }, [socket]);
 
     useEffect(() => {
@@ -66,7 +70,7 @@ const Messages = ({ conversationId, updateMessage }) => {
     }, [messagesByDate]);
 
     return (
-        <Box sx={{ height: "90%", flex: 1, p: 1, overflowY: "auto", scrollbarWidth: "thin" }}>
+        <Box sx={{ height: "90%", flex: 1, p: 1,mb:"1rem", overflowY: "auto", scrollbarWidth: "thin" }}>
             {Object.entries(messagesByDate).map(([date, messages]) => (
                 <Box key={date}>
                     {

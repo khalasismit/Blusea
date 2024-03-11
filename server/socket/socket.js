@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
       delete users[userId]; // Remove previous socket ID
     }
     users[userId] = socket.id;
-    // console.log(users)
+    console.log(users)
   });
 
   socket.on('send_message', (data) => {

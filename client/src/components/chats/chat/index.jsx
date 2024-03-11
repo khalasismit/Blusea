@@ -33,12 +33,12 @@ const Chat = ({ id, participants, messages }) => {
                 if (minutes < 10) {
                     minutes = '0' + minutes;
                 }
-                if(new Date(date).toDateString() === new Date(new Date().setDate(new Date().getDate() - 1)).toDateString()){
+                if (new Date(date).toDateString() === new Date(new Date().setDate(new Date().getDate() - 1)).toDateString()) {
                     return `Yesterday ${hours}:${minutes} ${ampm}`
                 }
-                else if (new Date(date).toDateString() === new Date().toDateString()){
+                else if (new Date(date).toDateString() === new Date().toDateString()) {
                     return `${hours}:${minutes} ${ampm}`
-                }else{   
+                } else {
                     return `${date}`
                 }
             })

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
 import { useNavigate } from "react-router-dom";
-const Chats = ({ handleSetConversationId }) => {
+const Chats = () => {
     const navigate = useNavigate()
     const [isSearch, setIsSearch] = useState(false);
     const [otherUserId, setOtherUserId] = useState("");
@@ -113,7 +113,6 @@ const Chats = ({ handleSetConversationId }) => {
                                 key={conversation._id}
                             >
                                 <Chat
-                                    handleSetConversationId={handleSetConversationId}
                                     id={conversation._id}
                                     participants={conversation.participants}
                                     messages={conversation.messages}
