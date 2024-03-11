@@ -67,6 +67,7 @@ const CommentInput = ({ postId, commentId, CM, socket }) => {
         // console.log("Comment Input -> parentId :",commentId)
     }, [CM])
     useEffect(() => {
+        socket.connect();
         return () => {
             socket.close();
         };
