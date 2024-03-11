@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../../../redux/reducers";
 import DeleteComment from "../deleteComment";
 
-const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, createdAt, updateCommentField, parentId, handleViewReplies,replies }) => {
+const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, createdAt, updateCommentField, parentId, handleViewReplies, replies,socket }) => {
     // console.log(_id, postId, type, userName, comment, likes, profilePic, createdAt )
     const [timeAgo, setTimeAgo] = useState('');
     useEffect(() => {
@@ -24,7 +24,7 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
         return () => clearInterval(intervalId);
     }, [createdAt]);
     const user = useSelector((state) => state.user)
-    const [isLiked,setIsLiked] = useState(likes.includes(user._id))
+    const [isLiked, setIsLiked] = useState(likes.includes(user._id))
     // const isLiked = likes.includes(user._id) ? true : false
     const dispatch = useDispatch()
     const handleCommentLike = async () => {
@@ -41,30 +41,36 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
         });
         const updatedPost = await res.json();
         const CommentIdRes = await fetch(`http://localhost:3001/users/userToReply/${_id}`, {
-                method: "GET",
-            });
-            const Commentuser = await CommentIdRes.json();
+            method: "GET",
+        });
+        const Commentuser = await CommentIdRes.json();
         try {
-            let url = ""
-            if (!isLiked) {
-                url = `http://localhost:3001/notifications/new`
-            } else if (isLiked) {
-                url = `http://localhost:3001/notifications/deleteLike`
-            } else {
-                console.log("Error in Like.jsx")
+            if (user._id !== Commentuser._id) {
+                let url = ""
+                if (!isLiked) {
+                    url = `http://localhost:3001/notifications/new`
+                } else if (isLiked) {
+                    url = `http://localhost:3001/notifications/deleteLike`
+                } else {
+                    console.log("Error in Like.jsx")
+                }
+                const NotifRes = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        postId: postId,
+                        senderId: user._id,
+                        receiverId: Commentuser._id,
+                        message: `liked your comment : ${comment}`
+                    })
+                });
+                const newNotif = await NotifRes.json();
+                console.log("newNotif: ", newNotif);
+                if (!isLiked) {
+                    socket.on("authenticate", user.userId);
+                    socket.emit("like", { newNotif: newNotif });
+                }
             }
-            const NotifRes = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    postId: postId,
-                    senderId: user._id,
-                    receiverId: Commentuser._id,
-                    message: `liked your comment : ${comment}`
-                })
-            });
-            const newNotif = await NotifRes.json();
-            console.log("newNotif: ", newNotif);
             dispatch(setPost({ post: updatedPost }));
         } catch (error) {
             console.log("Error in Like.jsx", error)
@@ -93,15 +99,15 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
                             </span>
                         </Typography>
                     </Box>
-                    <Typography sx={{display:"flex",alignItems:"center"}}>
+                    <Typography sx={{ display: "flex", alignItems: "center" }}>
                         <span>
                             {timeAgo}
                         </span>
                         <span style={{ margin: "0 1rem", cursor: "pointer" }} onClick={() => { updateCommentField(`@${userName} `); parentId(_id); }}>
                             Reply
                         </span>
-                        { userName === user.userName 
-                        &&
+                        {userName === user.userName
+                            &&
                             <DeleteComment commentId={_id} postId={postId}></DeleteComment>
                         }
                     </Typography>
@@ -124,7 +130,7 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
             </Box >
         </Box>
         {
-            <Box sx={{ ml: "2.5rem",cursor:"pointer" }} onClick={()=>{handleViewReplies(_id)}}>
+            <Box sx={{ ml: "2.5rem", cursor: "pointer" }} onClick={() => { handleViewReplies(_id) }}>
                 <Typography>
                     see more ({replies})
                 </Typography>

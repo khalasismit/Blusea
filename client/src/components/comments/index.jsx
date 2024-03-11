@@ -3,7 +3,7 @@ import Comment from "./comment"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 
-const Comments = ({ postId, parentId, updateCommentField }) => {
+const Comments = ({ postId, parentId, updateCommentField,socket }) => {
     const posts = useSelector((state) => state.posts);
     const [comments, setComments] = useState([]);
     const [Loading, setLoading] = useState(true);
@@ -56,6 +56,7 @@ const Comments = ({ postId, parentId, updateCommentField }) => {
                         createdAt={comment.createdAt}
                         updateCommentField={updateCommentField}
                         parentId={parentId}
+                        socket={socket}
                         replies={comment.replies.length}
                         handleViewReplies={() => toggleRepliesVisibility(comment._id)}
                     />

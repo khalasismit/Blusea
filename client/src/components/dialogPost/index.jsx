@@ -12,12 +12,12 @@ import Like from "../like";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Comments from "../comments";
-import { setPost } from "../../redux/reducers";
+// import { setPost } from "../../redux/reducers";
 import SavePost from "../savePost";
 import CommentInput from "../feed/post/commentInput";
 
 const DialogPost = ({ item, open, handleClose, onClose,socket }) => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const [post, setpost] = useState(item);
     // console.log("Post:",post)
     const user = useSelector((state) => state.user);
@@ -88,7 +88,6 @@ const DialogPost = ({ item, open, handleClose, onClose,socket }) => {
     const NavigateToProfile = () => {
         navigate(`/profile/${post.userName}`);
     }
-    // return (<></>)
     return <Dialog maxWidth={isNonMobile ? 'lg' : "md"} fullWidth open={open} onClose={handleClose} >
         <CloseOutlinedIcon onClick={handleClose} sx={{ fontSize: "2rem", position: "fixed", top: ".3rem", right: ".3rem" }} />
         <Box sx={{ flex: 1, display: "flex", flexDirection: isNonMobile ? "row" : "column", overflowY: "auto", scrollbarWidth: "none" }}>
@@ -130,7 +129,7 @@ const DialogPost = ({ item, open, handleClose, onClose,socket }) => {
                 <Box sx={{flex:1,display: "flex",flexDirection: "column" }}>
                     {/* second first Box */}
                     <Box sx={{flex:1,overflow: "auto", scrollbarWidth: "thin" }}>
-                        <Comments postId={post._doc._id} updateCommentField={updateCommentField} parentId={parentId} ></Comments>
+                        <Comments socket={socket} postId={post._doc._id} updateCommentField={updateCommentField} parentId={parentId} ></Comments>
                     </Box>
                     {/* second second Box */}
                     <Box sx={{ p: 1,position:!isNonMobile && "sticky",bottom:!isNonMobile && 0,background:!isNonMobile&&theme.palette.background.default}}>

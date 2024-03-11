@@ -4,20 +4,15 @@ import Feed from "../../components/feed";
 import Requests from "../../components/requests";
 import Ads from "../../components/ads";
 import { Link } from "react-router-dom";
-// import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotifs } from "../../redux/reducers";
-// import { io } from "socket.io-client";
-// import Story from "../../components/feed/magnetStories/story";
 const HomePage = ({ socket }) => {
     const dispatch = useDispatch();
-    // const socket = io("http://localhost:3001");
     const isNonMobile = useMediaQuery('(min-width:1000px)')
     const nonMobile = useMediaQuery('(min-width:600px)')
     const theme = useTheme();
-    const [newNotif, setNewNotif] = useState(useSelector(state=>state.notifs));
-    // const user = useSelector((state) => state.user);
+    const [newNotif, setNewNotif] = useState(useSelector(state => state.notifs));
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
@@ -26,18 +21,12 @@ const HomePage = ({ socket }) => {
         e.preventDefault();
     };
     useEffect(() => {
-        // socket.on("connect", () => {
-        // socket.emit("authenticate", user._id);
         socket.on("notification", (data) => {
             if (newNotif[newNotif.length - 1] !== data) {
                 setNewNotif(newNotif => [...newNotif, data])
-                dispatch(setNotifs({ notifs: [...newNotif,data] }));
+                dispatch(setNotifs({ notifs: [...newNotif, data] }));
             }
         })
-        // })
-        // socket.on("notification", (data) => {
-        //     setNewNotif(newNotif => [...newNotif, data])
-        // })
         return () => {
             socket.disconnect();
         }
