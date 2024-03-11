@@ -1,6 +1,6 @@
 import { Box, Divider, Typography, useMediaQuery, useTheme } from "@mui/material"
 import Chats from "../../components/chats"
-const ChatPage = () => {
+const ChatPage = ({socket}) => {
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
@@ -13,7 +13,7 @@ const ChatPage = () => {
     return <Box sx={{ display: "flex", flex: 1 }}>
         <Box sx={{ height: isNonMobile?"100vh":"90%", display: "flex", flex: 1 }}>
             <Box sx={{ flex: 1, borderRadius: "0.5rem", m: 1, display: "flex", flexDirection: isNonMobile ? "row" : "column" }}>
-                <Chats></Chats>
+                <Chats socket={socket}></Chats>
                 {
                     isNonMobile &&
                     <Divider orientation="vertical" sx={{ m: 1 }} flexItem></Divider>

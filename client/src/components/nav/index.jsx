@@ -17,8 +17,8 @@ import { setNotifs } from '../../redux/reducers';
 
 const Navigation = ({ socket }) => {
     const dispatch = useDispatch();
-    // const socket = io("http://localhost:3001");
     const [newNotif, setNewNotif] = useState(useSelector(state => state.notifs));
+    const [newMessages, setNewMessages] = useState([]);
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
@@ -37,9 +37,13 @@ const Navigation = ({ socket }) => {
                 setNewNotif(prevnewNotif => [...prevnewNotif, data])
                 dispatch(setNotifs({ notifs: [...newNotif,data] }));
             })
+            socket.on("receive_message",(data)=>{
+                setNewMessages(prevnewMessages => [...prevnewMessages, data]);
+            })
         // });
         return () => {
             socket.off("notification");
+            socket.off("receive_messages");
             socket.close();
         }
     }, [socket]);
@@ -156,9 +160,11 @@ const Navigation = ({ socket }) => {
                         )}
                     </Box>
                 </Link>}
-                <Link to={"/chats"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
+                <Link to={"/chats"} onClick={() => { setNewMessages([]); }} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                        <Badge color="secondary" badgeContent={newMessages.length}>
                         <TextsmsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
+                        </Badge>
                         {isNonMobile && (
                             <Typography>
                                 Messaging

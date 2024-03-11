@@ -33,6 +33,7 @@ io.on('connection', (socket) => {
 
   socket.on('send_message', (data) => {
     const { receiverId, message } = data;
+    console.log("message: ",message.NewMessage)
     // Find the recipient's socket ID
         const recipientSocketId = users[receiverId];
         

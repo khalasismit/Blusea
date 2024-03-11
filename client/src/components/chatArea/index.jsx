@@ -4,7 +4,9 @@ import Messages from "../messages";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ChatHeader from "./chatHeader";
+import { useSelector } from "react-redux";
 const ChatArea = ({socket}) => {
+    const user = useSelector((state) => state.user)
     const [conversation, setConversation] = useState([])
     const { conversationId } = useParams();
     const [update,setUpdate] = useState("")
@@ -20,8 +22,12 @@ const ChatArea = ({socket}) => {
         setConversation(data);
     }
     useEffect(() => {
+        socket.emit("authenticate",user._id);
         getConversation()
-    }, [conversationId])
+        return () =>{
+            socket.close()
+        }
+    }, [conversationId,socket])
     const isNonMobile = useMediaQuery('(min-width:1000px)');
     const theme = useTheme();
     return <Box sx={{
@@ -45,3 +51,25 @@ const ChatArea = ({socket}) => {
 }
 
 export default ChatArea;
+
+/* for new message notification purpose */ 
+// const data = [
+//     {
+//         "conversationId":"someid",
+//         "newMessages":[
+//             //array of new messages objects
+//         ]
+//     },
+//     {
+//         "conversationId":"someid",
+//         "newMessages":[
+//             //array of new messages objects
+//         ]
+//     },
+//     {
+//         "conversationId":"someid",
+//         "newMessages":[
+//             //array of new messages objects
+//         ]
+//     },
+// ]

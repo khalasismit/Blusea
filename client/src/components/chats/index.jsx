@@ -1,11 +1,12 @@
 import { Avatar, Box, Divider, TextField, Typography, useTheme } from "@mui/material";
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import Chat from "./chat";
 import { useEffect, useState } from "react";
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
 import { useNavigate } from "react-router-dom";
-const Chats = () => {
+const Chats = ({ socket }) => {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [isSearch, setIsSearch] = useState(false);
     const [otherUserId, setOtherUserId] = useState("");
@@ -35,33 +36,38 @@ const Chats = () => {
     }
     useEffect(() => {
         getConversations();
-    }, []);
+        socket.connect();
+        socket.emit("authenticate", user._id);
+        return ()=>{
+            socket.close()
+        }
+    }, [socket]);
     const handleIsSearch = () => {
         setIsSearch(!isSearch)
     }
     const handleSearch = async (value) => {
-            const searchRes = await fetch(`http://localhost:3001/users/${user._id}/search/${value}`, {
-                method: "GET",
-                headers: {}
-            });
-            const data = await searchRes.json();
-            setSearchData(data);
-    }
+        const searchRes = await fetch(`http://localhost:3001/users/${user._id}/search/${value}`, {
+            method: "GET",
+            headers: {}
+        });
+        const data = await searchRes.json();
+        setSearchData(data);
+    } 
     const theme = useTheme();
     return <Box sx={{ flex: 1, display: "flex", background: theme.palette.background.alt, flexDirection: "column", p: 1, borderRadius: "1rem" }}>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center",}}>
-            <Typography sx={{ fontSize: "1.1rem",p:"0 1rem" }}>Conversations</Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", }}>
+            <Typography sx={{ fontSize: "1.1rem", p: "0 1rem" }}>Conversations</Typography>
             <Box onClick={handleIsSearch} sx={{
-                p:"0.5rem 0.7rem",
-                borderRadius:"50%",
-                ':hover':{background:theme.palette.neutral.light} 
+                p: "0.5rem 0.7rem",
+                borderRadius: "50%",
+                ':hover': { background: theme.palette.neutral.light }
             }}>
                 {
                     isSearch ? <SearchOffOutlinedIcon sx={{ fontSize: "1.6rem", color: theme.palette.neutral.dark }} />
-                        : <PersonSearchOutlinedIcon sx={{ fontSize: "1.6rem",color: theme.palette.neutral.dark}} />
+                        : <PersonSearchOutlinedIcon sx={{ fontSize: "1.6rem", color: theme.palette.neutral.dark }} />
                 }
-            {/* <PersonSearchOutlinedIcon sx={{ fontSize: "1.6rem"}} /> */}
+                {/* <PersonSearchOutlinedIcon sx={{ fontSize: "1.6rem"}} /> */}
             </Box>
         </Box>
         <Divider sx={{ m: 1 }} flexItem></Divider>
@@ -113,14 +119,15 @@ const Chats = () => {
                                 key={conversation._id}
                             >
                                 <Chat
+                                    socket={socket}
                                     id={conversation._id}
                                     participants={conversation.participants}
                                     messages={conversation.messages}
-                                    // messages={conversation.messages[conversation.messages.length-1].message}
-                                    />
+                                // messages={conversation.messages[conversation.messages.length-1].message}
+                                />
                             </Box>
                         ))
-                        ) : (
+                    ) : (
                         <Box >
                             <Typography sx={{ justifyContent: "center", display: "flex", fontSize: "1rem" }}>
                                 No conversations yet

@@ -1,15 +1,18 @@
-import { Avatar, Box, Typography, useTheme } from "@mui/material";
-import { useSelector } from "react-redux";
+import { Avatar, Badge, Box, Typography, useTheme } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-const Chat = ({ id, participants, messages }) => {
-    const lastMessage = messages[messages.length - 1];
+import { addNewMessages, clearNewMessages } from "../../../redux/reducers";
+const Chat = ({ socket, id, participants, messages }) => {
+    const [lastMessage,setLastMesssage] = useState(messages.length > 0 ? messages[messages.length - 1] : "");
     const [UserToChat, setUserToChat] = useState([])
     const [time, setTime] = useState("");
+    const newMessages = useSelector(state => state.conversations).find(conversation => conversation.conversationId === id)?.newMessages || []
     // const [lastMessage, setLastMessage] = useState("")
     const user = useSelector((state) => state.user)
     const theme = useTheme();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     useEffect(() => {
         participants.map((participant) => {
             if (participant._id !== user._id) {
@@ -43,17 +46,49 @@ const Chat = ({ id, participants, messages }) => {
                 }
             })
         }
-    }, [])
-    return <Box sx={{ display: 'flex', borderRadius: 2, gap: 2, p: 1, cursor: "pointer", ":hover": { background: theme.palette.background.default } }} onClick={() => { navigate(`/chats/${id}/messages`) }}>
-        {/* {
-            profilePic === "" ?
-                <Avatar sx={{ borderRadius: 2, height: "2.5rem", width: "2.5rem" }}></Avatar>
-                :
-                <Avatar src={profilePic} sx={{ borderRadius: 2, height: "2.5rem", width: "2.5rem" }}></Avatar>
-        } */}
+    },[lastMessage])
+    
+    useEffect(()=>{
+        socket.connect();
+        socket.emit("authenticate", user._id);
+        socket.on("receive_message", (data) => {
+            if (data.conversationId === id) {
+                // setnewMessages(prevMessage => [...prevMessage, [data]]);
+                console.log("newMessage:", data)
+                dispatch(
+                    addNewMessages({
+                        conversationId: id,
+                        newMessages: [data]
+                    })
+                )
+                setLastMesssage(data)
+            }
+        })
+        return () => {
+            socket.off("receive_message")
+            socket.close()
+        }
+    }, [socket]);
+    return <Box
+        sx={{
+            display: 'flex',
+            borderRadius: 2,
+            gap: 2,
+            p: 1,
+            cursor: "pointer",
+            ":hover": { background: theme.palette.background.default }
+        }}
+        onClick={() => {
+            navigate(`/chats/${id}/messages`);
+            dispatch(clearNewMessages({
+                conversationId: id
+            }))
+        }}>
         <Box sx={{ flex: 1, display: "flex", justifyContent: "space-between" }}>
             <Box sx={{ flex: 1, display: "flex", gap: 2 }}>
-                <Avatar src={UserToChat.picturePath} sx={{ height: "2.5rem", width: "2.5rem" }}></Avatar>
+                <Badge badgeContent={newMessages.length} color="secondary">
+                    <Avatar src={UserToChat.picturePath} sx={{ height: "2.5rem", width: "2.5rem" }}></Avatar>
+                </Badge>
                 <Box sx={{ flex: 1 }}>
                     <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                         <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }} >{UserToChat.userName}</Typography>

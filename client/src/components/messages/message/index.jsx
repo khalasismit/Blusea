@@ -9,7 +9,7 @@ const Message = ({ message, senderId, senderProfilePic, createdAt }) => {
     const [time, setTime] = useState("");
     useEffect(() => {
         setTime(() => {
-            console.log(typeof createdAt) // return String
+            // console.log(typeof createdAt) // return String
             //converting String To Date object
             const Time = new Date(createdAt);
             let hours = Time.getHours();

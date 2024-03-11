@@ -16,7 +16,7 @@ const Messages = ({ socket,conversationId, updateMessage }) => {
             headers: {}
         });
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
         organizeMessagesByDate(data);
     };
 
