@@ -3,6 +3,7 @@ import { useSelector } from "react-redux"
 import Chat from "./chat";
 import { useEffect, useState } from "react";
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
+import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
 import { useNavigate } from "react-router-dom";
 const Chats = ({ handleSetConversationId }) => {
     const navigate = useNavigate()
@@ -56,7 +57,11 @@ const Chats = ({ handleSetConversationId }) => {
                 borderRadius:"50%",
                 ':hover':{background:theme.palette.neutral.light} 
             }}>
-            <PersonSearchOutlinedIcon sx={{ fontSize: "1.6rem"}} />
+                {
+                    isSearch ? <SearchOffOutlinedIcon sx={{ fontSize: "1.6rem", color: theme.palette.neutral.dark }} />
+                        : <PersonSearchOutlinedIcon sx={{ fontSize: "1.6rem",color: theme.palette.neutral.dark}} />
+                }
+            {/* <PersonSearchOutlinedIcon sx={{ fontSize: "1.6rem"}} /> */}
             </Box>
         </Box>
         <Divider sx={{ m: 1 }} flexItem></Divider>

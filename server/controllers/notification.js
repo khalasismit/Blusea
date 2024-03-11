@@ -12,7 +12,9 @@ export const newNotif = async (req, res) => {
             postId: postId
         })
         await newNotif.save();
-        return res.status(201).json(newNotif);
+        const notif = await Notification.findOne({ senderId: senderId, receiverId: receiverId, postId: postId, message: message }).populate("senderId", "userName picturePath").populate("postId", "imageId");
+        const {url} = await File.findOne({ _id: notif.postId.imageId });
+        return res.status(201).json({...notif,url});
     } catch (err) {
         console.log("server error")
         return res.status(400).json({ message: "Server Error" });

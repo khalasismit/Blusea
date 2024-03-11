@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 import ExploreIcon from '@mui/icons-material/Explore';
 import SearchIcon from '@mui/icons-material/Search';
@@ -7,13 +7,18 @@ import TextsmsIcon from '@mui/icons-material/Textsms';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 // import AddBoxIcon from '@mui/icons-material/AddBox';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Avatar, Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Avatar, Badge, Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Mode from '../mode';
 import Create from '../create';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNotifs } from '../../redux/reducers';
+// import { io } from 'socket.io-client';
 
-const Navigation = () => {
+const Navigation = ({ socket }) => {
+    const dispatch = useDispatch();
+    // const socket = io("http://localhost:3001");
+    const [newNotif, setNewNotif] = useState(useSelector(state => state.notifs));
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
@@ -24,6 +29,21 @@ const Navigation = () => {
     const user = useSelector(state => state.user)
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const theme = useTheme();
+
+    useEffect(() => {
+        // socket.on('connect', () => {
+            //     socket.emit("authenticate", user._id);
+            socket.on("notification", (data) => {
+                setNewNotif(prevnewNotif => [...prevnewNotif, data])
+                dispatch(setNotifs({ notifs: [...newNotif,data] }));
+            })
+        // });
+        return () => {
+            socket.off("notification");
+            socket.close();
+        }
+    }, [socket]);
+
     return <Box sx={{
         position: "sticky",
         top: 0,
@@ -124,9 +144,11 @@ const Navigation = () => {
                     </Box>
                 </Link>
                 <Create></Create>
-                {isNonMobile && <Link to={"/notifications"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
+                {isNonMobile && <Link to={"/notifications"} onClick={() => { setNewNotif([]); dispatch(setNotifs({notifs:[]})) }} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                        <NotificationsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
+                        <Badge color="secondary" badgeContent={newNotif.length}>
+                            <NotificationsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
+                        </Badge>
                         {isNonMobile && (
                             <Typography>
                                 Notification
@@ -187,14 +209,14 @@ const Navigation = () => {
                             },
                         }}>
                             {/* <Link to={"/settings"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}> */}
-                                <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                                    <MenuIcon titleAccess='Settings' sx={{ fontSize: "2rem" }} />
-                                    {isNonMobile && (
-                                        <Typography>
-                                            More
-                                        </Typography>
-                                    )}
-                                </Box>
+                            <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                                <MenuIcon titleAccess='Settings' sx={{ fontSize: "2rem" }} />
+                                {isNonMobile && (
+                                    <Typography>
+                                        More
+                                    </Typography>
+                                )}
+                            </Box>
                             {/* </Link> */}
                         </Box>
                         <Mode></Mode>

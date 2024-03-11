@@ -1,4 +1,4 @@
-import { CircularProgress, Typography, useMediaQuery } from '@mui/material';
+import { CircularProgress, useMediaQuery } from '@mui/material';
 import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -7,7 +7,9 @@ import DialogPost from '../../components/dialogPost';
 import { useSelector } from 'react-redux';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
+import io from "socket.io-client";
 const ExplorePage = () => {
+  const socket = io("http://localhost:3001");
   const posts = useSelector((state) => state.posts)
   const isNonMobile = useMediaQuery("(min-width:768px)")
   const [exploreData, setExploreData] = useState(null);
@@ -57,7 +59,7 @@ const ExplorePage = () => {
                       alt={`${item._doc._id}`}
                       onContextMenu={handleContextMenu}
                       onDragStart={handleDragStart}
-                      style={{ width: "100%", height: "auto", aspectRatio: "1 / 1", objectFit: "cover", cursor: "pointer"}}
+                      style={{ width: "100%", height: "auto", aspectRatio: "1 / 1", objectFit: "cover", cursor: "pointer" }}
                     />
                     {/* <Box
                       style={{
@@ -92,15 +94,15 @@ const ExplorePage = () => {
                         justifyContent: "center",
                         alignItems: "center",
                         opacity: 0,
-                        gap:"1.5rem",
+                        gap: "1.5rem",
                         transition: "opacity 0.3s ease",
                       }}
                       onMouseEnter={(e) => e.target.style.opacity = 1}
                       onMouseLeave={(e) => e.target.style.opacity = 0}
                       onClick={() => handleImageClick(item)}
                     >
-                      <Box className="likes-count" style={{  fontSize:"1rem",fontWeight:"bold",display:"flex",alignItems:"center",gap:5}}><FavoriteIcon/> {item._doc.likes.length}</Box>
-                      <Box className="comment-count" style={{  fontSize:"1rem",fontWeight:"bold",display:"flex",alignItems:"center",gap:5}}><CommentIcon/> {item._doc.comments.length}</Box>
+                      <Box className="likes-count" style={{ fontSize: "1rem", fontWeight: "bold", display: "flex", alignItems: "center", gap: 5 }}><FavoriteIcon /> {item._doc.likes.length}</Box>
+                      <Box className="comment-count" style={{ fontSize: "1rem", fontWeight: "bold", display: "flex", alignItems: "center", gap: 5 }}><CommentIcon /> {item._doc.comments.length}</Box>
                     </Box>
                   </Box>
                 </ImageListItem>
@@ -116,6 +118,7 @@ const ExplorePage = () => {
     {
       selectedPost && (
         <DialogPost
+          socket={socket}
           key={selectedPost._doc._id}
           item={selectedPost}
           open={openDialog}

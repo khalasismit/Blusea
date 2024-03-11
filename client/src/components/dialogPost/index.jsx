@@ -16,7 +16,7 @@ import { setPost } from "../../redux/reducers";
 import SavePost from "../savePost";
 import CommentInput from "../feed/post/commentInput";
 
-const DialogPost = ({ item, open, handleClose, onClose }) => {
+const DialogPost = ({ item, open, handleClose, onClose,socket }) => {
     const dispatch = useDispatch();
     const [post, setpost] = useState(item);
     // console.log("Post:",post)
@@ -144,7 +144,7 @@ const DialogPost = ({ item, open, handleClose, onClose }) => {
                                 },
                             }}>
                                 <Box>
-                                    <Like postId={post._doc._id} postUserName={post.userName} likes={post._doc.likes} />
+                                    <Like socket={socket} postId={post._doc._id} postUserName={post.userName} likes={post._doc.likes} />
                                 </Box>
                                 <Box>
                                     <ModeCommentOutlinedIcon sx={{ fontSize: "1.7rem" }} />
@@ -172,7 +172,7 @@ const DialogPost = ({ item, open, handleClose, onClose }) => {
                             <TextField fullWidth size="small" variant="standard" label="Add a comment..." value={comment} onChange={(e) => { setComment(e.target.value) }} />
                             <Button disabled={!comment || comment === "" ? true : false} sx={{ display: comment === "" ? "none" : "block", color: theme.palette.neutral.dark, }} onClick={handleComment}>Post</Button>
                         </Box> */}
-                        <CommentInput postId={post._doc._id} CM={comment} commentId={commentId}></CommentInput>
+                        <CommentInput socket={socket} postId={post._doc._id} CM={comment} commentId={commentId}></CommentInput>
                     </Box>
                 </Box>
             </Box>

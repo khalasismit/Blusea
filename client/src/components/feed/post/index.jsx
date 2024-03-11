@@ -17,7 +17,7 @@ import SavePost from "../../savePost";
 import Share from "../../share";
 import CommentInput from "./commentInput";
 
-const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, likes, comments, caption, createdAt }) => {
+const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, likes, comments, caption, createdAt,socket }) => {
 
     const user = useSelector((state) => state.user);
     const LIKES = likes.length
@@ -76,7 +76,7 @@ const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, lik
                     color: theme.palette.neutral.main,
                 },
             }}>
-                <Like postId={postId} postUserName={userName} likes={likes} />
+                <Like socket={socket} postId={postId} postUserName={userName} likes={likes} />
                 <ModeCommentOutlinedIcon sx={{ fontSize: "1.7rem" }} onClick={handleOpen} />
                 <Share post={post} picturePath={picturePath}></Share>
             </Box>
@@ -97,9 +97,10 @@ const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, lik
             </Box>
             <Typography sx={{ cursor: "pointer" }} onClick={handleOpen}> view all {COMMENTS} comment </Typography>
         </Box>
-        <CommentInput postId={postId} commentId={""} CM={""} ></CommentInput>
+        <CommentInput socket={socket} postId={postId} commentId={""} CM={""} ></CommentInput>
         {openDialog && (
             <DialogPost
+                socket={socket}
                 key={post._doc._id}
                 item={post}
                 open={openDialog}

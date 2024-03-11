@@ -3,7 +3,9 @@ import Post from "./post";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-const Feed = () => {
+// import io from "socket.io-client";
+const Feed = ({socket}) => {
+    // const socket = io("http://localhost:3001");
     // const theme = useTheme()
     // const user = useSelector((state) => state.user)
     const Posts = useSelector((state) => state.posts)
@@ -56,6 +58,7 @@ const Feed = () => {
                             createdAt={post._doc.createdAt}
                             likes={post._doc.likes}
                             comments={post._doc.comments}
+                            socket={socket}
                         />
                     ))
                 ) : (

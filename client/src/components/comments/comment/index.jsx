@@ -24,9 +24,11 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
         return () => clearInterval(intervalId);
     }, [createdAt]);
     const user = useSelector((state) => state.user)
-    const isLiked = likes.includes(user._id) ? true : false
+    const [isLiked,setIsLiked] = useState(likes.includes(user._id))
+    // const isLiked = likes.includes(user._id) ? true : false
     const dispatch = useDispatch()
     const handleCommentLike = async () => {
+        setIsLiked(!isLiked)
         const res = await fetch(`http://localhost:3001/posts/${postId}/comment/toggleCommentLike`, {
             method: "PATCH",
             headers: {
@@ -38,7 +40,37 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
             })
         });
         const updatedPost = await res.json();
+        const CommentIdRes = await fetch(`http://localhost:3001/users/userToReply/${_id}`, {
+                method: "GET",
+            });
+            const Commentuser = await CommentIdRes.json();
+        try {
+            let url = ""
+            if (!isLiked) {
+                url = `http://localhost:3001/notifications/new`
+            } else if (isLiked) {
+                url = `http://localhost:3001/notifications/deleteLike`
+            } else {
+                console.log("Error in Like.jsx")
+            }
+            const NotifRes = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    postId: postId,
+                    senderId: user._id,
+                    receiverId: Commentuser._id,
+                    message: `liked your comment : ${comment}`
+                })
+            });
+            const newNotif = await NotifRes.json();
+            console.log("newNotif: ", newNotif);
+            dispatch(setPost({ post: updatedPost }));
+        } catch (error) {
+            console.log("Error in Like.jsx", error)
+        }
         dispatch(setPost(updatedPost));
+
     }
     const iscomment = type === 'comment' ? true : false;
     return <Box sx={{ p: iscomment ? "0.5rem" : "0.5rem 0.5rem 0.5rem 3rem" }}>

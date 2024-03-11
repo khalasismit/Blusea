@@ -6,11 +6,13 @@ import {
     useMediaQuery,
     Typography,
     useTheme,
-    Divider,
+    Checkbox,
+    FormControlLabel,
+    // Divider,
 } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setStatus } from "../../redux/reducers"
 import { setLogin } from "../../redux/reducers";
 import { useDispatch } from "react-redux";
@@ -21,7 +23,7 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOff from '@mui/icons-material/VisibilityOffOutlined';
-import LoginButton from "./auth0Login";
+// import LoginButton from "./auth0Login";
 import ForgetPass from "./forgotPass";
 
 // handling schema and validation 
@@ -67,7 +69,7 @@ const Form = () => {
     const [error, setError] = useState("");
     const dispatch = useDispatch();
     const [snackbar, setSnackbar] = useState(false);
-
+    const [tnc, setTnc] = useState(false);
 
     const [showPassword, setShowPassword] = useState(false);
     const TogglePwdVisibility = () => {
@@ -303,27 +305,49 @@ const Form = () => {
                             />
                         )}
                     </Box>
-                    {
+                    {!isLogin && (
+                        // <FormControlLabel
+                        //     control={
+                        //     }
+                        //     label={`I accept the Terms And Conditions`}
+                        // />
+                        <Box sx={{display:"flex",alignItems:"center",gap:"2px"}}>
+                            <Checkbox
+                                checked={tnc}
+                                onClick={() => setTnc(!tnc)}
+                                name="termsAndConditions"
+                                color="primary"
+                            />
+                            I accept the 
+                            <Link to={"/tnc/terms-and-conditions"} target="_blank" style={{ color:palette.primary.dark }}>
+                                <span>
+                                    terms and conditions
+                                </span>
+                            </Link>
+                        </Box>
+                    )}
+                    {/* {
                         isForgotPass &&
                         <ForgetPass />
-                    }
+                    } */}
                     {/* Error */}
                     <Typography color="red" p="1rem 0 0 0">{error}</Typography>
                     {/* BUTTONS */}
                     <Box>
-                        { !isForgotPass && <Button
+                        {!isForgotPass && <Button
                             fullWidth
                             type="submit"
                             sx={{
-                                m: "1rem 0",
+                                m: "0 0 1rem 0",
                                 p: "0.5rem",
                                 backgroundColor: palette.primary.dark,
                                 color: palette.background.alt,
                                 "&:hover": { color: palette.primary.dark, background: palette.primary.main },
                             }}
+                            disabled={isRegister && !tnc}
                         > {
-                            isLogin ? "LOGIN" : "REGISTER"
-                        }</Button>}
+                                isLogin ? "LOGIN" : "REGISTER"
+                            }</Button>}
                         {/* {
                             isLogin &&
                             <Typography
