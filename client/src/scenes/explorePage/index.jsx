@@ -7,10 +7,9 @@ import DialogPost from '../../components/dialogPost';
 import { useSelector } from 'react-redux';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
-import io from "socket.io-client";
-const ExplorePage = () => {
-  const socket = io("http://localhost:3001");
-  const posts = useSelector((state) => state.posts)
+
+const ExplorePage = ({socket}) => {
+    const posts = useSelector((state) => state.posts)
   const isNonMobile = useMediaQuery("(min-width:768px)")
   const [exploreData, setExploreData] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);

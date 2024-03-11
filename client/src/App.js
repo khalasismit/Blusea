@@ -52,7 +52,7 @@ function App() {
             <Routes>
               {/* <Route exact path="/home" element={<HomePage />} /> */}
               <Route exact path="/home" element={isAuth ? <HomePage socket={socket} /> : <Navigate to="/" />} />
-              <Route path="/explore" element={isAuth ? <ExplorePage /> : <Navigate to="/" />} />
+              <Route path="/explore" element={isAuth ? <ExplorePage socket={socket}/> : <Navigate to="/" />} />
               <Route path="/profile/:userName" element={isAuth ? <ProfilePage /> : <Navigate to="/" />} />
               <Route path="/search" element={isAuth ? <SearchPage /> : <Navigate to="/" />} />
               <Route path="/notifications" element={isAuth ? <NotificationsPage socket={socket} /> : <Navigate to="/" />} />
