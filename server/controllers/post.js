@@ -16,7 +16,7 @@ testUser : 65cc410814dfd545893e5347
 export const Feed = async (req, res) => {
   try {
     // const { userId } = req.params;
-    const posts = await Post.find();
+    const posts = await Post.find({ visibility: true });
     // const postWithUrl = await Promise.all(posts.map(async (post) => {
     //   if (post.type === "private") {
     //     const user = await User.findById(userId);
@@ -68,7 +68,7 @@ export const getPost = async (req, res) => {
 export const getUserPosts = async (req, res) => {
   try {
     const { userId } = req.params
-    const posts = await Post.find({ userId: userId });
+    const posts = await Post.find({ userId: userId, visibility: true });
     const postWithUrl = await Promise.all(posts.map(async (post) => {
       const { userName } = await User.findById(post.userId);
       const { url } = await File.findById(post.imageId);
@@ -84,7 +84,7 @@ export const getUserPosts = async (req, res) => {
 /* GET ALL POST FOR EXPLORE PAGE */
 export const explore = async (req, res) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find({ visibility: true });
     const postWithUrl = await Promise.all(posts.map(async (post) => {
       const { userName } = await User.findById(post.userId);
       const { url } = await File.findById(post.imageId);
@@ -151,6 +151,30 @@ export const savePost = async (req, res) => {
     res.status(400).json({ error: err });
   }
 }
+export const removePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const post = await Post.findOneAndUpdate({ _id: postId }, {
+      visibility: false
+    }, { new: true }) //Return
+    await post.save();
+    console.log("updated Post : ", post);
+    const user = await User.findOneAndUpdate({ _id: post.userId }, {
+      $pull: {
+        posts: post._id,
+        saved: post._id
+      },
+    }, { new: true });
+    await user.save();
+    const posts = await Post.find({ visibility: true });
+    console.log("updated User : ", user);
+    res.status(200).json({ updatedPosts: posts, updatedUser: user });
+  } catch (err) {
+    console.log("Server Error")
+    res.status(400).json({ error: err });
+  }
+}
+
 
 const populateCommentsRecursively = async (comments, depth) => {
   if (depth <= 0) {
@@ -218,7 +242,7 @@ export const comment = async (req, res) => {
       userId,
       postId,
       comment,
-      parentId:null,
+      parentId: null,
       replies: [],
     });
 
@@ -233,7 +257,7 @@ export const comment = async (req, res) => {
         userId,
         postId,
         comment,
-        parentId:commentId,
+        parentId: commentId,
         replies: [],
       })
       await newComment.save();
@@ -246,7 +270,7 @@ export const comment = async (req, res) => {
       })
     }
     const updatedPost = await Post.findById(postId);
-    res.status(201).json({updatedPost,newComment});
+    res.status(201).json({ updatedPost, newComment });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });

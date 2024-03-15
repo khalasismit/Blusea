@@ -1,4 +1,4 @@
-import { Avatar, Box, Dialog, Divider, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Dialog, Divider, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux"
@@ -11,8 +11,10 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import EditProfile from "../../components/editProfile";
 import Settings from "../../components/settings";
 import ActivityFeed from "./ActivityFeed";
+import Mode from "../../components/mode";
 // import { setLogin } from "../../redux/reducers";
-const ProfilePage = () => {
+const ProfilePage = ({socket}) => {
+    const isNonMobile = useMediaQuery('(min-width:600px)')
     const [active, setActive] = useState("posts")
     const [AFT, setAFT] = useState("posts")
     const [title, setTitle] = useState('');
@@ -30,9 +32,11 @@ const ProfilePage = () => {
     const navigate = useNavigate();
     const { userName } = useParams();
     const [user, setUser] = useState([]);
+    const Posts = useSelector((state) => state.posts);
     const [totalPosts, setTotalPosts] = useState(0);
     const [totalFollowers, setTotalFollowers] = useState(0);
     const [totalFollowing, setTotalFollowing] = useState(0);
+    const [totalRequests, setTotalRequests] = useState(0);
 
     const User = useSelector((state) => state.user);
     const getUser = async () => {
@@ -52,15 +56,16 @@ const ProfilePage = () => {
     }
     useEffect(() => {
         getUser()
-    }, [userName, User])
+    }, [userName, User,Posts])
     useEffect(() => {
         if (user) {
             setTotalPosts(user.posts ? user.posts.length : 0);
             setTotalFollowers(user.followers ? user.followers.length : 0);
             setTotalFollowing(user.following ? user.following.length : 0);
+            setTotalRequests(user.followRequest ? user.followRequest.length : 0);
         }
         setIsLoggedInUser(User.userName === userName ? true : false)
-    }, [user, User, userName]);
+    }, [user, User, userName,Posts]);
 
     const handleListData = async (title) => {
         try {
@@ -132,6 +137,10 @@ const ProfilePage = () => {
                         <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} onClick={() => handleListData('followers')} >{totalFollowers} followers</Typography>
                         <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} onClick={() => handleListData('following')} >{totalFollowing} following</Typography>
                     </Box>
+                        {
+                            isLoggedInUser &&
+                            <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} onClick={() => navigate(`/requests/${user._id}`)} > {totalRequests} requests</Typography>
+                        }
                 </Box>
                 <Box sx={{ p: 1 }}>
                     <Typography sx={{ fontSize: "1rem" }}>
@@ -178,6 +187,10 @@ const ProfilePage = () => {
                 <>
                     <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", p: "0.2rem", background: theme.palette.background.alt, borderRadius: "2rem" }}>
                         <Settings></Settings>
+                        {
+                            !isNonMobile && 
+                            <Mode></Mode>
+                        }
                         <EditProfile></EditProfile>
                     </Box>
                 </>
@@ -201,7 +214,7 @@ const ProfilePage = () => {
             </Box>
         </Box>
         <Box sx={{ flex: 1 }}>
-            <ActivityFeed Type={AFT} user={user}></ActivityFeed>
+            <ActivityFeed socket={socket} Type={AFT} user={user}></ActivityFeed>
         </Box>
     </Box>
 };

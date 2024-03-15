@@ -2,7 +2,7 @@ import express from "express";
 import multer from 'multer';
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-import { Feed, comment, deleteComment, explore, getComments, getPost, getUserPosts, savePost, toggleCommentLike, toggleLike } from "../controllers/post.js";
+import { Feed, comment, deleteComment, explore, getComments, getPost, getUserPosts, removePost, savePost, toggleCommentLike, toggleLike } from "../controllers/post.js";
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 
@@ -47,6 +47,7 @@ router.get("/explore",explore);
 router.get("/:postId",getPost);
 router.get("/:userId/posts",getUserPosts);
 router.patch("/:postId/toggleSave",savePost);
+router.patch("/:postId/remove",removePost);
 
 /* ROUTES FOR LIKE/UNLIKE POST */ 
 router.patch("/:postId/toggleLike/:userId", toggleLike);

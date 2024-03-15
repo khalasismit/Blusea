@@ -15,7 +15,7 @@ const Comments = ({ postId, parentId, updateCommentField,socket }) => {
     };
 
     const toggleRepliesInTree = (comments, commentId) => {
-        return comments.map(comment => {
+        return comments.slice().reverse().map(comment => {
             if (comment._id === commentId) {
                 return { ...comment, showReplies: !comment.showReplies };
             } else if (comment.replies && comment.replies.length > 0) {
@@ -43,7 +43,7 @@ const Comments = ({ postId, parentId, updateCommentField,socket }) => {
     }, [posts,postId])
 
     const renderCommentsTree = (comments) => {
-        return comments.map(comment => (
+        return comments.slice().reverse().map(comment => (
                 <Box key={comment._id}>
                     <Comment
                         _id={comment._id}

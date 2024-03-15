@@ -1,7 +1,9 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import {Accept} from "../../follow";
 import {Decline} from "../../follow";
+import { useNavigate } from "react-router-dom";
 const Request = ({ userName,reqId }) => {
+    const navigate = useNavigate()
     // const { palette } = useTheme();
     return <Box sx={{
         display: "flex",
@@ -17,8 +19,10 @@ const Request = ({ userName,reqId }) => {
         <Box sx={{ display: "flex",alignItems:"center",gap: "1rem" }}>
             <Avatar src="./assets/images/Snapchat-1048757234.jpg" sx={{ borderRadius: 2, height: "3rem", width: "3rem" }}></Avatar>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Typography>{userName}</Typography>
-                <Typography> • Wants to follow you • </Typography>
+                <Typography sx={{fontSize:"0.9rem",fontWeight:"bold",cursor:"pointer"}} onClick={()=>{
+                    navigate(`/profile/${userName}`)
+                }} >{userName}</Typography>
+                <Typography sx={{fontSize:"0.9rem"}}> • wants to follow you • </Typography>
             </Box>
         </Box>
         <Box sx={{display: "flex", justifyContent: "space-around", gap: "1rem" }}>

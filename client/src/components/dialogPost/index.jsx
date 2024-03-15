@@ -15,8 +15,9 @@ import Comments from "../comments";
 // import { setPost } from "../../redux/reducers";
 import SavePost from "../savePost";
 import CommentInput from "../feed/post/commentInput";
+import DeletePost from "../delPost";
 
-const DialogPost = ({ item, open, handleClose, onClose,socket }) => {
+const DialogPost = ({ DeleteIcon,item, open, handleClose, onClose,socket }) => {
     // const dispatch = useDispatch();
     const [post, setpost] = useState(item);
     // console.log("Post:",post)
@@ -107,9 +108,16 @@ const DialogPost = ({ item, open, handleClose, onClose,socket }) => {
                                     <Avatar src={post.picturePath} sx={{ borderRadius: 2, height: "2.5rem", width: "2.5rem" }}></Avatar>
                             }
                         </Box>
+                        <Box sx={{display:"flex",flex:1,alignItems:"center",justifyContent:"space-between"}}>
                         <Box sx={{ display: "flex", flexDirection: "column" }}>
                             <Typography sx={{ fontSize: typography.h5, fontFamily: typography.h5, cursor: "pointer" }} onClick={NavigateToProfile} >{post.userName}</Typography>
                             <Typography sx={{ fontSize: typography.h6, fontFamily: typography.h6 }}>{timeAgo} </Typography>
+                        </Box>
+                        {
+                            DeleteIcon &&(
+                                <DeletePost postId={post._doc._id} socket={socket} handleClose={handleClose}></DeletePost>
+                            )
+                        }
                         </Box>
                     </Box>
                     <Divider orientation="horizontal" variant="fullwidth" flexItem ></Divider>

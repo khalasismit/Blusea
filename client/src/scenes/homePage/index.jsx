@@ -43,15 +43,17 @@ const HomePage = ({ socket }) => {
                             style={{ width: "4.8rem", height: "3.8rem", objectFit: "cover" }}
                         />
                     </Box>
-                    <Link
-                        onClick={() => { setNewNotif([]); dispatch(setNotifs({ notifs: [] })) }}
-                        to={"/notifications"}
-                        style={{ textDecoration: "none", color: theme.palette.neutral.dark }}
-                    >
-                        <Badge badgeContent={newNotif.length} color="secondary" sx={{ m: "0 1rem" }}>
-                            <NotificationsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
-                        </Badge>
-                    </Link>
+                    <Box>
+                        <Link
+                            onClick={() => { setNewNotif([]); dispatch(setNotifs({ notifs: [] })) }}
+                            to={"/notifications"}
+                            style={{ textDecoration: "none", color: theme.palette.neutral.dark }}
+                        >
+                            <Badge badgeContent={newNotif.length} color="secondary" sx={{ m: "0 1rem" }}>
+                                <NotificationsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
+                            </Badge>
+                        </Link>
+                    </Box>
                 </Box>
             }
             <Feed socket={socket}></Feed>

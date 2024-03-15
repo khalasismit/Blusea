@@ -8,6 +8,7 @@ import {
     useTheme,
     Checkbox,
     FormControlLabel,
+    Divider,
     // Divider,
 } from "@mui/material";
 import { Formik } from "formik";
@@ -18,13 +19,15 @@ import { setLogin } from "../../redux/reducers";
 import { useDispatch } from "react-redux";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
-
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOff from '@mui/icons-material/VisibilityOffOutlined';
+import { jwtDecode } from "jwt-decode";
 // import LoginButton from "./auth0Login";
-import ForgetPass from "./forgotPass";
+// import ForgetPass from "./forgotPass";
+// import GoogleSignUpButton from "./googleSignup";
 
 // handling schema and validation 
 const loginSchema = yup.object().shape({
@@ -80,8 +83,42 @@ const Form = () => {
     const toggleCPwdVisibility = () => {
         setshowConfirm(!showConfirm);
     };
+    const handleContinueWithGoogle = async (values) => {
+        try {
+            const response = await fetch('http://localhost:3001/auth/google/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values),
+            });
+            const Data =  await response.json()
+            if (response.ok) {
+                setSnackbar(true);
+                dispatch(
+                    setLogin({
+                        user: Data.user,
+                        token: Data.token
+                    }),
+                    setStatus({
+                        status: Data.user.status
+                    })
+                );
+                setTimeout(() => {
+                    setSnackbar(false)
+                    navigate("/home");
+                }, 1500);
+            } else {
+                console.error('Error continue with Google');
+            }
+        } catch (error) {
+            console.error('Error continue with Google:', error);
+            // Handle error
+        }
+    };
 
-    const register = async (values, onSubmitProps) => {
+    const register = async (values) => {
+        console.log("Register", JSON.stringify(values))
         let savedUserRes = await fetch("http://localhost:3001/auth/signup",
             {
                 method: "POST",
@@ -90,7 +127,7 @@ const Form = () => {
             }
         );
         let savedUser = await savedUserRes.json();
-        onSubmitProps.resetForm();
+        // onSubmitProps.resetForm();
         if (savedUser !== "Error") {
             setSnackbar(true)
             setTimeout(() => {
@@ -107,7 +144,7 @@ const Form = () => {
         }
     }
 
-    const login = async (values, onSubmitProps) => {
+    const login = async (values) => {
         const loggedInRes = await fetch("http://localhost:3001/auth/login",
             {
                 method: "POST",
@@ -117,7 +154,6 @@ const Form = () => {
         )
         var loggedIn = "";
         loggedIn = await loggedInRes.json();
-        onSubmitProps.resetForm();
         if (loggedIn !== "Error") {
             setSnackbar(true);
             dispatch(
@@ -306,20 +342,14 @@ const Form = () => {
                         )}
                     </Box>
                     {!isLogin && (
-                        // <FormControlLabel
-                        //     control={
-                        //     }
-                        //     label={`I accept the Terms And Conditions`}
-                        // />
-                        <Box sx={{display:"flex",alignItems:"center",gap:"2px"}}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: "2px" }}>
                             <Checkbox
                                 checked={tnc}
                                 onClick={() => setTnc(!tnc)}
                                 name="termsAndConditions"
                                 color="primary"
-                            />
-                            I accept the 
-                            <Link to={"/tnc/terms-and-conditions"} target="_blank" style={{ color:palette.primary.dark }}>
+                            />I accept the
+                            <Link to={"/tnc/terms-and-conditions"} target="_blank" style={{ color: palette.primary.dark }}>
                                 <span>
                                     terms and conditions
                                 </span>
@@ -348,27 +378,32 @@ const Form = () => {
                         > {
                                 isLogin ? "LOGIN" : "REGISTER"
                             }</Button>}
-                        {/* {
-                            isLogin &&
-                            <Typography
-                                onClick={() => {
-                                    setPageType("forgot");
-                                    resetForm();
-                                }}
-                                sx={{
-                                    textAlign: 'center',
-                                    textDecoration: "underline",
-                                    color: palette.primary.dark,
-                                    "&:hover": {
-                                        cursor: "pointer",
-                                        color: palette.primary.main,
-                                    },
-                                }}
-                            >
-                                   Forgot password?
-                            </Typography>
-                        } */}
-                        {/* <Divider flexItem variant="middle" sx={{ m: 1 }} textAlign="center">Or</Divider> */}
+                        <Divider flexItem sx={{ m: 1 }} textAlign="center">Or</Divider>
+                        <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>
+                            {/* <GoogleButton label="Continue with google" onClick={handleGoogleLogin} ></GoogleButton> */}
+                            <GoogleOAuthProvider
+                                clientId="39621683080-hq2nsug77bkpvrllrsavutbpeahegqbc.apps.googleusercontent.com">
+                                <GoogleLogin
+                                    size="large"
+                                    text="continue_with"
+                                    onSuccess={CredentialResponse => {
+                                        // console.log(CredentialResponse)
+                                        const details = jwtDecode(CredentialResponse.credential);
+                                        const values = ({
+                                            email : details.email,
+                                            firstName: details.given_name,
+                                            lastName: details.family_name,
+                                            userName: details.name,
+                                            picturePath: details.picture
+                                        })  
+                                        handleContinueWithGoogle(values)
+                                    }}
+                                    onError={() => {
+                                        console.log("err")
+                                    }}
+                                ></GoogleLogin>
+                            </GoogleOAuthProvider>
+                        </Box>
                         <Typography
                             onClick={() => {
                                 setPageType(isLogin ? "register" : "login");

@@ -17,6 +17,7 @@ import ChatArea from './components/chatArea';
 import TermsAndConditions from './scenes/tncPage/tnc';
 import PrivacyPolicy from './scenes/tncPage/privacyPolicy';
 import io from "socket.io-client";
+import Requests from './components/requests';
 function App() {
   const socket = io("http://localhost:3001");
   const mode = useSelector((state) => state.mode);
@@ -35,6 +36,22 @@ function App() {
       socket.disconnect();
     }
   }, [user, socket])
+
+  // const handleCallbackResponse = (response) => {
+  //   console.log(response)
+  // }
+
+  // useEffect(()=>{
+  //   /*global google*/
+  //   google.account.id.intialize({
+  //     client_id:"39621683080-fhj153siej8cpsp7k5lc408pcuqgt7eu.apps.googleusercontent.com",
+  //     callback: handleCallbackResponse
+  //   })
+  //   google.accounts.id.renderButton(
+  //     document.getElementById("google-signin"),
+  //     {theme:"outline", size:"small", text:"continue_with"}
+  //   )
+  // },[])
   return (
     <Box sx={{ background: { bg } }}>
       <BrowserRouter>
@@ -53,11 +70,12 @@ function App() {
               {/* <Route exact path="/home" element={<HomePage />} /> */}
               <Route exact path="/home" element={isAuth ? <HomePage socket={socket} /> : <Navigate to="/" />} />
               <Route path="/explore" element={isAuth ? <ExplorePage socket={socket}/> : <Navigate to="/" />} />
-              <Route path="/profile/:userName" element={isAuth ? <ProfilePage /> : <Navigate to="/" />} />
-              <Route path="/search" element={isAuth ? <SearchPage /> : <Navigate to="/" />} />
+              <Route path="/profile/:userName" element={isAuth ? <ProfilePage socket={socket}/> : <Navigate to="/" />} />
+              <Route path="/search" element={isAuth ? <SearchPage socket={socket}/> : <Navigate to="/" />} />
               <Route path="/notifications" element={isAuth ? <NotificationsPage socket={socket} /> : <Navigate to="/" />} />
               <Route path="/chats" element={isAuth ? <ChatPage socket={socket}/> : <Navigate to="/" />} />
               <Route path="/chats/:conversationId/messages" element={isAuth ? <ChatArea socket={socket}/> : <Navigate to="/" />} />
+              <Route path="/requests/:id" element={isAuth ? <Requests/> : <Navigate to="/" />} />
             </Routes>
           </Box>
         </ThemeProvider>

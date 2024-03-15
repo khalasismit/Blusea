@@ -38,7 +38,7 @@ export const getUserSavedPost = async (req, res) => {
 
     // Retrieve details for each saved post
     const postWithUrl = await Promise.all(savedPosts.map(async (postId) => {
-      const post = await Post.findById(postId);
+      const post = await Post.findOne({_id:postId,visibility:true});
       const { userName } = await User.findById(post.userId);
       const { url } = await File.findById(post.imageId);
       const { picturePath } = await User.findOne({ userName: userName });

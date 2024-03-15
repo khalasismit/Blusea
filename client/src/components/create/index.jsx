@@ -168,7 +168,7 @@ const Create = () => {
                                 </Box>
                                 <Box sx={{ p: 1, display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }} onClick={() => setIsOpenAdditional(!isOpenAdditional)}>
                                     <Typography>
-                                        Advanced settings
+                                        Advanced settings [Soon in next update]
                                     </Typography>
                                     {
                                         isOpenAdditional ? <KeyboardArrowUpOutlinedIcon /> : <KeyboardArrowDownOutlinedIcon />

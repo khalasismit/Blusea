@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import DialogPost from "../../../components/dialogPost";
 
-const ActivityFeed = ({ Type, user }) => {
+const ActivityFeed = ({ socket,Type, user }) => {
     const [loading,setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [userPosts, setUserPosts] = useState([]);
@@ -100,6 +100,8 @@ const ActivityFeed = ({ Type, user }) => {
         
         {selectedPost && (
             <DialogPost
+                DeleteIcon = {Type === "posts" ? true : false}
+                socket={socket}
                 key={selectedPost._doc._id}
                 item={selectedPost}
                 open={openDialog}
