@@ -215,14 +215,14 @@ const Navigation = ({ socket }) => {
                             },
                         }}>
                             {/* <Link to={"/settings"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}> */}
-                            <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                            {/* <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                                 <MenuIcon titleAccess='Settings' sx={{ fontSize: "2rem" }} />
                                 {isNonMobile && (
                                     <Typography>
                                         More
                                     </Typography>
                                 )}
-                            </Box>
+                            </Box> */}
                             {/* </Link> */}
                         </Box>
                         <Mode></Mode>

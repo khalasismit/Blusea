@@ -40,7 +40,10 @@ const DeletePost = ({ postId, socket, handleClose }) => {
     }
     return (
         <Box onClick={handleDialog}>
-            <DeleteOutlineOutlinedIcon sx={{ fontSize: "1.7rem", cursor: "pointer" }} />
+            <Box sx={{cursor: "pointer",p:1,":hover":{background:theme.palette.background.default,borderRadius:"10%"}}}>
+            <DeleteOutlineOutlinedIcon sx={{ fontSize: "1.5rem"}} />
+            </Box>
+            
             <Dialog maxWidth={"xs"}fullWidth open={open} onClose={handleDialog}>
                 <Box sx={{ display: "flex", flexDirection: "column",}}>
                     <Box sx={{  p: 1,cursor: "pointer", ":hover": { background: theme.palette.primary.main} }} onClick={() => { handleRemove() }}>

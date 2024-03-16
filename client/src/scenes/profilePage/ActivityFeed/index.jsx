@@ -100,7 +100,7 @@ const ActivityFeed = ({ socket,Type, user }) => {
         
         {selectedPost && (
             <DialogPost
-                DeleteIcon = {Type === "posts" ? true : false}
+                DeleteIcon = {Type === "posts" && User._id === user._id ? true : false}
                 socket={socket}
                 key={selectedPost._doc._id}
                 item={selectedPost}

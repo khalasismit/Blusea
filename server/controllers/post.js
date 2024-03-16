@@ -15,8 +15,8 @@ testUser : 65cc410814dfd545893e5347
 /* GET FEED POST */
 export const Feed = async (req, res) => {
   try {
-    // const { userId } = req.params;
     const posts = await Post.find({ visibility: true });
+    // const { userId } = req.params;
     // const postWithUrl = await Promise.all(posts.map(async (post) => {
     //   if (post.type === "private") {
     //     const user = await User.findById(userId);

@@ -162,7 +162,7 @@ export const suggestions = async (req, res) => {
     // Remove the users the current user is following
     const suggestions = usersWithoutCurrentUser.filter(user => !usersFollowingIds.includes(user._id.toString()))
     //suffle
-    suggestions.sort(() => Math.random() - 0.7);
+    suggestions.sort(() => Math.random() - 0.8);
     //select first 6
     const randomSuggestions = suggestions.slice(0, 6);
     return res.status(200).json(randomSuggestions);

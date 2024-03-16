@@ -26,7 +26,7 @@ import Visibility from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOff from '@mui/icons-material/VisibilityOffOutlined';
 import { jwtDecode } from "jwt-decode";
 // import LoginButton from "./auth0Login";
-// import ForgetPass from "./forgotPass";
+import ForgetPass from "./forgotPass";
 // import GoogleSignUpButton from "./googleSignup";
 
 // handling schema and validation 
@@ -92,7 +92,7 @@ const Form = () => {
                 },
                 body: JSON.stringify(values),
             });
-            const Data =  await response.json()
+            const Data = await response.json()
             if (response.ok) {
                 setSnackbar(true);
                 dispatch(
@@ -281,7 +281,7 @@ const Form = () => {
                                     error={Boolean(touched.email) && Boolean(errors.email)}
                                     helperText={touched.email && errors.email}
                                     sx={{ gridColumn: "span 4" }}
-                                />
+                                />  
                                 <TextField
                                     size="small"
                                     label="Password"
@@ -341,7 +341,7 @@ const Form = () => {
                             />
                         )}
                     </Box>
-                    {!isLogin && (
+                    {!isLogin && !isForgotPass && (
                         <Box sx={{ display: "flex", alignItems: "center", gap: "2px" }}>
                             <Checkbox
                                 checked={tnc}
@@ -356,10 +356,21 @@ const Form = () => {
                             </Link>
                         </Box>
                     )}
-                    {/* {
+                    {isLogin && (
+                        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "end", pt: 1, cursor: "pointer" }} onClick={() => { setPageType("forgot") }}>
+                            <Typography sx={{ textDecoration: "underline", color: palette.primary.main }}>
+                                forgot password?
+                            </Typography>
+                        </Box>
+                    )}
+                    {
                         isForgotPass &&
-                        <ForgetPass />
-                    } */}
+                        (<>
+                            Work in progress
+                            {/* <ForgetPass /> */}
+                        </>
+                        )
+                    }
                     {/* Error */}
                     <Typography color="red" p="1rem 0 0 0">{error}</Typography>
                     {/* BUTTONS */}
@@ -390,12 +401,12 @@ const Form = () => {
                                         // console.log(CredentialResponse)
                                         const details = jwtDecode(CredentialResponse.credential);
                                         const values = ({
-                                            email : details.email,
+                                            email: details.email,
                                             firstName: details.given_name,
                                             lastName: details.family_name,
                                             userName: details.name,
                                             picturePath: details.picture
-                                        })  
+                                        })
                                         handleContinueWithGoogle(values)
                                     }}
                                     onError={() => {

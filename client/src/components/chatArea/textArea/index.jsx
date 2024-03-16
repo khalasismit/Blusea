@@ -60,6 +60,12 @@ const TextArea = ({ participants, updateMessage, socket }) => {
             socket.close()
         }
     }, [])
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            sendMessage();
+        }
+    };
     return (
         <Box sx={{
             width: "100%",
@@ -70,22 +76,25 @@ const TextArea = ({ participants, updateMessage, socket }) => {
             right: "0",
             left: isNonMobile ? "16rem" : "0"
         }}>
-            <TextField
-                multiline={true}
-                value={message}
-                onChange={(e) => { setMessage(e.target.value) }}
-                variant="outlined"
-                fullWidth
-                label="Type a message"
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="start" sx={{ p: "0 0 0 1rem" }}>
-                            <SendOutlinedIcon sx={{ fontSize: "2rem", cursor: "pointer" }} onClick={sendMessage} />
-                            {/* <AccountCircle /> */}
-                        </InputAdornment>
-                    ),
-                }}
-            />
+            {/* <form action=""> */}
+                <TextField
+                    multiline={true}
+                    value={message}
+                    onChange={(e) => { setMessage(e.target.value) }}
+                    onKeyDown={handleKeyDown}
+                    variant="outlined"
+                    fullWidth
+                    label="Type a message"
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="start" sx={{ p: "0 0 0 1rem" }}>
+                                <SendOutlinedIcon sx={{ fontSize: "2rem", cursor: "pointer" }} onClick={sendMessage} />
+                                {/* <AccountCircle /> */}
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            {/* </form> */}
         </Box>
     );
 };

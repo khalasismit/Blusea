@@ -162,13 +162,13 @@ const Create = () => {
                                 <Box sx={{ p: 0 }}>
                                     <TextField name="caption" placeholder="Write a caption..." variant="standard" fullWidth multiline rows={6} value={values.caption} onChange={handleChange} onBlur={handleBlur} />
                                 </Box>
-                                <Box sx={{ display: "flex", alignItems: "center", gap: 2, p: 1 }}>
+                                {/* <Box sx={{ display: "flex", alignItems: "center", gap: 2, p: 1 }}>
                                     <TextField name="location" placeholder="Add location" variant="standard" fullWidth multiline value={values.location} onChange={handleChange} onBlur={handleBlur} />
                                     <LocationOnOutlinedIcon />
-                                </Box>
+                                </Box> */}
                                 <Box sx={{ p: 1, display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }} onClick={() => setIsOpenAdditional(!isOpenAdditional)}>
                                     <Typography>
-                                        Advanced settings [Soon in next update]
+                                        Advanced settings [Work in progress]
                                     </Typography>
                                     {
                                         isOpenAdditional ? <KeyboardArrowUpOutlinedIcon /> : <KeyboardArrowDownOutlinedIcon />

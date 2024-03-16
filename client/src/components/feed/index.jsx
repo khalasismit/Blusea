@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const Feed = ({socket}) => {
     // const socket = io("http://localhost:3001");
     // const theme = useTheme()
-    // const user = useSelector((state) => state.user)
+    const user = useSelector((state) => state.user)
     const Posts = useSelector((state) => state.posts)
     const [posts, setPosts] = useState(null);
     const fetchPosts = async () => {
