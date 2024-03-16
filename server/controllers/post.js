@@ -285,7 +285,9 @@ export const toggleCommentLike = async (req, res) => {
     const isLiked = comment.likes.includes(userId);
     { isLiked ? comment.likes.pull(userId) : comment.likes.push(userId) }
     await comment.save();
+    // const updatedPost = await Post.findOne({ comments: commentId });
     res.status(200).json(comment)
+    // res.status(200).json(updatedPost)
   } catch (err) {
     res.status(400).json("{ error: err }");
   }

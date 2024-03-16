@@ -75,8 +75,7 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
         } catch (error) {
             console.log("Error in Like.jsx", error)
         }
-        dispatch(setPost(updatedPost));
-
+        dispatch(setPost({post:updatedPost}));
     }
     const iscomment = type === 'comment' ? true : false;
     return <Box sx={{ p: iscomment ? "0.5rem" : "0.5rem 0.5rem 0.5rem 3rem" }}>

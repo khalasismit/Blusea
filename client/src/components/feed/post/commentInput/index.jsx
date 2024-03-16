@@ -58,7 +58,7 @@ const CommentInput = ({ postId, commentId, CM, socket }) => {
                 console.log("Error in comment.jsx", error)
             }
             setComment("");
-            dispatch(setPost(updatedPost));
+            dispatch(setPost({post:updatedPost}));
         }).catch(err => { console.log(err) });
     }
     useEffect(() => {
