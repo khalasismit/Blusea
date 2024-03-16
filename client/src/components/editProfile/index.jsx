@@ -7,7 +7,9 @@ import KeyboardBackspaceOutlinedIcon from '@mui/icons-material/KeyboardBackspace
 import Dropzone from "react-dropzone";
 import { setLogin } from "../../redux/reducers";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { useNavigate } from "react-router-dom";
 const EditProfile = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -79,6 +81,8 @@ const EditProfile = () => {
             token: token
         }))
         setLoading(false)
+        navigate("/profile/" + updatedProfile.userName)
+        // window.location.href = `http://localhost:3000/profile/${updatedProfile.userName}`
         handleClose()
     }
     return (

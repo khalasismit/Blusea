@@ -24,8 +24,8 @@ export const Follow = ({ user2userName }) => {
             return { user2, user1 }
         }).then(async ({ user2, user1 }) => {
 
-            console.log("user2", user2);
-            console.log("user1", user1);
+            // console.log("user2", user2);
+            // console.log("user1", user1);
             const isUser1Following = await user2.followers.includes(user1._id)
             const isUser2Following = await user1.followers.includes(user2._id)
             const isReqsent = await user1.sentRequest.includes(user2._id)
