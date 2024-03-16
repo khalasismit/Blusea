@@ -76,12 +76,14 @@ const EditProfile = () => {
         })
         const updatedProfile = await editUserRes.json();
         console.log("updatedProfile: ", updatedProfile)
+        setLoading(false)
+        if (user.userName !== updatedProfile.userName) {
+            navigate(`/profile/${updatedProfile.userName}`)
+        }
         dispatch(setLogin({
             user: updatedProfile,
             token: token
         }))
-        setLoading(false)
-        navigate("/profile/" + updatedProfile.userName)
         // window.location.href = `http://localhost:3000/profile/${updatedProfile.userName}`
         handleClose()
     }
@@ -92,7 +94,7 @@ const EditProfile = () => {
                     Edit profile
                 </Typography>
             </Button> */}
-            <Box sx={{cursor:"pointer",background:theme.palette.background.alt,borderRadius:"50%",p: "0.5rem 0.5rem 0.1rem 0.5rem",":hover":{background:theme.palette.background.default}}}>
+            <Box sx={{ cursor: "pointer", background: theme.palette.background.alt, borderRadius: "50%", p: "0.5rem 0.5rem 0.1rem 0.5rem", ":hover": { background: theme.palette.background.default } }}>
                 <EditOutlinedIcon onClick={() => { setOpen(true) }} />
             </Box>
             <Dialog maxWidth="md" fullWidth open={open} onClose={handleClose}>
