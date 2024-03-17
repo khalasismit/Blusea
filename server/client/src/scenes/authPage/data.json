@@ -1,0 +1,72 @@
+[
+  {
+    "firstname": "John",
+    "lastname": "Smith",
+    "username": "jsmith21",
+    "email": "jsmith21@example.com",
+    "password": "5ecurePa$$"
+  },
+  {
+    "firstname": "Emily",
+    "lastname": "Johnson",
+    "username": "ejohnson88",
+    "email": "ejohnson88@example.com",
+    "password": "P@ssw0rd123"
+  },
+  {
+    "firstname": "Michael",
+    "lastname": "Williams",
+    "username": "mwilliams34",
+    "email": "mwilliams34@example.com",
+    "password": "SecretPass!"
+  },
+  {
+    "firstname": "Jessica",
+    "lastname": "Brown",
+    "username": "jbrown42",
+    "email": "jbrown42@example.com",
+    "password": "Brownie#123"
+  },
+  {
+    "firstname": "David",
+    "lastname": "Jones",
+    "username": "djones79",
+    "email": "djones79@example.com",
+    "password": "Dav!dPassword"
+  },
+  {
+    "firstname": "Ashley",
+    "lastname": "Davis",
+    "username": "adavis56",
+    "email": "adavis56@example.com",
+    "password": "7AshleyDavis"
+  },
+  {
+    "firstname": "Christopher",
+    "lastname": "Wilson",
+    "username": "cwilson23",
+    "email": "cwilson23@example.com",
+    "password": "CWil5on!"
+  },
+  {
+    "firstname": "Sarah",
+    "lastname": "Martinez",
+    "username": "smartinez91",
+    "email": "smartinez91@example.com",
+    "password": "SarahMa$$"
+  },
+  {
+    "firstname": "Matthew",
+    "lastname": "Taylor",
+    "username": "mtaylor07",
+    "email": "mtaylor07@example.com",
+    "password": "Tayl0rMatthew"
+  },
+  {
+    "firstname": "Jennifer",
+    "lastname": "Anderson",
+    "username": "janderson65",
+    "email": "janderson65@example.com",
+    "password": "Jen!Ander"
+  }
+]
