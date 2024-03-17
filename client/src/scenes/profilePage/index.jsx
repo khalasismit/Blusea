@@ -58,7 +58,6 @@ const ProfilePage = ({ socket }) => {
         getUser()
     }, [userName, User, Posts])
     useEffect(() => {
-        console.log(process.env.REACT_APP_API_KEY)
         if (user) {
             setTotalPosts(user.posts ? user.posts.length : 0);
             setTotalFollowers(user.followers ? user.followers.length : 0);
