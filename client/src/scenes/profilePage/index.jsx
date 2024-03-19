@@ -32,7 +32,7 @@ const ProfilePage = ({ socket }) => {
     const theme = useTheme()
     const navigate = useNavigate();
     let { userName } = useParams();
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState(null);
     const Posts = useSelector((state) => state.posts);
     const [totalPosts, setTotalPosts] = useState(0);
     const [totalFollowers, setTotalFollowers] = useState(0);
@@ -48,8 +48,9 @@ const ProfilePage = ({ socket }) => {
                 }
             })
             const data = await response.json();
-            console.log(data)
+            // console.log(data)
             setUser(data)
+            console.log(isLoggedInUser, user)
         } catch (error) {
             console.log("Error in getting the profile details");
         };
@@ -127,8 +128,9 @@ const ProfilePage = ({ socket }) => {
                     <Box sx={{ display: "flex", alignItems: "center", gap: 3, p: 1 }}>
                         <Typography sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>{userName}</Typography>
                         {
-                            (user.length > 0 && !isLoggedInUser) &&
-                            <Follow user2userName={userName}></Follow>
+                            user !== null && !isLoggedInUser && ( // Add this condition
+                                <Follow user2userName={userName}></Follow>
+                            )
                         }
                     </Box>
                     <Box sx={{ display: "flex", flexDirection: "column", p: "0 0.5rem" }}>
@@ -220,7 +222,7 @@ const ProfilePage = ({ socket }) => {
     ) : (
         <>
             <Box sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", flex: 1 }}>
-                <Box sx={{ display: "flex", flexDirection: "column", flex: 1,alignItems:"center" }}>
+                <Box sx={{ display: "flex", flexDirection: "column", flex: 1, alignItems: "center" }}>
                     <Box sx={{
                         height: "30%",
                         display: "flex",
@@ -238,10 +240,10 @@ const ProfilePage = ({ socket }) => {
                         <Typography fontWeight="bold" fontSize="30px" color={theme.palette.neutral.dark} sx={{ lineHeight: "0px" }}>
                             Magnet
                         </Typography>
-                        <Typography fontSize={"5rem"} color={theme.palette.neutral.dark} sx={{ fontWeight:"bold",lineHeight: "5rem",mt:"1rem" }}>
+                        <Typography fontSize={"5rem"} color={theme.palette.neutral.dark} sx={{ fontWeight: "bold", lineHeight: "5rem", mt: "1rem" }}>
                             404
                         </Typography>
-                        <Typography fontSize={"1.5rem"} color={theme.palette.neutral.dark} sx={{ fontWeight:"bold" }}>
+                        <Typography fontSize={"1.5rem"} color={theme.palette.neutral.dark} sx={{ fontWeight: "bold" }}>
                             {userName} Not Found
                         </Typography>
                         {/* <Typography fontSize={"1rem"} color={theme.palette.neutral.dark} sx={{ fontWeight:"bold" }}>
