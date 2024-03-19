@@ -14,7 +14,7 @@ const ImageWidget = ({ src, alt }) => {
             alt={alt}
             onContextMenu={handleContextMenu}
             onDragStart={handleDragStart}
-            style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "0.3rem" }}
+            style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: "0.3rem" }}
         />
     </Box>
 }
