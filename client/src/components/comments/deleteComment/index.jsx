@@ -18,7 +18,7 @@ const DeleteComment = ({ commentId, postId }) => {
             })
         });
         const updatedPost = await res.json();
-        dispatch(setPost(updatedPost));
+        dispatch(setPost({post:updatedPost}));
         // console.log(updatedPost);
         setOpen(false);
     };

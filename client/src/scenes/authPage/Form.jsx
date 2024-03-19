@@ -123,7 +123,7 @@ const Form = () => {
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values)
+                body: JSON.stringify(values)    
             }
         );
         let savedUser = await savedUserRes.json();

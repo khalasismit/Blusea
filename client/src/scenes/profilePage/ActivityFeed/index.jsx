@@ -1,10 +1,10 @@
-import { Box, CircularProgress, ImageList, ImageListItem, useMediaQuery } from "@mui/material";
+import { Box, CircularProgress, ImageList, ImageListItem, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import DialogPost from "../../../components/dialogPost";
 
-const ActivityFeed = ({ socket,Type, user }) => {
-    const [loading,setLoading] = useState(false);
+const ActivityFeed = ({ socket, Type, user }) => {
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [userPosts, setUserPosts] = useState([]);
     const [savedPosts, setSavedPosts] = useState([]);
@@ -73,34 +73,40 @@ const ActivityFeed = ({ socket,Type, user }) => {
 
     return <Box sx={{ width: "100%", display: "flex", justifyContent: "center", p: "1rem" }}>
         {!loading ? (
-            <Box width={isNonMobile ? "80%" : "100%"}>
-                <ImageList variant='standard' cols={3} gap={3}>
-                    {
-                        data.slice().reverse().map((item) => (
-                            <ImageListItem key={item._doc._id}>
-                                <img
-                                    srcSet={`${item.url}`}
-                                    src={`${item.url}`}
-                                    alt={`${item._doc._id}`}
-                                    onContextMenu={handleContextMenu}
-                                    onDragStart={handleDragStart}
-                                    style={{ width: "100%", height: "auto", aspectRatio: "1 / 1", objectFit: "cover", }}
-                                    onClick={() => handleImageClick(item)}
-                                />
-                            </ImageListItem>
-                        ))
-                    }
-                </ImageList>
-            </Box>
+            data ? (
+                <Box width={isNonMobile ? "80%" : "100%"}>
+                    <ImageList variant='standard' cols={3} gap={3}>
+                        {
+                            data && data.slice().reverse().map((item) => (
+                                <ImageListItem key={item._doc._id}>
+                                    <img
+                                        srcSet={`${item.url}`}
+                                        src={`${item.url}`}
+                                        alt={`${item._doc._id}`}
+                                        onContextMenu={handleContextMenu}
+                                        onDragStart={handleDragStart}
+                                        style={{ width: "100%", height: "auto", aspectRatio: "1 / 1", objectFit: "cover", }}
+                                        onClick={() => handleImageClick(item)}
+                                    />
+                                </ImageListItem>
+                            ))
+                        }
+                    </ImageList>
+                </Box>
+            ) : (
+                <Box width={isNonMobile ? "80%" : "100%"}>
+                    <Typography> no data</Typography>
+                </Box>
+            )
         ) : (
-            <Box sx={{flex:1,display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <CircularProgress />
             </Box>
         )}
-        
+
         {selectedPost && (
             <DialogPost
-                DeleteIcon = {Type === "posts" && User._id === user._id ? true : false}
+                DeleteIcon={Type === "posts" && User._id === user._id ? true : false}
                 socket={socket}
                 key={selectedPost._doc._id}
                 item={selectedPost}

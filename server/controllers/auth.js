@@ -62,7 +62,7 @@ export const continueWithGoogle = async (req, res) => {
 /* REGISTER USER */
 export const signup = async (req, res) => {
     try {
-        console.log(req.body.values)
+        // console.log(req.body.values)
         const {
             firstName,
             lastName,
@@ -81,9 +81,24 @@ export const signup = async (req, res) => {
             posts,
             savedPosts,
         } = req.body;
-
+        console.log(firstName,
+            lastName,
+            userName,
+            dob,
+            bio,
+            location,
+            picturePath,
+            email,
+            password,
+            status,
+            followers,
+            following,
+            followRequest,
+            sentRequest,
+            posts,
+            savedPosts)
         let saltRound = 10;
-        hashedPassword = await bcrypt.hash(password, saltRound);
+        let hashedPassword = await bcrypt.hash(password, saltRound);
         const newUser = new User({
             firstName,
             lastName,
@@ -102,7 +117,6 @@ export const signup = async (req, res) => {
             posts,
             savedPosts,
         });
-
         await newUser.save();
         res.status(201).json(newUser);
     } catch (err) {
