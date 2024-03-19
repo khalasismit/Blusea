@@ -114,18 +114,18 @@ const ProfilePage = ({ socket }) => {
                         }} />
                 }
             </Dialog>
-            <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1, m: "2rem 0" }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", m: "1rem 0 0 0" }}>
                 {/* <Box onClick={handleProfilePic} m={0}> */}
                 {
                     user.picturePath === "" ?
                         <Avatar sx={{ width: "10rem", height: "10rem", borderRadius: "10%" }} />
                         :
-                        <Avatar src={user.picturePath} sx={{ width: "10rem", height: "10rem", cursor: "pointer", borderRadius: "10%" }} onClick={handleProfilePic} />
+                        <Avatar src={user.picturePath} sx={{ width: "10rem", height: "10rem", cursor: "pointer", borderRadius: 1 }} onClick={handleProfilePic} />
                 }
                 {/* </Box> */}
-                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", background: theme.palette.background.alt, borderRadius: "1rem" }}>
+                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", background: theme.palette.background.alt }}>
                     {/* user details */}
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 3, p: 1 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 3, p: "0 0.5rem" }}>
                         <Typography sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>{userName}</Typography>
                         {
                             user !== null && !isLoggedInUser && ( // Add this condition
@@ -133,7 +133,7 @@ const ProfilePage = ({ socket }) => {
                             )
                         }
                     </Box>
-                    <Box sx={{ display: "flex", flexDirection: "column", p: "0 0.5rem" }}>
+                    {/* <Box sx={{ display: "flex", flexDirection: "column", p:"0 0.5rem"}}>
                         <Typography sx={{ fontSize: "0.9rem" }}>{totalPosts} posts</Typography>
                         <Box sx={{ flex: 1, display: "flex", gap: 1, alignItems: "center" }}>
                             <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} onClick={() => handleListData('followers')} >{totalFollowers} followers</Typography>
@@ -143,7 +143,7 @@ const ProfilePage = ({ socket }) => {
                             isLoggedInUser &&
                             <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} onClick={() => navigate(`/requests/${user._id}`)} > {totalRequests} requests</Typography>
                         }
-                    </Box>
+                    </Box> */}
                     <Box sx={{ p: 1 }}>
                         <Typography sx={{ fontSize: "1rem" }}>
                             {user.firstName} {user.lastName}
@@ -187,7 +187,7 @@ const ProfilePage = ({ socket }) => {
                 {
                     isLoggedInUser &&
                     <>
-                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", p: "0.2rem", background: theme.palette.background.alt, borderRadius: "2rem" }}>
+                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", p: "0.2rem", background: theme.palette.background.alt, borderRadius: "0 0.5rem 0.5rem 0" }}>
                             <Settings></Settings>
                             {
                                 !isNonMobile &&
@@ -198,6 +198,46 @@ const ProfilePage = ({ socket }) => {
                     </>
                 }
             </Box>
+            {/* <Divider orientation="horizontal" variant="middle" flexItem /> */}
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "3rem" }}>
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: "0.6rem", color: theme.palette.neutral.dark, '&:hover': { cursor: "pointer" } }} >
+                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} >
+                        {totalPosts}
+                    </Typography>
+                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} >
+                        Posts
+                    </Typography>
+                </Box>
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: "0.6rem", color: theme.palette.neutral.dark, '&:hover': { cursor: "pointer" } }} onClick={() => handleListData('followers')}>
+                    {/* <GridOnIcon sx={{ fontSize: "0.85rem" }} /> */}
+                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} >
+                        {totalFollowers}
+                    </Typography>
+                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} >
+                        followers
+                    </Typography>
+                </Box>
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: "0.6rem", color: theme.palette.neutral.dark, '&:hover': { cursor: "pointer" } }} onClick={() => handleListData('following')}>
+                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} >
+                        {totalFollowing}
+                    </Typography>
+                    <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} >
+                        following
+                    </Typography>
+                </Box>
+                {
+                    isLoggedInUser &&
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: "0.6rem", color: theme.palette.neutral.dark, '&:hover': { cursor: "pointer" } }} onClick={() => navigate(`/requests/${user._id}`)}>
+                        <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} >
+                            {totalRequests}
+                        </Typography>
+                        <Typography sx={{ fontSize: "0.9rem", cursor: "pointer" }} >
+                            requests
+                        </Typography>
+                    </Box>
+                }
+            </Box>
+            {/* <Divider orientation="horizontal" variant="middle" flexItem sx={{ m: "1rem 0" }} /> */}
             <Divider orientation="horizontal" variant="middle" flexItem />
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "3rem", }}>
                 <Box sx={{ borderTop: active === "posts" && `1px solid ${theme.palette.neutral.dark}`, display: "flex", alignItems: "center", gap: 1, p: "0.6rem", color: theme.palette.neutral.dark, '&:hover': { cursor: "pointer" } }} onClick={() => { setAFT("posts"); setActive("posts") }} >

@@ -49,6 +49,40 @@ export const Feed = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+export const AdminFeed = async (req, res) => {
+  try {
+    const posts = await Post.find();
+    // const { userId } = req.params;
+    // const postWithUrl = await Promise.all(posts.map(async (post) => {
+    //   if (post.type === "private") {
+    //     const user = await User.findById(userId);
+    //     if (user.following.includes(post.userId)) {
+    //       const { userName } = await User.findById(post.userId);
+    //       const { url } = await File.findById(post.imageId);
+    //       const { picturePath } = await User.findOne({ userName: userName });
+    //       return { ...post, url, userName, picturePath };
+    //     } else {
+    //       return;
+    //     }
+    //   } else {
+    //     const { userName } = await User.findById(post.userId);
+    //     const { url } = await File.findById(post.imageId);
+    //     const { picturePath } = await User.findOne({ userName: userName });
+    //     return { ...post, url, userName, picturePath };
+    //   }
+    // }));
+    // const filteredPost = postWithUrl.filter((post) => post !== undefined);
+    // res.status(200).json(filteredPost);
+    const postWithUrl = await Promise.all(posts.map(async (post) => {
+      const user = await User.findOne({_id : post.userId});
+      const { url } = await File.findById(post.imageId);
+      return { ...post, url, user};
+    }));
+    res.status(200).json(postWithUrl);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
 
 /* GET A SINGLE POST */
 export const getPost = async (req, res) => {
