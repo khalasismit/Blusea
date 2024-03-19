@@ -73,7 +73,7 @@ const ActivityFeed = ({ socket, Type, user }) => {
 
     return <Box sx={{ width: "100%", display: "flex", justifyContent: "center", p: "1rem" }}>
         {!loading ? (
-            data ? (
+            data.length > 0 ? (
                 <Box width={isNonMobile ? "80%" : "100%"}>
                     <ImageList variant='standard' cols={3} gap={3}>
                         {
@@ -94,8 +94,8 @@ const ActivityFeed = ({ socket, Type, user }) => {
                     </ImageList>
                 </Box>
             ) : (
-                <Box width={isNonMobile ? "80%" : "100%"}>
-                    <Typography> no data</Typography>
+                <Box sx={{ flex:1 ,display:"flex",alignItems:"center",justifyContent:"center"}}>
+                    <Typography sx={{fontSize:"1.2rem"}}> No {Type} data </Typography>
                 </Box>
             )
         ) : (
