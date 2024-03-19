@@ -51,7 +51,7 @@ const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, lik
         navigate(`/profile/${userName}`);
     }
 
-    return <Box sx={{ flex: 1, background: theme.palette.background.alt, m: "0.5rem 0", width: isNonMobile ? "600px" : "100%", display: "flex", flexDirection: "column", p: "1rem", borderRadius: 2 }}>
+    return <Box sx={{ flex: 1, background: theme.palette.background.alt, m: "0.2rem 0", width: isNonMobile ? "600px" : "100%", display: "flex", flexDirection: "column", p: "1rem", }}>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 {

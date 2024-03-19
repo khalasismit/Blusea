@@ -16,6 +16,7 @@ import Comments from "../comments";
 import SavePost from "../savePost";
 import CommentInput from "../feed/post/commentInput";
 import DeletePost from "../delPost";
+import Share from "../share";
 
 const DialogPost = ({ DeleteIcon,item, open, handleClose, onClose,socket }) => {
     // const dispatch = useDispatch();
@@ -89,9 +90,9 @@ const DialogPost = ({ DeleteIcon,item, open, handleClose, onClose,socket }) => {
     const NavigateToProfile = () => {
         navigate(`/profile/${post.userName}`);
     }
-    return <Dialog maxWidth={isNonMobile ? 'lg' : "md"} fullWidth open={open} onClose={handleClose} >
+    return <Dialog maxWidth={isNonMobile ? 'lg' : "md"} fullWidth open={open} onClose={handleClose}>
         <CloseOutlinedIcon onClick={handleClose} sx={{ fontSize: "2rem", position: "fixed", top: ".3rem", right: ".3rem" }} />
-        <Box sx={{ flex: 1, display: "flex", flexDirection: isNonMobile ? "row" : "column", overflowY: "auto", scrollbarWidth: "none" }}>
+        <Box sx={{ flex: 1, display: "flex", flexDirection: isNonMobile ? "row" : "column", overflowY: "auto", scrollbarWidth: "none",background:theme.palette.background.default }}>
             <Box sx={{ width: isNonMobile ? "600px" : "100%", p: "0 0.5rem" }}>
                 <ImageWidget src={post.url} alt={post.pictureAlt} />
             </Box>
@@ -157,7 +158,8 @@ const DialogPost = ({ DeleteIcon,item, open, handleClose, onClose,socket }) => {
                                     <ModeCommentOutlinedIcon sx={{ fontSize: "1.7rem" }} />
                                 </Box>
                                 <Box>
-                                    <SendOutlinedIcon sx={{ fontSize: "1.7rem" }} />
+                                    <Share post={post} picturePath={post.url}></Share>
+                                    {/* <SendOutlinedIcon sx={{ fontSize: "1.7rem" }} /> */}
                                 </Box>
                             </Box>
                             <Box sx={{
