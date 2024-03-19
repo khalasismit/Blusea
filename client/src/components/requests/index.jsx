@@ -37,6 +37,7 @@ const Requests = () => {
                         ) : (
                             Users.map((User) => (
                                 <Request
+                                    profilePic={User.picturePath}
                                     reqId={User._id}
                                     key={User._id}
                                     userName={User.userName}
