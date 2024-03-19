@@ -127,7 +127,7 @@ const ProfilePage = ({ socket }) => {
                     <Box sx={{ display: "flex", alignItems: "center", gap: 3, p: 1 }}>
                         <Typography sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>{userName}</Typography>
                         {
-                            (user !== null && !isLoggedInUser) &&
+                            (user.length > 0 && !isLoggedInUser) &&
                             <Follow user2userName={userName}></Follow>
                         }
                     </Box>
