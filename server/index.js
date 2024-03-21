@@ -12,6 +12,7 @@ import postRoute from "./routes/post.js";
 import messageRoute from "./routes/message.js";
 import notifRoute from "./routes/notification.js"
 import { app, server } from "./socket/socket.js";
+import File from "./models/File.js";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -37,7 +38,14 @@ app.use('/users', userRoute);
 app.use('/posts', postRoute);
 app.use('/chats', messageRoute);
 app.use('/notifications', notifRoute);
-
+app.get("/files",async(req,res)=>{
+  try {
+  const files = await File.find();
+  res.status(200).json(files);
+} catch (error) {
+  res.status(400).json(error);
+  }
+})
 /* ROUTES SETUP WHICH USES FILE UPLOAD */
 app.use('/',uploadFile);
 

@@ -2,7 +2,7 @@ import express from "express";
 import multer from 'multer';
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-import { AdminFeed, Feed, comment, deleteComment, explore, getComments, getPost, getUserPosts, removePost, savePost, toggleCommentLike, toggleLike } from "../controllers/post.js";
+import { AdminFeed, Feed, comment, deleteComment, explore, getComments, getPost, getUserPosts, getpostsadmin, removePost, savePost, toggleCommentLike, toggleLike } from "../controllers/post.js";
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 
@@ -40,7 +40,8 @@ router.post("/create", upload.single("file"), async (req, res) => {
 
 /* ROUTES TO GET ALL POSTS */ 
 router.get("/", Feed);
-router.get("/admin",AdminFeed);
+// router.get("/admin",AdminFeed);
+router.get("/admin",getpostsadmin);
 // router.get("/:userId", Feed);
 router.get("/explore",explore);
 

@@ -99,7 +99,7 @@ export const reject = async (req, res) => {
         console.log(`${user1userName} Reject the Request of ${user2userName}`);
 
         // res.status(200).json("Follow-Request-Rejected");
-        res.status(200).json(updatedUser2);
+        res.status(200).json(updatedUser);
     } catch (err) {
         res.status(400).json({ error: err })
     }

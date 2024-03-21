@@ -20,7 +20,7 @@ const DeletePost = ({ postId, socket, handleClose }) => {
         const data = await res.json();
         if (data) {
             dispatch(
-                setPosts(data.updatedPosts),
+                setPosts({post:data.updatedPosts}),
                 setLogin({
                     user: data.updatedUser,
                     token: token

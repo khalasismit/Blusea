@@ -17,9 +17,9 @@ export const getUser = async (req, res) => {
 // Edit User
 export const edit = async (req, res) => {
   try {
-    const { firstName, lastName, userName, location, bio, picturePath } = req.body
+    const { firstName, lastName, userName, location, bio, picturePath,email } = req.body
     const { id } = req.params;
-    const user = await User.findOneAndUpdate({ _id: id }, { firstName: firstName, lastName: lastName, userName: userName, location: location, bio: bio, picturePath: picturePath }, {
+    const user = await User.findOneAndUpdate({ _id: id }, { firstName: firstName, lastName: lastName, userName: userName, location: location, bio: bio, picturePath: picturePath,email:email }, {
       new: true
     });
     await user.save();
@@ -28,6 +28,18 @@ export const edit = async (req, res) => {
     res.status(404).json({ error })
   }
 }
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.status(200).json({ message: "User deleted successfully" });
+  }
+  catch (error) {
+    res.status(404).json({ error })
+  }
+}
+
 
 /* GET USER'S SAVED POST */
 export const getUserSavedPost = async (req, res) => {

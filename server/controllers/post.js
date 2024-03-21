@@ -49,6 +49,7 @@ export const Feed = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
 export const AdminFeed = async (req, res) => {
   try {
     const posts = await Post.find();
@@ -62,16 +63,16 @@ export const AdminFeed = async (req, res) => {
     //       const { picturePath } = await User.findOne({ userName: userName });
     //       return { ...post, url, userName, picturePath };
     //     } else {
-    //       return;
-    //     }
-    //   } else {
-    //     const { userName } = await User.findById(post.userId);
-    //     const { url } = await File.findById(post.imageId);
-    //     const { picturePath } = await User.findOne({ userName: userName });
-    //     return { ...post, url, userName, picturePath };
-    //   }
-    // }));
-    // const filteredPost = postWithUrl.filter((post) => post !== undefined);
+      //       return;
+      //     }
+      //   } else {
+        //     const { userName } = await User.findById(post.userId);
+        //     const { url } = await File.findById(post.imageId);
+        //     const { picturePath } = await User.findOne({ userName: userName });
+        //     return { ...post, url, userName, picturePath };
+        //   }
+        // }));
+        // const filteredPost = postWithUrl.filter((post) => post !== undefined);
     // res.status(200).json(filteredPost);
     const postWithUrl = await Promise.all(posts.map(async (post) => {
       const user = await User.findOne({_id : post.userId});
@@ -79,6 +80,14 @@ export const AdminFeed = async (req, res) => {
       return { ...post, url, user};
     }));
     res.status(200).json(postWithUrl);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+export const getpostsadmin = async (req, res) => {
+  try {
+    const posts = await Post.find();
+    res.status(200).json(posts);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
