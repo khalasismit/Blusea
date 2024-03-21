@@ -76,7 +76,7 @@ const Chat = ({ socket, id, participants, messages }) => {
             gap: 2,
             p: 1,
             cursor: "pointer",
-            ":hover": { background: theme.palette.background.default }
+            ":hover": { background: theme.palette.background.alt }
         }}
         onClick={() => {
             navigate(`/chats/${id}/messages`);

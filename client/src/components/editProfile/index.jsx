@@ -94,7 +94,7 @@ const EditProfile = () => {
                     Edit profile
                 </Typography>
             </Button> */}
-            <Box sx={{ cursor: "pointer", background: theme.palette.background.alt, borderRadius: "50%", p: "0.5rem 0.5rem 0.1rem 0.5rem", ":hover": { background: theme.palette.background.default } }}>
+            <Box sx={{ cursor: "pointer",borderRadius: "50%", p: "0.5rem 0.5rem 0.1rem 0.5rem", ":hover": { background: theme.palette.background.alt } }}>
                 <EditOutlinedIcon onClick={() => { setOpen(true) }} />
             </Box>
             <Dialog maxWidth="md" fullWidth open={open} onClose={handleClose}>

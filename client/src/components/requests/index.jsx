@@ -21,7 +21,7 @@ const Requests = () => {
         handleRequest();
     }, [user]);
     return <Box sx={{ flex:1,display: "flex", justifyContent: "center" }}>
-        <Box sx={{ flex: 1, p: "0.5rem 1rem", borderRadius: 2, m: 1, display: "flex", flexDirection: "column", background: palette.background.alt }} >
+        <Box sx={{ flex: 1, p: "0.5rem 1rem", borderRadius: 2, m: 1, display: "flex", flexDirection: "column", background: palette.background.default }} >
             <Typography sx={{
                 color: palette.neutral.main,
                 fontSize: "1.2rem",

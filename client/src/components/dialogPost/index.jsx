@@ -55,24 +55,6 @@ const DialogPost = ({ DeleteIcon,item, open, handleClose, onClose,socket }) => {
         getPost(post)
     }, [Posts])
     
-    // const handleComment = async () => {
-    //     await fetch(`http://localhost:3001/posts/${post._doc._id}/comment/new`, {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({
-    //             userId: user._id,
-    //             comment: comment,
-    //             commentId : commentId
-    //         })
-    //     }).then(async (res) => await res.json()).then(async (data) => {
-    //         if(data){
-    //             dispatch(setPost(data))
-    //             getPost(post)
-    //             setComment("");
-    //         }
-    //     }).catch(err => { console.log(err) });
-    // }
-
     useEffect(() => {
         const calculateTimeAgo = () => {
             if (post._doc.createdAt) {
@@ -93,7 +75,7 @@ const DialogPost = ({ DeleteIcon,item, open, handleClose, onClose,socket }) => {
     return <Dialog maxWidth={isNonMobile ? 'lg' : "md"} fullWidth open={open} onClose={handleClose}>
         <CloseOutlinedIcon onClick={handleClose} sx={{ fontSize: "2rem", position: "fixed", top: ".3rem", right: ".3rem" }} />
         <Box sx={{ flex: 1, display: "flex", flexDirection: isNonMobile ? "row" : "column", overflowY: "auto", scrollbarWidth: "none",background:theme.palette.background.default }}>
-            <Box sx={{ width: isNonMobile ? "600px" : "100%", p: "0 0.5rem" }}>
+            <Box sx={{ width: isNonMobile ? "600px" : "100%",height:"650px",p: "0 0.5rem" }}>
                 <ImageWidget src={post.url} alt={post.pictureAlt} />
             </Box>
             <Divider orientation={isNonMobile ? "vertical" : "horizontal"} variant="middle" flexItem ></Divider>
@@ -141,7 +123,7 @@ const DialogPost = ({ DeleteIcon,item, open, handleClose, onClose,socket }) => {
                         <Comments socket={socket} postId={post._doc._id} updateCommentField={updateCommentField} parentId={parentId} ></Comments>
                     </Box>
                     {/* second second Box */}
-                    <Box sx={{ p: 1,position:!isNonMobile && "sticky",bottom:!isNonMobile && 0,background:!isNonMobile&&theme.palette.background.default}}>
+                    <Box sx={{ p: 1,position:!isNonMobile && "sticky",bottom:!isNonMobile && 0,background: !isNonMobile && theme.palette.background.default}}>
                         <Divider orientation="horizontal" variant="fullWidth" flexItem ></Divider>
                         <Box sx={{ display: "flex", justifyContent: "space-between", p: "0.4rem 0" }}>
                             <Box sx={{

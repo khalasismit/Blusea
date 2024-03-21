@@ -28,7 +28,7 @@ const Feed = ({socket}) => {
                 throw new Error('Failed to fetch posts');
             }
             const data = await res.json();
-            // console.log(data)
+            console.log(data)
             setPosts(data);
         } catch (error) {
             console.error('Error fetching posts:', error);

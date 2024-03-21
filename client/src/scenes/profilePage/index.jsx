@@ -123,10 +123,10 @@ const ProfilePage = ({ socket }) => {
                         <Avatar src={user.picturePath} sx={{ width: "10rem", height: "10rem", cursor: "pointer", borderRadius: 1 }} onClick={handleProfilePic} />
                 }
                 {/* </Box> */}
-                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", background: theme.palette.background.alt }}>
+                <Box sx={{ flex: 1, display: "flex", flexDirection: "column"}}>
                     {/* user details */}
                     <Box sx={{ display: "flex", alignItems: "center", gap: 3, p: "0 0.5rem" }}>
-                        <Typography sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>{userName}</Typography>
+                        <Typography sx={{ fontSize: "1.2rem"}}>{userName}</Typography>
                         {
                             user !== null && !isLoggedInUser && ( // Add this condition
                                 <Follow user2userName={userName}></Follow>
@@ -145,10 +145,10 @@ const ProfilePage = ({ socket }) => {
                         }
                     </Box> */}
                     <Box sx={{ p: 1 }}>
-                        <Typography sx={{ fontSize: "1rem" }}>
+                        <Typography sx={{color:theme.palette.neutral.main,fontSize: "1rem" }}>
                             {user.firstName} {user.lastName}
                         </Typography>
-                        <Typography sx={{ fontSize: "0.85rem", width: "15rem" }}>
+                        <Typography sx={{ fontSize: "0.9rem", width: "15rem" }}>
                             {user.bio}
                         </Typography>
                     </Box>
@@ -187,7 +187,7 @@ const ProfilePage = ({ socket }) => {
                 {
                     isLoggedInUser &&
                     <>
-                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", p: "0.2rem", background: theme.palette.background.alt, borderRadius: "0 0.5rem 0.5rem 0" }}>
+                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", p: "0.2rem", borderRadius: "0 0.5rem 0.5rem 0" }}>
                             <Settings></Settings>
                             {
                                 !isNonMobile &&

@@ -51,18 +51,13 @@ export const createConversation = async (req, res) => {
     try {
         // console.log(userId);
         let { userId, otherUserId } = req.body;
-        console.log(userId, otherUserId)
+        // console.log(userId, otherUserId)
         let existingConversation = await Conversation.findOne({
             participants: { $all: [userId, otherUserId] }
         });
+
         if (existingConversation) {
-            // If conversation already exists, return the existing conversation
-            const conversation = await existingConversation.populate("participants messages")
-            const decryptedMessagesConversation = await Promise.all(conversation.messages.map((message) => {
-                const decryptedMessage = decryptMessage(message.message)
-                return { ...message.toObject(), message: decryptedMessage }
-            }))
-            return res.status(200).json(decryptedMessagesConversation);
+            return res.status(200).json(existingConversation);
         }
         /* Create new conversation and save it */
         const newConversation = await Conversation.create({ participants: [userId, otherUserId] })

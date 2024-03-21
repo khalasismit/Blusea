@@ -6,7 +6,7 @@ import Logout from "../logout";
 const Settings = () => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
-    return <Box sx={{ cursor: "pointer", background: theme.palette.background.alt, borderRadius: "50%", p: "0.5rem 0.5rem 0.1rem 0.5rem", ":hover": { background: theme.palette.background.default } }}>
+    return <Box sx={{ cursor: "pointer", borderRadius: "50%", p: "0.5rem 0.5rem 0.1rem 0.5rem", ":hover": { background: theme.palette.background.alt } }}>
         {/* <Box sx={{p: "0.5rem 1rem 0.1rem 1rem",background:theme.palette.background.alt,":hover":{background:theme.palette.background.default}}}> */}
         <SettingsOutlinedIcon sx={{ cursor: "pointer" }} onClick={() => { setOpen(true) }} />
         <Dialog maxWidth="xs" fullWidth open={open} onClose={() => { setOpen(false) }}>

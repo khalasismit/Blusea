@@ -27,7 +27,7 @@ const ChatPage = ({socket}) => {
                             justifyContent: "center",
                             alignItems: "center",
                             borderRadius: "1rem",
-                            background: theme.palette.background.alt,
+                            background: theme.palette.background.default,
                             // p: "1.5rem 4rem",
                             fontSize: "2rem",
                             '& > *': {

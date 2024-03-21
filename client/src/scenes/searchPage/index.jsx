@@ -42,7 +42,7 @@ const SearchPage = () => {
     return <Box sx={{ display: "flex", flex: 1 }}>
         <Box sx={{ height: isNonMobile ? "100vh" : "90%", display: "flex", flex: 1 }}>
             <Box sx={{ flex: 1, borderRadius: "0.5rem", m: 1, display: "flex", flexDirection: isNonMobile ? "row" : "column" }}>
-                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", background: theme.palette.background.alt, borderRadius: "1rem" }}>
+                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", background: theme.palette.background.default}}>
                     <TextField
                         id="outlined-basic"
                         label="Search"
@@ -64,8 +64,8 @@ const SearchPage = () => {
                                         gap: "1rem",
                                         p: "0.5rem",
                                         m: "0.2rem",
-                                        borderRadius: "1rem",
-                                        ":hover": { background: theme.palette.background.default }
+                                        borderRadius:2,
+                                        ":hover": { background: theme.palette.background.alt }
                                     }}
                                     onClick={() => {
                                         navigate(`/profile/${user.userName}`)
@@ -85,7 +85,7 @@ const SearchPage = () => {
                     <Divider orientation="vertical" sx={{ m: 1 }} flexItem></Divider>
                 }
                 {isNonMobile && (
-                    <Box sx={{ flex: 1, borderRadius: "1rem", background: theme.palette.background.alt, }}>
+                    <Box sx={{ flex: 1, borderRadius: 2, background: theme.palette.background.default }}>
                         <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
                             <Box sx={{
                                 height: "30%",
@@ -120,8 +120,8 @@ const SearchPage = () => {
                                             gap: "1rem",
                                             p: "0.5rem",
                                             m: "0.2rem",
-                                            borderRadius: "1rem",
-                                            ":hover": { background: theme.palette.background.default }
+                                            borderRadius: 2,
+                                            ":hover": { background: theme.palette.background.alt }
                                         }}
                                         onClick={() => {
                                             navigate(`/profile/${user.userName}`)

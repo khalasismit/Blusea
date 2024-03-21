@@ -1,4 +1,4 @@
-import { Badge, Box, useMediaQuery, useTheme } from "@mui/material";
+import { Badge, Box, Divider, useMediaQuery, useTheme } from "@mui/material";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Feed from "../../components/feed";
 import Requests from "../../components/requests";
@@ -34,13 +34,13 @@ const HomePage = ({ socket }) => {
     return <Box sx={{ display: "flex", flex: 1, justifyContent: "space-evenly" }}>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
             {
-                !nonMobile && <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", background: theme.palette.background.alt, position: "sticky", top: 0, zIndex: 100 }}>
+                !nonMobile && <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", background: theme.palette.background.default, position: "sticky", top: 0, zIndex: 100 }}>
                     <Box sx={{ flex: 1, display: "flex", alignItems: "center", }}>
                         <img
                             src={"https://firebasestorage.googleapis.com/v0/b/magnet784492.appspot.com/o/logo%2Fmagnet3.png?alt=media&token=750dc1ef-316a-4bf3-8a83-8024f0a90dea"}
                             onContextMenu={handleContextMenu}
                             onDragStart={handleDragStart}
-                            style={{ width: "4.8rem", height: "3.8rem", objectFit: "cover" }}
+                            style={{ width: "4.2rem", height: "3.2rem", objectFit: "cover" }}
                         />
                     </Box>
                     <Box>
@@ -63,8 +63,9 @@ const HomePage = ({ socket }) => {
         </Box>
         {isNonMobile &&
             (
-                <Box sx={{ height: "100vh", flex: 1, gap: 1, display: "flex", flexDirection: "column" }}>
+                <Box sx={{ height: "100vh", flex: 1,display: "flex", flexDirection: "column" }}>
                     <Requests></Requests>
+                    <Divider flexItem variant="middle" ></Divider>
                     <Ads></Ads>
                 </Box>
             )

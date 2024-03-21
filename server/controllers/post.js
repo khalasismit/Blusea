@@ -11,7 +11,13 @@ smitk : 65cb9a4f72dc8e25e6485ba6
 testUser : 65cc410814dfd545893e5347
 
 */
-
+// function shuffleArray(array) {
+//   for (let i = array.length - 1; i > 0; i--) {
+//     const j = Math.floor(Math.random() * (i + 1));
+//     [array[i], array[j]] = [array[j], array[i]];
+//   }
+//   return array;
+// }
 /* GET FEED POST */
 export const Feed = async (req, res) => {
   try {
@@ -44,6 +50,8 @@ export const Feed = async (req, res) => {
       const { picturePath } = await User.findOne({ userName: userName });
       return { ...post, url, userName, picturePath };
     }));
+    // const shufflePosts = shuffleArray(postWithUrl)
+    // res.status(200).json(shufflePosts);
     res.status(200).json(postWithUrl);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -134,6 +142,8 @@ export const explore = async (req, res) => {
       const { picturePath } = await User.findOne({ userName: userName });
       return { ...post, url, userName, picturePath };
     }));
+    // const shufflePosts = shuffleArray(postWithUrl)
+    // res.status(200).json(shufflePosts);
     res.status(200).json(postWithUrl);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -240,24 +250,6 @@ const populateCommentsRecursively = async (comments, depth) => {
 export const getComments = async (req, res) => {
   try {
     const { postId } = req.params;
-    // const comments = await Comment.find({ type: "comment",postId:postId }).populate("replies userId").exec();
-    // const comments = await Comment.find({ type: 'comment', postId }).populate({
-    //   path: 'replies',
-    //   populate: {
-    //     path: 'replies',
-    //     populate: {
-    //       path: 'replies',
-    //       populate: {
-    //         path: 'replies',
-    //         populate: {
-    //           path: 'replies',
-    //           populate: { path: 'userId' }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }).populate('userId').exec();
-
     const depth = 5; // Set depth to 5 or retrieve it from request if it's dynamic
 
     let comments = await Comment.find({ type: 'comment', postId }).exec();

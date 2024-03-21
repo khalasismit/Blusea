@@ -54,10 +54,10 @@ const Chats = ({ socket }) => {
         setSearchData(data);
     } 
     const theme = useTheme();
-    return <Box sx={{ flex: 1, display: "flex", background: theme.palette.background.alt, flexDirection: "column", p: 1, borderRadius: "1rem" }}>
+    return <Box sx={{ flex: 1, display: "flex", background: theme.palette.background.default, flexDirection: "column", p: 1, borderRadius: "1rem" }}>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", }}>
-            <Typography sx={{ fontSize: "1.1rem", p: "0 1rem" }}>Conversations</Typography>
+            <Typography sx={{ fontSize: "1.1rem", p: "0 1rem",fontWeight:"bold" }}>Conversations</Typography>
             <Box onClick={handleIsSearch} sx={{
                 p: "0.5rem 0.7rem",
                 borderRadius: "50%",
@@ -93,8 +93,8 @@ const Chats = ({ socket }) => {
                                     gap: "1rem",
                                     p: "0.5rem",
                                     m: "0.2rem",
-                                    borderRadius: "1rem",
-                                    ":hover": { background: theme.palette.background.default }
+                                    borderRadius: 2,
+                                    ":hover": { background: theme.palette.background.alt }
                                 }}
                                 onClick={() => {
                                     setOtherUserId(user._id);
@@ -111,7 +111,7 @@ const Chats = ({ socket }) => {
                 </Box>
             </Box>
         ) : (
-            <Box sx={{ overflow: "auto", scrollbarWidth: "none", display: "flex", flexDirection: "column" }}>
+            <Box sx={{ overflow: "auto", scrollbarWidth: "none", display: "flex", flexDirection: "column", }}>
                 {
                     !conversations.length <= 0 ? (
                         conversations && conversations.map((conversation) => (

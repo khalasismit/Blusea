@@ -8,13 +8,13 @@ const ImageWidget = ({ src, alt }) => {
     const handleDragStart = (e) => {
         e.preventDefault();
     };
-    return <Box sx={{ height: "650px", p: "0.5rem 0" }}>
+    return <Box sx={{ height: "100%", p: "0.5rem 0" }}>
         <img
             src={src}
-            alt={alt}
+            alt={alt}            
             onContextMenu={handleContextMenu}
             onDragStart={handleDragStart}
-            style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: "0.3rem" }}
+            style={{width: "100%", height: "100%",objectFit: "contain" }}
         />
     </Box>
 }

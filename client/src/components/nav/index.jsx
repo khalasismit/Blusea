@@ -52,9 +52,11 @@ const Navigation = ({ socket }) => {
         position: "sticky",
         top: 0,
         zIndex: 100,
-        borderRadius: 4,
-        p: "0.5rem",
-        m: 0,
+        // borderRadius: 4,
+        // p: "0.5rem",    
+        // boxShadow: isNonMobile ? `0px -1px 5px ${theme.palette.neutral.light}`: "",
+        background: theme.palette.background.default,
+        borderRight:`1px solid ${theme.palette.neutral.light}`,
         height: isNonMobile ? "100vh" : "auto",
         width: isNonMobile ? "max-content" : "100%",
         display: "flex",
@@ -67,8 +69,7 @@ const Navigation = ({ socket }) => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                borderRadius: "1rem 1rem 0rem 0rem",
-                background: theme.palette.background.alt,
+                // borderRadius: "1rem 1rem 0rem 0rem",
                 p: "1.5rem 4rem",
                 fontSize: "2rem",
                 '& > *': {
@@ -99,21 +100,22 @@ const Navigation = ({ socket }) => {
                 justifyContent: isNonMobile ? "" : "space-evenly",
                 flexDirection: isNonMobile ? "column" : "row",
                 padding: isNonMobile ? "1rem 0rem" : "0",
-                boxShadow: isNonMobile ? "" : "0px -1px 5px rgba(0,0,0,0.1)",
+                // boxShadow: isNonMobile ? "" : "0px -1px 5px rgba(0,0,0,0.1)",
                 position: isNonMobile ? "" : "fixed",
                 left: isNonMobile ? "" : "0",
                 right: isNonMobile ? "" : "0",
                 bottom: isNonMobile ? "" : "0",
                 color: theme.palette.neutral.dark,
                 zIndex: 100,
-                background: theme.palette.background.alt,
+                p:"0 0.5rem",
+                background: theme.palette.background.default,
                 '& > *': {
                     borderRadius: 2,
                     p: "0.7rem 1rem", fontSize: "2rem"
                 },
                 '& > *:hover': {
                     color: theme.palette.neutral.light,
-                    background: theme.palette.neutral.mediumMain, // Change the background color on hover
+                    background: theme.palette.neutral.light, // Change the background color on hover
                     cursor: 'pointer', // Add a pointer cursor on hover
                 },
             }}>
@@ -195,8 +197,8 @@ const Navigation = ({ socket }) => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        background: theme.palette.background.alt,
-                        borderRadius: "0 0 1rem 1rem",
+                        // background: theme.palette.background.alt,
+                        // borderRadius: "0 0 1rem 1rem",
                     }}>
                         <Box sx={{
                             display: "flex",
