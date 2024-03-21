@@ -8,6 +8,7 @@ const Feed = ({socket}) => {
     // const socket = io("http://localhost:3001");
     // const theme = useTheme()
     const user = useSelector((state) => state.user)
+    const token = useSelector((state) => state.token)
     const Posts = useSelector((state) => state.posts)
     const [posts, setPosts] = useState(null);
     const fetchPosts = async () => {
@@ -15,7 +16,8 @@ const Feed = ({socket}) => {
             const res = await fetch("http://localhost:3001/posts", {
                 method: "GET",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
             });
             // const res = await fetch(`http://localhost:3001/posts/${user._id}`, {

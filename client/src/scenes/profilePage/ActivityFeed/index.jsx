@@ -9,6 +9,7 @@ const ActivityFeed = ({ socket, Type, user }) => {
     const [userPosts, setUserPosts] = useState([]);
     const [savedPosts, setSavedPosts] = useState([]);
     const User = useSelector((state) => state.user);
+    const token = useSelector((state) => state.token);
     // const Posts = useSelector((state) => state.posts)
     const isNonMobile = useMediaQuery("(min-width:768px)")
     const [openDialog, setOpenDialog] = useState(false);
@@ -22,13 +23,13 @@ const ActivityFeed = ({ socket, Type, user }) => {
                 // Fetch user's own posts
                 userPostsPromise = await fetch(`http://localhost:3001/posts/${user._id}/posts`, {
                     method: "GET",
-                    headers: {}
+                    headers: {Authorization: `Bearer ${token}`}
                 }).then(res => res.json());
 
                 // Fetch user's saved posts
                 savedPostsPromise = await fetch(`http://localhost:3001/users/${user._id}/posts/saved`, {
                     method: "GET",
-                    headers: {}
+                    headers: {Authorization: `Bearer ${token}`}
                 }).then(res => res.json());
 
                 // Wait for both promises to resolve

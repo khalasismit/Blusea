@@ -15,7 +15,7 @@ const SavePost = ({ saved, postId }) => {
         setIsSaved(!isSaved);
         const res = await fetch(`http://localhost:3001/posts/${postId}/toggleSave`, {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
             body: JSON.stringify({
                 userId: user._id,
                 postId: postId

@@ -6,6 +6,7 @@ import { setPost } from "../../redux/reducers";
 import { useEffect, useState } from "react";
 const Like = ({ postId, postUserName, likes, socket }) => {
     const user = useSelector((state) => state.user)
+    const token = useSelector((state) => state.token)
     const [isLiked, setIsLiked] = useState(likes.includes(user._id))
     // const [likeType, setLikeType] = useState("LIKE_POST");
     const dispatch = useDispatch()
@@ -13,7 +14,7 @@ const Like = ({ postId, postUserName, likes, socket }) => {
         setIsLiked(!isLiked);
         const res = await fetch(`http://localhost:3001/posts/${postId}/toggleLike/${user._id}`, {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
         });
         const updatedPost = await res.json();
         try {
@@ -28,7 +29,7 @@ const Like = ({ postId, postUserName, likes, socket }) => {
                 }
                 const NotifRes = await fetch(url, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
                     body: JSON.stringify({
                         postId: postId,
                         senderId: user._id,
@@ -54,8 +55,13 @@ const Like = ({ postId, postUserName, likes, socket }) => {
             socket.close();
         };
     }, [])
+    // useEffect(()=>{
+    //     if(liked){
+    //         handleLike()
+    //     }
+    // },[liked])
     return (
-        <Box onClick={handleLike} >
+        <Box onClick={handleLike}>
             {
                 isLiked ?
                     <FavoriteIcon sx={{ fontSize: "1.7rem", color: "red" }} />

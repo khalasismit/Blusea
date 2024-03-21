@@ -17,7 +17,7 @@ import SavePost from "../../savePost";
 import Share from "../../share";
 import CommentInput from "./commentInput";
 
-const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, likes, comments, caption, createdAt,socket }) => {
+const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, likes, comments, caption, createdAt, socket }) => {
 
     const user = useSelector((state) => state.user);
     const LIKES = likes.length
@@ -33,6 +33,7 @@ const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, lik
         // console.log(item)
         setOpenDialog(true); // Open the dialog
     };
+
     useEffect(() => {
         const calculateTimeAgo = () => {
             if (createdAt) {
@@ -51,7 +52,7 @@ const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, lik
         navigate(`/profile/${userName}`);
     }
 
-    return <Box sx={{ flex: 1, background: theme.palette.background.default,width: isNonMobile ? "600px" : "100%", display: "flex", flexDirection: "column", p: "1rem", }}>
+    return <Box sx={{ flex: 1, background: theme.palette.background.default, width: isNonMobile ? "600px" : "100%", display: "flex", flexDirection: "column", p: "1rem", }}>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 {
@@ -67,7 +68,9 @@ const Post = ({ post, postId, profilePic, picturePath, pictureAlt, userName, lik
             </Box>
             <MoreHorizIcon sx={{ fontSize: "1.7rem" }} />
         </Box>
-        <ImageWidget src={picturePath} alt={pictureAlt} />
+        <Box >
+            <ImageWidget src={picturePath} alt={pictureAlt} />
+        </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box sx={{
                 display: "flex",

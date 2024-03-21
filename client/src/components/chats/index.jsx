@@ -13,10 +13,11 @@ const Chats = ({ socket }) => {
     const [searchData, setSearchData] = useState([]);
     const [conversations, setConversations] = useState([]);
     const user = useSelector((state) => state.user)
+    const token = useSelector((state) => state.token)
     const handleCreateConv = async () => {
         const res = await fetch(`http://localhost:3001/chats/conversation/create`, {
             method: "POST",
-            headers: { "Content-Type": "Application/json" },
+            headers: { "Content-Type": "Application/json",Authorization: `Bearer ${token}` },
             body: JSON.stringify({
                 userId: user._id,
                 otherUserId: otherUserId
@@ -29,7 +30,8 @@ const Chats = ({ socket }) => {
     }
     const getConversations = async () => {
         const res = await fetch(`http://localhost:3001/chats/${user._id}/conversations`, {
-            method: "GET"
+            method: "GET",
+            headers:{Authorization: `Bearer ${token}`}
         })
         const data = await res.json();
         setConversations(data);
@@ -48,7 +50,7 @@ const Chats = ({ socket }) => {
     const handleSearch = async (value) => {
         const searchRes = await fetch(`http://localhost:3001/users/${user._id}/search/${value}`, {
             method: "GET",
-            headers: {}
+            headers: {Authorization: `Bearer ${token}`}
         });
         const data = await searchRes.json();
         setSearchData(data);

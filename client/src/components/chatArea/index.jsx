@@ -7,6 +7,7 @@ import ChatHeader from "./chatHeader";
 import { useSelector } from "react-redux";
 const ChatArea = ({socket}) => {
     const user = useSelector((state) => state.user)
+    const token = useSelector((state) => state.token)
     const [conversation, setConversation] = useState([])
     const { conversationId } = useParams();
     const [update,setUpdate] = useState("")
@@ -16,7 +17,7 @@ const ChatArea = ({socket}) => {
     const getConversation = async () => {
         const res = await fetch(`http://localhost:3001/chats/${conversationId}`, {
             method: "GET",
-            headers: {}
+            headers: {Authorization: `Bearer ${token}`}
         })
         const data = await res.json();
         setConversation(data);

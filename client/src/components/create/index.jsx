@@ -17,6 +17,7 @@ const Create = () => {
     const [loading, setLoading] = useState(false)
     const [isOpenAdditional, setIsOpenAdditional] = useState(false);
     const user = useSelector((state) => state.user);
+    const token = useSelector((state) => state.token);
     const [type, setType] = useState("public");
     const [isPrivate, setIsPrivate] = useState(false);
     const handleSwitchToggle = () => {
@@ -39,7 +40,7 @@ const Create = () => {
         formData.append("caption", values.caption);
         const uploadResponse = await fetch('http://localhost:3001/upload', {
             method: 'POST',
-            headers: {},
+            headers: {Authorization: `Bearer ${token}`},
             body: formData
         });
 
@@ -47,7 +48,7 @@ const Create = () => {
         formData.append("fileId", fileData);
         const createPost = await fetch("http://localhost:3001/posts/create", {
             method: "POST",
-            headers: {},
+            headers: {Authorization: `Bearer ${token}`},
             body: formData,
         });
         const newPost = await createPost.json();

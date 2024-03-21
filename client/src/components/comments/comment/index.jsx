@@ -24,6 +24,7 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
         return () => clearInterval(intervalId);
     }, [createdAt]);
     const user = useSelector((state) => state.user)
+    const token = useSelector((state) => state.token)
     const [isLiked, setIsLiked] = useState(likes.includes(user._id))
     // const isLiked = likes.includes(user._id) ? true : false
     const dispatch = useDispatch()
@@ -32,7 +33,8 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
         const res = await fetch(`http://localhost:3001/posts/${postId}/comment/toggleCommentLike`, {
             method: "PATCH",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
                 userId: user._id,
@@ -42,6 +44,9 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
         const updatedPost = await res.json();
         const CommentIdRes = await fetch(`http://localhost:3001/users/userToReply/${_id}`, {
             method: "GET",
+            headers: {
+                'Content-Type': 'application/json',Authorization: `Bearer ${token}`
+            }
         });
         const Commentuser = await CommentIdRes.json();
         try {
@@ -56,7 +61,8 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
                 }
                 const NotifRes = await fetch(url, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}` },
                     body: JSON.stringify({
                         postId: postId,
                         senderId: user._id,

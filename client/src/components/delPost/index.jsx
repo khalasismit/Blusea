@@ -15,7 +15,8 @@ const DeletePost = ({ postId, socket, handleClose }) => {
     const handleRemove = async () => {
         const res = await fetch(`http://localhost:3001/posts/${postId}/remove`, {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json",
+            Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
         if (data) {

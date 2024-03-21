@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 const Requests = () => {
     const user = useSelector(state => state.user)
+    const token = useSelector(state => state.token)
     const { _id } = user
     const [Loading, setLoading] = useState(true);
     const [Users, setUsers] = useState([])
@@ -11,7 +12,7 @@ const Requests = () => {
     const handleRequest = async () => {
         let res = await fetch(`http://localhost:3001/users/${_id}/requests`, {
             method: "GET",
-            headers: {}
+            headers: {Authorization: `Bearer ${token}`}
         })
         const data = await res.json();
         setUsers(data);

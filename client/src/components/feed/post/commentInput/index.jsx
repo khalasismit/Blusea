@@ -5,13 +5,14 @@ import { setPost } from "../../../../redux/reducers";
 
 const CommentInput = ({ postId, commentId, CM, socket }) => {
     const user = useSelector(s => s.user);
+    const token = useSelector(s => s.token);
     const theme = useTheme();
     const dispatch = useDispatch();
     const [comment, setComment] = useState(CM);
     const handleComment = async () => {
         await fetch(`http://localhost:3001/posts/${postId}/comment/new`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json',Authorization: `Bearer ${token}` },
             body: JSON.stringify({
                 userId: user._id,
                 comment: comment,
@@ -20,6 +21,7 @@ const CommentInput = ({ postId, commentId, CM, socket }) => {
         }).then(async (res) => await res.json()).then(async (data) => {
             const res = await fetch(`http://localhost:3001/users/userToReply/${commentId}`, {
                 method: "GET",
+                headers:{Authorization: `Bearer ${token}`}
             });
             const ParentCommentuser = await res.json();
             // console.log("Comment data: ", data);
@@ -41,7 +43,7 @@ const CommentInput = ({ postId, commentId, CM, socket }) => {
                 if (user._id !== receiverId) {
                     const NotifRes = await fetch(`http://localhost:3001/notifications/new`, {
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
+                        headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
                         body: JSON.stringify({
                             postId: postId,
                             senderId: user._id,

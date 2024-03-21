@@ -44,13 +44,13 @@ const EditProfile = () => {
         if (initialValues.file !== values.file) {
             const uploadRes = await fetch('http://localhost:3001/upload', {
                 method: 'POST',
-                headers: {},
+                headers: {Authorization: `Bearer ${token}`},
                 body: formData
             });
             const fileData = await uploadRes.json();
             const downloadUrlRes = await fetch(`http://localhost:3001/download`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
                 body: JSON.stringify({
                     fileId: fileData
                 })
@@ -65,6 +65,7 @@ const EditProfile = () => {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
                 firstName: formData.get("firstName"),

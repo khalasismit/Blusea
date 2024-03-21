@@ -13,11 +13,13 @@ const NotificationsPage = ({socket}) => {
     // const socket = io("http://localhost:3001");
     const [Data, setData] = useState([]);
     const user = useSelector((state) => state.user)
+    const token = useSelector((state) => state.token)
     const getNotif = async () => {
         try {
             setLoading(true)
             const res = await fetch(`http://localhost:3001/notifications/${user._id}`, {
                 method: "GET",
+                headers: {Authorization: `Bearer ${token}`}
             });
             const notifs = await res.json();
             setData(notifs);

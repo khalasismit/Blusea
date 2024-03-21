@@ -13,6 +13,7 @@ import messageRoute from "./routes/message.js";
 import notifRoute from "./routes/notification.js"
 import { app, server } from "./socket/socket.js";
 import File from "./models/File.js";
+import { verifyToken } from "./middleware/verifyToken.js";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -34,10 +35,10 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 /* ROUTES */
 app.use('/auth', authRoute);
-app.use('/users', userRoute);
-app.use('/posts', postRoute);
-app.use('/chats', messageRoute);
-app.use('/notifications', notifRoute);
+app.use('/users',verifyToken,userRoute);
+app.use('/posts',verifyToken,postRoute);
+app.use('/chats',verifyToken,messageRoute);
+app.use('/notifications',verifyToken,notifRoute);
 app.get("/files",async(req,res)=>{
   try {
   const files = await File.find();
@@ -47,7 +48,7 @@ app.get("/files",async(req,res)=>{
   }
 })
 /* ROUTES SETUP WHICH USES FILE UPLOAD */
-app.use('/',uploadFile);
+app.use('/',verifyToken,uploadFile);
 
 /* MONGOOSE SETUP */
 

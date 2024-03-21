@@ -27,6 +27,7 @@ const ProfilePage = ({ socket }) => {
         setOpen(false);
     };
     const User = useSelector((state) => state.user);
+    const token = useSelector((state) => state.token);
     const [ListData, setListData] = useState([]);
     const [isLoggedInUser, setIsLoggedInUser] = useState(true)
     const theme = useTheme()
@@ -44,7 +45,8 @@ const ProfilePage = ({ socket }) => {
             const response = await fetch(`http://localhost:3001/users/${userName}`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             })
             const data = await response.json();
@@ -81,7 +83,7 @@ const ProfilePage = ({ socket }) => {
             // console.log(await url)
             await fetch(url, {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json',Authorization: `Bearer ${token}` }
             }).then(async (res) => {
                 const data = await res.json();
                 // console.log(data)

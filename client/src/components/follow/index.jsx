@@ -1,11 +1,11 @@
-import { Box, Button, useTheme } from "@mui/material"
+import { Box, Button, Typography, useTheme } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { setLogin } from "../../redux/reducers";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export const Follow = ({ user2userName }) => {
-    const {userName} = useParams();
+    const { userName } = useParams();
     const user1 = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
     const theme = useTheme();
@@ -15,7 +15,7 @@ export const Follow = ({ user2userName }) => {
     const getUser2 = async (user1) => {
         await fetch(`http://localhost:3001/users/${user2userName}`, {
             method: "GET",
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json',Authorization: `Bearer ${token}` }
         }).then(async (res) => {
             const data = await res.json();
             setuser2(data);
@@ -53,7 +53,7 @@ export const Follow = ({ user2userName }) => {
     }
     useEffect(() => {
         getUser2(user1)
-    }, [user1, Type,userName]) //eslint-disable-line react-hooks/exhaustive-deps
+    }, [user1, Type, userName]) //eslint-disable-line react-hooks/exhaustive-deps
 
     const handleClick = async (Type, user1, user2) => {
         try {
@@ -77,7 +77,7 @@ export const Follow = ({ user2userName }) => {
             }
             await fetch(url, {
                 method: method,
-                headers: {}
+                headers: {Authorization: `Bearer ${token}`}
             }).then(async (res) => {
                 const updatedUser = await res.json();
                 dispatch(setLogin({
@@ -117,9 +117,11 @@ export const Follow = ({ user2userName }) => {
         }
     }
     return <Box>
-        <Button type="submit" variant="outlined" sx={{ color: theme.palette.neutral.dark }}
+        <Button type="submit" variant="contained" sx={{backgroundColor:"rgb(0, 149, 246)",':hover':{background:"rgb(0, 149, 246)"},borderRadius:2,textTransform:"none"}}
             onClick={() => { handleClick(Type, user1, user2) }} >
-            {Type}
+            <Typography sx={{color:"white"}}>
+                {Type}
+            </Typography>
         </Button>
     </Box>
 }
@@ -132,13 +134,13 @@ export const Accept = ({ reqId }) => {
     const handleClick = async () => {
         let res = await fetch(`http://localhost:3001/users/${_id}/follow-request/${reqId}/accept`, {
             method: "PUT",
-            headers: {},
+            headers: {Authorization: `Bearer ${token}`},
         })
         const updatedUser = await res.json();
         dispatch(setLogin({ user: updatedUser, token: token }));
     }
     return <>
-        <Button onClick={handleClick} variant="text" color="success" sx={{ fontWeight:"bold",textTransform:"none",flex: 1 }}>
+        <Button onClick={handleClick} variant="text" color="success" sx={{ fontWeight: "bold", textTransform: "none", flex: 1 }}>
             Accept
         </Button>
     </>
@@ -152,13 +154,13 @@ export const Decline = ({ reqId }) => {
     const handleClick = async () => {
         let res = await fetch(`http://localhost:3001/users/${_id}/follow-request/${reqId}/reject`, {
             method: "PUT",
-            headers: {},
+            headers: {Authorization: `Bearer ${token}`},
         })
         const updatedUser = await res.json();
         dispatch(setLogin({ user: updatedUser, token: token }));
     }
     return <>
-        <Button onClick={handleClick} variant="text" color="error" sx={{ fontWeight:"bold",textTransform:"none",flex: 1 }}>
+        <Button onClick={handleClick} variant="text" color="error" sx={{ fontWeight: "bold", textTransform: "none", flex: 1 }}>
             Decline
         </Button>
     </>

@@ -10,6 +10,7 @@ const SearchPage = () => {
     const [searchData, setSearchData] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
     const user = useSelector((state) => state.user)
+    const token = useSelector((state) => state.token)
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
@@ -21,14 +22,15 @@ const SearchPage = () => {
     const handleSearch = async (value) => {
         const searchRes = await fetch(`http://localhost:3001/users/search/${value}`, {
             method: "GET",
-            headers: {}
+            headers: {Authorization: `Bearer ${token}`}
         });
         const data = await searchRes.json();
         setSearchData(data);
     }
     const getSuggestion = async () => {
         const res = await fetch(`http://localhost:3001/users/suggestions/${user._id}`, {
-            method: "GET"
+            method: "GET",
+            headers: {Authorization: `Bearer ${token}`}
         })
         const data = await res.json();
         setSuggestions(data);

@@ -5,6 +5,7 @@ import { useSelector } from "react-redux"
 
 const Comments = ({ postId, parentId, updateCommentField,socket }) => {
     const posts = useSelector((state) => state.posts);
+    const token = useSelector((state) => state.token);
     const [comments, setComments] = useState([]);
     const [Loading, setLoading] = useState(true);
 
@@ -31,7 +32,7 @@ const Comments = ({ postId, parentId, updateCommentField,socket }) => {
     const getComments = async () => {
         const res = await fetch(`http://localhost:3001/posts/${postId}/comment`, {
             method: "GET",
-            headers: {}
+            headers: {Authorization: `Bearer ${token}`}
         })
         const data = await res.json();
         setComments(data);

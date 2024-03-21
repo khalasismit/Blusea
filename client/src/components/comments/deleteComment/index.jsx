@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { Box, Dialog, Divider, Typography, useTheme } from "@mui/material";
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../../../redux/reducers";
 const DeleteComment = ({ commentId, postId }) => {
     const dispatch = useDispatch()
     const theme =useTheme();
+    const token = useSelector((state)=>state.token)
     const [open, setOpen] = useState(false);
     const handleDelete = async () => {
         const res = await fetch(`http://localhost:3001/posts/${postId}/comment/delete`, {
             method: "PATCH",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
                 commentId

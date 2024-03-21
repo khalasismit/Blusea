@@ -8,6 +8,7 @@ const TextArea = ({ participants, updateMessage, socket }) => {
     const [message, setMessage] = useState("");
     const [UserToChat, setUserToChat] = useState([]);
     const user = useSelector((state) => state.user);
+    const token = useSelector((state) => state.token);
     const theme = useTheme();
     // console.log("participants",participants)
     const isNonMobile = useMediaQuery('(min-width:1000px)');
@@ -28,6 +29,7 @@ const TextArea = ({ participants, updateMessage, socket }) => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     senderId: user._id,

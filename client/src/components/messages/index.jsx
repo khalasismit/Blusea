@@ -2,10 +2,10 @@ import { Box, Divider } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import Message from "./message";
 // import { io } from "socket.io-client";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const Messages = ({ socket,conversationId, updateMessage }) => {
-    // const user = useSelector((state) => state.user);
+    const token = useSelector((state) => state.token);
     // const socket = io("http://localhost:3001");
     const [messagesByDate, setMessagesByDate] = useState({});
     const messagesEndRef = useRef(null);
@@ -13,7 +13,7 @@ const Messages = ({ socket,conversationId, updateMessage }) => {
     const getMessages = async () => {
         const res = await fetch(`http://localhost:3001/chats/${conversationId}/messages`, {
             method: "GET",
-            headers: {}
+            headers: {Authorization: `Bearer ${token}`}
         });
         const data = await res.json();
         // console.log(data);

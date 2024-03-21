@@ -10,6 +10,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 
 const ExplorePage = ({socket}) => {
     const posts = useSelector((state) => state.posts)
+    const token = useSelector((state) => state.token)
   const isNonMobile = useMediaQuery("(min-width:768px)")
   const [exploreData, setExploreData] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
@@ -19,7 +20,8 @@ const ExplorePage = ({socket}) => {
     let res = await fetch('http://localhost:3001/posts/explore', {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
       }
     });
     const data = await res.json();

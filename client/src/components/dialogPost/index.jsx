@@ -23,6 +23,7 @@ const DialogPost = ({ DeleteIcon,item, open, handleClose, onClose,socket }) => {
     const [post, setpost] = useState(item);
     // console.log("Post:",post)
     const user = useSelector((state) => state.user);
+    const token = useSelector((state) => state.token);
     const Posts = useSelector((state) => state.posts);
     // const LIKES = likes.length
     // const COMMENTS = comments.length
@@ -45,6 +46,7 @@ const DialogPost = ({ DeleteIcon,item, open, handleClose, onClose,socket }) => {
         // console.log(post)
         await fetch(`http://localhost:3001/posts/${post._doc._id}`, {
             method: 'GET',
+            headers:{Authorization: `Bearer ${token}`}
         }).then(async (res) => await res.json()).then(async (data) => {
             // console.log(data);
             setpost(data)
