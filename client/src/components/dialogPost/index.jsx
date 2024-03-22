@@ -40,7 +40,6 @@ const DialogPost = ({ DeleteIcon,item, open, handleClose, onClose,socket }) => {
     const parentId = (value) => {
         setCommentId(value);
     };
-
     // console.log(postId, profilePic, picturePath, pictureAlt, userName, likes, createdAt, open, handleClose)
     const getPost = async (post) => {
         // console.log(post)

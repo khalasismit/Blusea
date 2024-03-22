@@ -1,4 +1,4 @@
-import { Box, Button, Typography, useTheme } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { setLogin } from "../../redux/reducers";
 import { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ export const Follow = ({ user2userName }) => {
     const { userName } = useParams();
     const user1 = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
-    const theme = useTheme();
+    // const theme = useTheme();
     const dispatch = useDispatch();
     const [user2, setuser2] = useState([]);
     const [Type, setType] = useState("Follow");
@@ -31,9 +31,9 @@ export const Follow = ({ user2userName }) => {
             const isReqsent = await user1.sentRequest.includes(user2._id)
             // const isRequest = await user2.followRequest.includes(user1._id)
 
-            console.log("isUser1Following", isUser1Following);
-            console.log("isUser2Following", isUser2Following);
-            console.log("isReqsent", isReqsent);
+            // console.log("isUser1Following", isUser1Following);
+            // console.log("isUser2Following", isUser2Following);
+            // console.log("isReqsent", isReqsent);
             // console.log("isRequest", isRequest);
 
             if (!isUser1Following && !isUser2Following && !isReqsent) {

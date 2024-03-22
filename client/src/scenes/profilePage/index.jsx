@@ -52,13 +52,13 @@ const ProfilePage = ({ socket }) => {
             const data = await response.json();
             // console.log(data)
             setUser(data)
-            console.log(isLoggedInUser, user)
+            // console.log(isLoggedInUser, user)
         } catch (error) {
             console.log("Error in getting the profile details");
         };
     }
     useEffect(() => {
-        getUser()
+        getUser();
     }, [userName, User, Posts])
     useEffect(() => {
         if (user) {

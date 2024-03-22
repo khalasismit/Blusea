@@ -1,16 +1,12 @@
-import { Box, CircularProgress, Divider, Typography, useMediaQuery, useTheme, } from "@mui/material"
+import { Box, CircularProgress,Typography, useMediaQuery, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
-// import io from "socket.io-client"
 import Notification from "./notification"
-// import { io } from "socket.io-client";
 const NotificationsPage = ({socket}) => {
-    // const socket = io("http://localhost:3001");
     const theme = useTheme();
     const [loading, setLoading] = useState(false)
     const isNonMobile = useMediaQuery("(min-width:1000px)");
-    // const socket = io("http://localhost:3001");
     const [Data, setData] = useState([]);
     const user = useSelector((state) => state.user)
     const token = useSelector((state) => state.token)
@@ -23,7 +19,6 @@ const NotificationsPage = ({socket}) => {
             });
             const notifs = await res.json();
             setData(notifs);
-            console.log("notifs", notifs)
             setLoading(false)
         } catch (error) {
             console.error("Error fetching notifications:", error);

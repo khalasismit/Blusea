@@ -10,11 +10,9 @@ const ActivityFeed = ({ socket, Type, user }) => {
     const [savedPosts, setSavedPosts] = useState([]);
     const User = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
-    // const Posts = useSelector((state) => state.posts)
     const isNonMobile = useMediaQuery("(min-width:768px)")
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
-
     useEffect(() => {
         const fetchData = async (user) => {
             try {
@@ -23,13 +21,13 @@ const ActivityFeed = ({ socket, Type, user }) => {
                 // Fetch user's own posts
                 userPostsPromise = await fetch(`http://localhost:3001/posts/${user._id}/posts`, {
                     method: "GET",
-                    headers: {Authorization: `Bearer ${token}`}
+                    headers: { Authorization: `Bearer ${token}` }
                 }).then(res => res.json());
 
                 // Fetch user's saved posts
                 savedPostsPromise = await fetch(`http://localhost:3001/users/${user._id}/posts/saved`, {
                     method: "GET",
-                    headers: {Authorization: `Bearer ${token}`}
+                    headers: { Authorization: `Bearer ${token}` }
                 }).then(res => res.json());
 
                 // Wait for both promises to resolve
@@ -46,22 +44,17 @@ const ActivityFeed = ({ socket, Type, user }) => {
     useEffect(() => {
         // Determine which data to set based on Type
         if (Type === "saved") {
-            // console.log("Fetching saved posts");
             setData(savedPosts);
         } else if (Type === "tagged") {
-            // console.log("Fetching tagged posts");
-
+            /* tag */
         } else {
-            // console.log("Fetching user's own posts");
-            // Default to user's own posts if Type is not "saved" or "tagged"
             setData(userPosts);
         }
     }, [Type, userPosts, savedPosts]);
 
     const handleImageClick = (item) => {
         setSelectedPost(item);
-        // console.log(item)
-        setOpenDialog(true); // Open the dialog
+        setOpenDialog(true);
     };
 
     const handleContextMenu = (e) => {
@@ -95,8 +88,8 @@ const ActivityFeed = ({ socket, Type, user }) => {
                     </ImageList>
                 </Box>
             ) : (
-                <Box sx={{ flex:1 ,display:"flex",alignItems:"center",justifyContent:"center"}}>
-                    <Typography sx={{fontSize:"1.2rem"}}> No {Type} data </Typography>
+                <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Typography sx={{ fontSize: "1.2rem" }}> No {Type} data </Typography>
                 </Box>
             )
         ) : (

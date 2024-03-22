@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const Feed = ({socket}) => {
     // const socket = io("http://localhost:3001");
     // const theme = useTheme()
-    const user = useSelector((state) => state.user)
+    // const user = useSelector((state) => state.user)
     const token = useSelector((state) => state.token)
     const Posts = useSelector((state) => state.posts)
     const [posts, setPosts] = useState(null);
@@ -30,7 +30,7 @@ const Feed = ({socket}) => {
                 throw new Error('Failed to fetch posts');
             }
             const data = await res.json();
-            console.log(data)
+            // console.log(data)
             setPosts(data);
         } catch (error) {
             console.error('Error fetching posts:', error);

@@ -19,6 +19,7 @@ const Navigation = ({ socket }) => {
     const dispatch = useDispatch();
     const [newNotif, setNewNotif] = useState(useSelector(state => state.notifs));
     const [newMessages, setNewMessages] = useState([]);
+    
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
@@ -26,6 +27,7 @@ const Navigation = ({ socket }) => {
     const handleDragStart = (e) => {
         e.preventDefault();
     };
+
     const user = useSelector(state => state.user)
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const theme = useTheme();
@@ -88,6 +90,7 @@ const Navigation = ({ socket }) => {
             </Box>
         )}
         <Box sx={{
+            p:"1rem 0",
             flex: 1,
             display: "flex",
             flexDirection: "column",
