@@ -22,7 +22,7 @@ app.use(cors({
   origin:"*"
 }));
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin","*","http://localhost:3000","https://storage.googleapis.com");
+  res.setHeader("Access-Control-Allow-Origin","*","http://localhost:3000","http://localhost:3003","https://storage.googleapis.com");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();

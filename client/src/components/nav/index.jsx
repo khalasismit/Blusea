@@ -6,20 +6,19 @@ import SearchIcon from '@mui/icons-material/Search';
 import TextsmsIcon from '@mui/icons-material/Textsms';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 // import AddBoxIcon from '@mui/icons-material/AddBox';
-import MenuIcon from '@mui/icons-material/Menu';
+// import MenuIcon from '@mui/icons-material/Menu';
 import { Avatar, Badge, Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Mode from '../mode';
 import Create from '../create';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotifs } from '../../redux/reducers';
-// import { io } from 'socket.io-client';
 
 const Navigation = ({ socket }) => {
     const dispatch = useDispatch();
     const [newNotif, setNewNotif] = useState(useSelector(state => state.notifs));
     const [newMessages, setNewMessages] = useState([]);
-    
+
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
@@ -33,16 +32,13 @@ const Navigation = ({ socket }) => {
     const theme = useTheme();
 
     useEffect(() => {
-        // socket.on('connect', () => {
-            //     socket.emit("authenticate", user._id);
-            socket.on("notification", (data) => {
-                setNewNotif(prevnewNotif => [...prevnewNotif, data])
-                dispatch(setNotifs({ notifs: [...newNotif,data] }));
-            })
-            socket.on("receive_message",(data)=>{
-                setNewMessages(prevnewMessages => [...prevnewMessages, data]);
-            })
-        // });
+        socket.on("notification", (data) => {
+            setNewNotif(prevnewNotif => [...prevnewNotif, data])
+            dispatch(setNotifs({ notifs: [...newNotif, data] }));
+        })
+        socket.on("receive_message", (data) => {
+            setNewMessages(prevnewMessages => [...prevnewMessages, data]);
+        })
         return () => {
             socket.off("notification");
             socket.off("receive_messages");
@@ -58,7 +54,7 @@ const Navigation = ({ socket }) => {
         // p: "0.5rem",    
         // boxShadow: isNonMobile ? `0px -1px 5px ${theme.palette.neutral.light}`: "",
         background: theme.palette.background.default,
-        borderRight:`1px solid ${theme.palette.neutral.light}`,
+        borderRight: `1px solid ${theme.palette.neutral.light}`,
         height: isNonMobile ? "100vh" : "auto",
         width: isNonMobile ? "max-content" : "100%",
         display: "flex",
@@ -90,7 +86,7 @@ const Navigation = ({ socket }) => {
             </Box>
         )}
         <Box sx={{
-            p:"1rem 0",
+            p: "1rem 0",
             flex: 1,
             display: "flex",
             flexDirection: "column",
@@ -110,7 +106,7 @@ const Navigation = ({ socket }) => {
                 bottom: isNonMobile ? "" : "0",
                 color: theme.palette.neutral.dark,
                 zIndex: 100,
-                p:"0 0.5rem",
+                p: "0 0.5rem",
                 background: theme.palette.background.default,
                 '& > *': {
                     borderRadius: 2,
@@ -153,7 +149,7 @@ const Navigation = ({ socket }) => {
                     </Box>
                 </Link>
                 <Create></Create>
-                {isNonMobile && <Link to={"/notifications"} onClick={() => { setNewNotif([]); dispatch(setNotifs({notifs:[]})) }} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
+                {isNonMobile && <Link to={"/notifications"} onClick={() => { setNewNotif([]); dispatch(setNotifs({ notifs: [] })) }} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                         <Badge color="secondary" badgeContent={newNotif.length}>
                             <NotificationsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
@@ -168,7 +164,7 @@ const Navigation = ({ socket }) => {
                 <Link to={"/chats"} onClick={() => { setNewMessages([]); }} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                         <Badge color="secondary" badgeContent={newMessages.length}>
-                        <TextsmsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
+                            <TextsmsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
                         </Badge>
                         {isNonMobile && (
                             <Typography>

@@ -204,6 +204,26 @@ export const savePost = async (req, res) => {
     res.status(400).json({ error: err });
   }
 }
+
+/* Edit post */
+export const editPost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const {fileId, caption} = req.body;
+    console.log("fileId : ", fileId)
+    console.log("caption : ", caption)
+    const post = await Post.findOneAndUpdate({ _id: postId }, {
+      caption: caption,
+      imageId: fileId
+    },{new:true}) //Return
+    await post.save();
+    // console.log("updated Post : ", post);
+    res.status(200).json(post);
+  } catch (err) {
+    console.log("Server Error")
+    res.status(400).json({ error: err });
+  }
+}
 export const removePost = async (req, res) => {
   try {
     const { postId } = req.params;

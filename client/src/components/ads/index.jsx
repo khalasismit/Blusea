@@ -16,7 +16,6 @@ const Ads = () => {
                 </Typography>
                 <Box sx={{ gap: 1, display: "flex", flexDirection: "column" }}>
                     ADS_DATA_NOT_FOUND
-
                     {/* <AdSense></AdSense> */}
                 </Box>
             </Box>

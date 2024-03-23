@@ -1,5 +1,5 @@
 import express from "express";
-import { signup, login, continueWithGoogle, 
+import { signup, login, continueWithGoogle, continueWithGoogleAdmin, signupAdmin, loginAdmin, 
     // googleSignup, googleLogin 
 } from "../controllers/auth.js";
 
@@ -10,6 +10,11 @@ router.post('/google/signup', continueWithGoogle);
 // router.post('/auth/google/login', googleLogin);
 router.post('/signup', signup);
 router.post('/login', login);
+
+router.post('/admin/google/signup', continueWithGoogleAdmin);
+// router.post('/auth/google/login', googleLogin);
+router.post('/admin/signup', signupAdmin);
+router.post('/admin/login', loginAdmin);
 // export const googleSignup = async (req, res) => {
 //     try {
 //         const { tokenId } = req.body;
