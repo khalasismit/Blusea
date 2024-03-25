@@ -41,7 +41,8 @@ const TextArea = ({ participants, updateMessage, socket }) => {
             const res2 = await fetch("http://localhost:3001/chats/message/decrypt", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     message: data.NewMessage.message,

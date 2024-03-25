@@ -71,21 +71,21 @@ export const AdminFeed = async (req, res) => {
     //       const { picturePath } = await User.findOne({ userName: userName });
     //       return { ...post, url, userName, picturePath };
     //     } else {
-      //       return;
-      //     }
-      //   } else {
-        //     const { userName } = await User.findById(post.userId);
-        //     const { url } = await File.findById(post.imageId);
-        //     const { picturePath } = await User.findOne({ userName: userName });
-        //     return { ...post, url, userName, picturePath };
-        //   }
-        // }));
-        // const filteredPost = postWithUrl.filter((post) => post !== undefined);
+    //       return;
+    //     }
+    //   } else {
+    //     const { userName } = await User.findById(post.userId);
+    //     const { url } = await File.findById(post.imageId);
+    //     const { picturePath } = await User.findOne({ userName: userName });
+    //     return { ...post, url, userName, picturePath };
+    //   }
+    // }));
+    // const filteredPost = postWithUrl.filter((post) => post !== undefined);
     // res.status(200).json(filteredPost);
     const postWithUrl = await Promise.all(posts.map(async (post) => {
-      const user = await User.findOne({_id : post.userId});
+      const user = await User.findOne({ _id: post.userId });
       const { url } = await File.findById(post.imageId);
-      return { ...post, url, user};
+      return { ...post, url, user };
     }));
     res.status(200).json(postWithUrl);
   } catch (err) {
@@ -209,13 +209,13 @@ export const savePost = async (req, res) => {
 export const editPost = async (req, res) => {
   try {
     const { postId } = req.params;
-    const {fileId, caption} = req.body;
+    const { fileId, caption } = req.body;
     console.log("fileId : ", fileId)
     console.log("caption : ", caption)
     const post = await Post.findOneAndUpdate({ _id: postId }, {
       caption: caption,
       imageId: fileId
-    },{new:true}) //Return
+    }, { new: true }) //Return
     await post.save();
     // console.log("updated Post : ", post);
     res.status(200).json(post);
@@ -242,6 +242,36 @@ export const removePost = async (req, res) => {
     const posts = await Post.find({ visibility: true });
     console.log("updated User : ", user);
     res.status(200).json({ updatedPosts: posts, updatedUser: user });
+  } catch (err) {
+    console.log("Server Error")
+    res.status(400).json({ error: err });
+  }
+}
+
+export const deletePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const post = await Post.findOne({ _id: postId })
+    console.log("Post : ", post);
+    const user = await User.findOneAndUpdate({ _id: post.userId }, {
+      $pull: {
+        posts: post._id,
+        saved: post._id
+      },
+    }, { new: true });
+
+    // remove post if from all users who saved it 
+    for (const userId of post.saved) {
+      const user = await User.findOneAndUpdate({ _id: userId }, {
+        $pull: { saved: postId }
+      }, { new: true });
+      console.log('Deleted in user : ', user)
+    }
+
+    await user.save();
+    await Post.findOneAndDelete({ _id: postId })
+    const posts = await Post.find();
+    res.status(200).json(posts);
   } catch (err) {
     console.log("Server Error")
     res.status(400).json({ error: err });
@@ -382,5 +412,17 @@ export const deleteComment = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
+  }
+}
+
+export const getComment = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+    const comment = await Comment.findOne({_id:commentId});
+    // const updatedPost = await Post.findOne({ comments: commentId });
+    res.status(200).json(comment)
+    // res.status(200).json(updatedPost)
+  } catch (err) {
+    res.status(400).json("{ error: err }");
   }
 }

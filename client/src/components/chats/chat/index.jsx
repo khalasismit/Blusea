@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addNewMessages, clearNewMessages } from "../../../redux/reducers";
 const Chat = ({ socket, id, participants, messages }) => {
-    const [lastMessage,setLastMesssage] = useState(messages.length > 0 ? messages[messages.length - 1] : "");
+    const [lastMessage, setLastMesssage] = useState(messages.length > 0 ? messages[messages.length - 1] : "");
     const [UserToChat, setUserToChat] = useState([])
     const [time, setTime] = useState("");
     const newMessages = useSelector(state => state.conversations).find(conversation => conversation.conversationId === id)?.newMessages || []
@@ -46,9 +46,9 @@ const Chat = ({ socket, id, participants, messages }) => {
                 }
             })
         }
-    },[lastMessage])
-    
-    useEffect(()=>{
+    }, [lastMessage])
+
+    useEffect(() => {
         socket.connect();
         socket.emit("authenticate", user._id);
         socket.on("receive_message", (data) => {

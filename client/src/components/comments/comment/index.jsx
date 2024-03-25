@@ -49,6 +49,7 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
             }
         });
         const Commentuser = await CommentIdRes.json();
+        // dispatch(setPost(updatedPost));
         try {
             if (user._id !== Commentuser._id) {
                 let url = ""
@@ -77,7 +78,6 @@ const Comment = ({ _id, postId, type, userName, comment, likes, profilePic, crea
                     socket.emit("like", { newNotif: newNotif });
                 }
             }
-            dispatch(setPost({ post: updatedPost }));
         } catch (error) {
             console.log("Error in Like.jsx", error)
         }

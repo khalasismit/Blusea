@@ -13,6 +13,7 @@ const HomePage = ({ socket }) => {
     const nonMobile = useMediaQuery('(min-width:600px)')
     const theme = useTheme();
     const [newNotif, setNewNotif] = useState(useSelector(state => state.notifs));
+    // const user = useSelector(state => state.user);
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
@@ -28,7 +29,8 @@ const HomePage = ({ socket }) => {
             }
         })
         return () => {
-            socket.disconnect();
+            socket.off("notification");
+            socket.close();
         }
     }, [socket])
     return <Box sx={{ display: "flex", flex: 1, justifyContent: "space-evenly" }}>
@@ -45,7 +47,14 @@ const HomePage = ({ socket }) => {
                     </Box>
                     <Box>
                         <Link
-                            onClick={() => { setNewNotif([]); dispatch(setNotifs({ notifs: [] })) }}
+                            onClick={() => {
+                                setNewNotif([]);
+                                dispatch(
+                                    setNotifs({
+                                        notifs: []
+                                    })
+                                )
+                            }}
                             to={"/notifications"}
                             style={{ textDecoration: "none", color: theme.palette.neutral.dark }}
                         >
@@ -63,7 +72,7 @@ const HomePage = ({ socket }) => {
         </Box>
         {isNonMobile &&
             (
-                <Box sx={{ height: "100vh", flex: 1,display: "flex", flexDirection: "column" }}>
+                <Box sx={{ height: "100vh", flex: 1, display: "flex", flexDirection: "column" }}>
                     <Requests></Requests>
                     <Divider flexItem variant="middle" ></Divider>
                     <Ads></Ads>

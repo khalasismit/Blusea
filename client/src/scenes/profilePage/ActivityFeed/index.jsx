@@ -40,7 +40,7 @@ const ActivityFeed = ({ socket, Type, user }) => {
             }
         };
         fetchData(user)
-    }, [user, User]);
+    }, [User.savedPosts,User.posts]);
     useEffect(() => {
         // Determine which data to set based on Type
         if (Type === "saved") {

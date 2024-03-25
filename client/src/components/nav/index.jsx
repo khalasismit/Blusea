@@ -12,39 +12,56 @@ import { Link } from 'react-router-dom';
 import Mode from '../mode';
 import Create from '../create';
 import { useDispatch, useSelector } from 'react-redux';
-import { setNotifs } from '../../redux/reducers';
+import { addNewMessages, setNotifs } from '../../redux/reducers';
 
 const Navigation = ({ socket }) => {
     const dispatch = useDispatch();
     const [newNotif, setNewNotif] = useState(useSelector(state => state.notifs));
-    const [newMessages, setNewMessages] = useState([]);
-
+    const [totalNewMessages, setTotalNewMessages] = useState(0);
+    const conversations = useSelector(state => state.conversations);
+    
+    
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
-
+    
     const handleDragStart = (e) => {
         e.preventDefault();
     };
-
+    
+    useEffect(()=>{
+        let total = 0;
+        conversations.forEach(conversation => {
+            total += conversation.newMessages.length;
+        });
+        setTotalNewMessages(total);
+    },[socket,conversations])
+    
     const user = useSelector(state => state.user)
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const theme = useTheme();
 
     useEffect(() => {
+        // socket.connect();
+        // socket.emit("authenticate", user._id)
         socket.on("notification", (data) => {
             setNewNotif(prevnewNotif => [...prevnewNotif, data])
             dispatch(setNotifs({ notifs: [...newNotif, data] }));
         })
+
         socket.on("receive_message", (data) => {
-            setNewMessages(prevnewMessages => [...prevnewMessages, data]);
+            dispatch(addNewMessages({
+                conversationId: data.conversationId,
+                newMessages: [data.message]
+            }))
+            // setNewMessages(prevnewMessages => [...prevnewMessages, data]);
         })
         return () => {
-            socket.off("notification");
-            socket.off("receive_messages");
-            socket.close();
+            socket.off("notification")
+            socket.off("receive_message")
+            socket.close()
         }
-    }, [socket]);
+    }, [conversations,socket]);
 
     return <Box sx={{
         position: "sticky",
@@ -86,7 +103,7 @@ const Navigation = ({ socket }) => {
             </Box>
         )}
         <Box sx={{
-            p: "1rem 0",
+            p: "1rem 0 0 0",
             flex: 1,
             display: "flex",
             flexDirection: "column",
@@ -161,9 +178,9 @@ const Navigation = ({ socket }) => {
                         )}
                     </Box>
                 </Link>}
-                <Link to={"/chats"} onClick={() => { setNewMessages([]); }} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
+                <Link to={"/chats"} style={{ textDecoration: "none", color: theme.palette.neutral.dark }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                        <Badge color="secondary" badgeContent={newMessages.length}>
+                        <Badge color="secondary" badgeContent={totalNewMessages}>
                             <TextsmsIcon titleAccess='Notifications' sx={{ fontSize: "2rem" }} />
                         </Badge>
                         {isNonMobile && (

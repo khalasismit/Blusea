@@ -83,7 +83,7 @@ const ProfilePage = ({ socket }) => {
             // console.log(await url)
             await fetch(url, {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json',Authorization: `Bearer ${token}` }
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
             }).then(async (res) => {
                 const data = await res.json();
                 // console.log(data)
@@ -125,10 +125,10 @@ const ProfilePage = ({ socket }) => {
                         <Avatar src={user.picturePath} sx={{ width: "10rem", height: "10rem", cursor: "pointer", borderRadius: 1 }} onClick={handleProfilePic} />
                 }
                 {/* </Box> */}
-                <Box sx={{ flex: 1, display: "flex", flexDirection: "column"}}>
+                <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
                     {/* user details */}
                     <Box sx={{ display: "flex", alignItems: "center", gap: 3, p: "0 0.5rem" }}>
-                        <Typography sx={{ fontSize: "1.2rem"}}>{userName}</Typography>
+                        <Typography sx={{ fontSize: "1.2rem" }}>{userName}</Typography>
                         {
                             user !== null && !isLoggedInUser && ( // Add this condition
                                 <Follow user2userName={userName}></Follow>
@@ -147,11 +147,16 @@ const ProfilePage = ({ socket }) => {
                         }
                     </Box> */}
                     <Box sx={{ p: 1 }}>
-                        <Typography sx={{color:theme.palette.neutral.main,fontSize: "1rem" }}>
+                        <Typography sx={{ color: theme.palette.neutral.main, fontSize: "1rem" }}>
                             {user.firstName} {user.lastName}
                         </Typography>
-                        <Typography sx={{ fontSize: "0.9rem", width: "15rem" }}>
-                            {user.bio}
+                        <Typography sx={{ fontSize: "0.9rem", width: "15rem", overflowWrap: "break-word" }}>
+                            {user.bio && user.bio.split('\n').map((line, index) => {
+                                return <Typography p="0.2rem" key={index}>
+                                    {line}
+                                    <br />
+                                </Typography>
+                            })}
                         </Typography>
                     </Box>
                 </Box>

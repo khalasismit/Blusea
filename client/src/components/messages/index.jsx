@@ -4,7 +4,7 @@ import Message from "./message";
 // import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 
-const Messages = ({ socket,conversationId, updateMessage }) => {
+const Messages = ({ socket, conversationId, updateMessage }) => {
     const token = useSelector((state) => state.token);
     // const socket = io("http://localhost:3001");
     const [messagesByDate, setMessagesByDate] = useState({});
@@ -13,7 +13,7 @@ const Messages = ({ socket,conversationId, updateMessage }) => {
     const getMessages = async () => {
         const res = await fetch(`http://localhost:3001/chats/${conversationId}/messages`, {
             method: "GET",
-            headers: {Authorization: `Bearer ${token}`}
+            headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
         // console.log(data);
@@ -41,23 +41,24 @@ const Messages = ({ socket,conversationId, updateMessage }) => {
         //     socket.emit("authenticate", user._id);
         //     console.log(socket.connected)
         //     if (socket.connected) {
-            // console.log("receivedMessage", receivedMessage);
-            // organizeMessagesByDate([...messagesByDate, receivedMessage]);
-            socket.on('receive_message', (receivedMessage) => {
-                    const date = new Date(receivedMessage.createdAt).toISOString().split('T')[0];
-                    setMessagesByDate(prevMessagesByDate => {
-                        const updatedMessagesByDate = { ...prevMessagesByDate };
-                        if (!updatedMessagesByDate[date]) {
-                            updatedMessagesByDate[date] = [receivedMessage];
-                        } else {
-                            updatedMessagesByDate[date] = [...updatedMessagesByDate[date], receivedMessage];
-                        }
-                        return updatedMessagesByDate;
-                    });
+        // console.log("receivedMessage", receivedMessage);
+        // organizeMessagesByDate([...messagesByDate, receivedMessage]);
+        socket.on('receive_message', (receivedMessage) => {
+            if (receivedMessage.conversationId === conversationId) {
+                const date = new Date(receivedMessage.createdAt).toISOString().split('T')[0];
+                setMessagesByDate(prevMessagesByDate => {
+                    const updatedMessagesByDate = { ...prevMessagesByDate };
+                    if (!updatedMessagesByDate[date]) {
+                        updatedMessagesByDate[date] = [receivedMessage];
+                    } else {
+                        updatedMessagesByDate[date] = [...updatedMessagesByDate[date], receivedMessage];
+                    }
+                    return updatedMessagesByDate;
                 });
-        //     }
+            }
+        });
         // });
-        return  () => {
+        return () => {
             socket.off('receive_message');
             socket.close();
         }
@@ -70,7 +71,7 @@ const Messages = ({ socket,conversationId, updateMessage }) => {
     }, [messagesByDate]);
 
     return (
-        <Box sx={{ height: "90%", flex: 1, p: 1,mb:"1rem", overflowY: "auto", scrollbarWidth: "thin" }}>
+        <Box sx={{ height: "90%", flex: 1, p: 1, mb: "1rem", overflowY: "auto", scrollbarWidth: "thin" }}>
             {Object.entries(messagesByDate).map(([date, messages]) => (
                 <Box key={date}>
                     {
